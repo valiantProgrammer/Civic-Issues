@@ -12,7 +12,7 @@ export default function FloatingAddButton() {
   return (
     <button
       onClick={handleClick}
-      className="fixed bottom-6 right-4 sm:bottom-4 w-14 h-14 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 z-10 flex items-center justify-center"
+      className="fixed bottom-6 right-4 sm:bottom-4 w-14 h-14 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 z-55 flex items-center justify-center"
       aria-label="Add new report"
     >
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

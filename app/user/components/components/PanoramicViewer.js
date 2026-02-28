@@ -412,7 +412,7 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
       {isCapturing && <CameraCapture onCapture={handleCaptureComplete} onCancel={() => setIsCapturing(false)} setMessage={setMessage} />}
       {/* --- ADD THIS NEW MODAL FOR CHOOSING MEDIA TYPE --- */}
       {isChoosing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-75 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsChoosing(false)} />
           <div className="relative bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center">
             <h3 className="text-lg font-semibold mb-1">Choose Media Type</h3>

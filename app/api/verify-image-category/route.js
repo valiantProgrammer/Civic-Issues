@@ -6,9 +6,8 @@ import fetch from 'node-fetch';
 // It's crucial to initialize this outside the handler so it's reused across requests.
 // Ensure you have GEMINI_API_KEY in your .env.local file.
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// Note: "gemini-2.0-flash" is a hypothetical future model name.
-// For now, we'll use the latest available flash model which is perfect for this task.
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+// Use gemini-1.5-flash as the model (gemini-2.0-flash might not be available yet)
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 /**
  * --- Step 2: Helper Function to Process the Image ---
@@ -92,10 +91,22 @@ export async function POST(request) {
 
   } catch (error) {
     // Catch any errors from the entire process
-    // console.error('Error in /api/verify-image-category:', error);
-    // return NextResponse.json(
-    //   { message: 'An internal error occurred during image verification.' },
-    //   { status: 500 }
-    // );
+    console.error('Error in /api/verify-image-category:', error);
+    
+    // Log more detailed error info to help with debugging
+    if (error.message) {
+      console.error('Error message:', error.message);
+    }
+    if (error.statusCode) {
+      console.error('API status code:', error.statusCode);
+    }
+    
+    return NextResponse.json(
+      { 
+        message: 'An internal error occurred during image verification.',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
+      { status: 500 }
+    );
   }
 }

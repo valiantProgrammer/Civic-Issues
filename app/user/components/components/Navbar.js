@@ -19,12 +19,9 @@ const LogoutIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24
 const primaryLinks = [
   { href: '/', label: 'Home', icon: <HomeIcon /> },
   { href: '/help', label: 'Need Help', icon: <HelpIcon /> },
-  { href: '/contact', label: 'Contact Manager', icon: <ContactIcon /> },
 ];
 
-const profileHistoryLink = { href: '/user/profile', label: 'Profile', icon: <ProfileIcon /> };
-
-export default function Navbar({ onReportFilterChange }) {
+export default function Navbar({ onReportFilterChange, onProfileClick, onContactClick, onReportsClick }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedReportFilter, setSelectedReportFilter] = useState('pending');
   const pathname = usePathname();
@@ -77,6 +74,16 @@ export default function Navbar({ onReportFilterChange }) {
             {primaryLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
+            <button
+              onClick={() => {
+                onContactClick();
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100 hover:text-purple-600 transition-colors"
+            >
+              <ContactIcon />
+              <span>Contact Manager</span>
+            </button>
           </div>
         </div>
 
@@ -93,7 +100,10 @@ export default function Navbar({ onReportFilterChange }) {
                     ? 'bg-yellow-100 text-purple-700 font-semibold'
                     : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
                 }`}
-                onClick={() => handleReportFilterClick(link.type)}
+                onClick={() => {
+                  handleReportFilterClick(link.type);
+                  onReportsClick();
+                }}
               >
                 {link.icon}
                 <span>{link.label}</span>
@@ -107,7 +117,16 @@ export default function Navbar({ onReportFilterChange }) {
             Profile History
           </h3>
           <div className="space-y-1">
-            <NavLink {...profileHistoryLink} />
+            <button
+              onClick={() => {
+                onProfileClick();
+                setIsMenuOpen(false);
+              }}
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100 hover:text-purple-600 transition-colors"
+            >
+              <ProfileIcon />
+              <span>Profile</span>
+            </button>
           </div>
         </div>
 

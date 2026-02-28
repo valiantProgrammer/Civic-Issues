@@ -57,10 +57,29 @@ export async function POST(request) {
 
         // 5. Determine Ward and Municipality from coordinates
         const Ward = await getWardModel();
-        const wardDoc = await Ward.findOne({ geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: coords } } } });
-        console.log(wardDoc)
+        let wardDoc = await Ward.findOne({ geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: coords } } } });
+        console.log("Ward lookup result:", wardDoc);
+        
         if (!wardDoc) {
-            return NextResponse.json({ success: false, message: "Could not determine the ward for the provided location." }, { status: 400 });
+            // If exact geospatial lookup fails, try a nearby location approach
+            const nearbyWard = await Ward.findOne({
+                geometry: {
+                    $near: {
+                        $geometry: { type: "Point", coordinates: coords },
+                        $maxDistance: 10000 // 10km radius as fallback
+                    }
+                }
+            });
+            
+            if (!nearbyWard) {
+                return NextResponse.json({ 
+                    success: false, 
+                    message: `Could not determine the ward for the provided location (${coords[0]}, ${coords[1]}). Please try another location within the service area.`,
+                    coordinates: coords
+                }, { status: 400 });
+            }
+            
+            wardDoc = nearbyWard;
         }
 
         const Municipality = await getMunicipalityModel();

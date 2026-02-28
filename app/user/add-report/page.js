@@ -291,15 +291,25 @@ function AddReportContent() {
           }),
         });
 
-        // if (!verificationRes.ok) {
-        //   throw new Error('Image verification service failed.');
-        // }
+        let verificationData = { isMatch: true }; // Default to true if verification passes
 
-        const verificationData = await verificationRes.json() || [];
+        if (verificationRes.ok) {
+          try {
+            verificationData = await verificationRes.json();
+          } catch (parseError) {
+            console.error("Failed to parse verification response:", parseError);
+            // Keep default value if JSON parsing fails
+          }
+        } else {
+          console.error("Verification service returned:", verificationRes.status);
+          // Keep default value if response is not ok
+        }
+
         console.log(verificationData.isMatch);
         if (!verificationData.isMatch) {
           setIsVerifying(false);
           setVerification(false)
+          return; // Stop submission if verification fails
         }
       } catch (err) {
         console.error("Verification error:", err);

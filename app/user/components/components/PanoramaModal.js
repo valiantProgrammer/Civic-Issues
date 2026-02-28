@@ -180,7 +180,7 @@ export default function PanoramaModal({ imageUrl, onClose }) {
 
   return (
     <div className="w-full cursor-grab h-full bg-black">
-      <div className="fixed inset-0 flex items-center justify-center text-gray-700 backdrop-blur-xl z-50 bg-white">
+      <div className="fixed inset-0 flex items-center justify-center text-gray-700 backdrop-blur-xl z-100 bg-white">
         {/* Instructions */}
         <div className="absolute top-4 left-4 z-10 bg-black/30 bg-opacity-75 text-white px-4 py-2 rounded-lg backdrop-blur-xl">
           <p className="text-sm">
@@ -190,11 +190,11 @@ export default function PanoramaModal({ imageUrl, onClose }) {
         </div>
 
         {imageUrl ? (
-          <div className="relative w-[100%] h-[100%] bg-black shadow-lg overflow-hidden">
+          <div className="relative w-[100%] h-[100%] bg-black shadow-lg overflow-hidden z-100">
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-50 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg"
+              className="absolute top-3 right-3 z-150 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg"
             >
               ✕
             </button>
