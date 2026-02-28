@@ -58,3 +58,79 @@ export async function GET(request) {
         );
     }
 }
+
+export async function PUT(request) {
+    try {
+        // Get token from cookies or authorization header
+        const token = request.cookies.get('accessToken')?.value || 
+                      request.headers.get('authorization')?.replace('Bearer ', '');
+
+        if (!token) {
+            return NextResponse.json(
+                { success: false, message: 'Unauthorized - No token provided' },
+                { status: 401 }
+            );
+        }
+
+        // Verify token and get userId
+        const payload = await verifyToken(token);
+        if (!payload || !payload.userId) {
+            return NextResponse.json(
+                { success: false, message: 'Unauthorized - Invalid token' },
+                { status: 401 }
+            );
+        }
+
+        const body = await request.json();
+        const { phone, address } = body;
+
+        // Validate required fields
+        if (!phone || !address) {
+            return NextResponse.json(
+                { success: false, message: 'Phone and address are required' },
+                { status: 400 }
+            );
+        }
+
+        const User = await getUserModel();
+        const user = await User.findByIdAndUpdate(
+            payload.userId,
+            {
+                phone: phone,
+                Address: address
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!user) {
+            return NextResponse.json(
+                { success: false, message: 'User not found' },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                success: true,
+                message: 'Profile updated successfully',
+                user: {
+                    _id: user._id,
+                    userName: user.userName,
+                    email: user.email,
+                    phone: user.phone,
+                    address: user.Address,
+                    age: user.age,
+                    userId: user.userId,
+                    timeOfLogin: user.timeOfLogin
+                }
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('Profile update error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Internal server error' },
+            { status: 500 }
+        );
+    }
+}

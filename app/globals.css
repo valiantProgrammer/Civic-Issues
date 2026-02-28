@@ -63,3 +63,35 @@ body {
     margin: 0 6px;
   }
 }
+
+
+/* Explorer sidebar scrollbar */
+.explorer-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.6) transparent;
+}
+
+.explorer-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.explorer-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 5px 0;
+}
+
+.explorer-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a855f7 0%, #ec4899 100%);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+  padding : -55px;
+}
+
+.explorer-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9333ea 0%, #db2777 100%);
+  background-clip: padding-box;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
