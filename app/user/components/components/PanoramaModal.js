@@ -72,9 +72,9 @@ const PanoramaContent = ({ imageUrl, containerRef }) => {
           const deltaY = event.clientY - previousMousePosition.y;
 
           // Adjust rotation based on mouse movement
-          // Invert X for intuitive drag (drag right = look right)
-          targetRotation.y -= (deltaX * Math.PI) / width;
-          targetRotation.x -= (deltaY * Math.PI) / height;
+          // Drag right = look right, drag down = look down
+          targetRotation.y += (deltaX * Math.PI) / width;
+          targetRotation.x += (deltaY * Math.PI) / height;
 
           // Clamp vertical rotation to prevent flipping
           targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotation.x));
@@ -90,7 +90,8 @@ const PanoramaContent = ({ imageUrl, containerRef }) => {
         let zoomLevel = 1;
         const onMouseWheel = (event) => {
           event.preventDefault();
-          zoomLevel += event.deltaY > 0 ? 0.1 : -0.1;
+          // Scroll up (deltaY < 0) = zoom in, Scroll down (deltaY > 0) = zoom out
+          zoomLevel += event.deltaY < 0 ? 0.1 : -0.1;
           zoomLevel = Math.max(0.5, Math.min(3, zoomLevel));
           camera.fov = 75 / zoomLevel;
           camera.updateProjectionMatrix();
