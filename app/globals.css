@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  color: #2b52c6e0;
 }
 
 @theme inline {
@@ -14,7 +14,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
@@ -23,4 +22,44 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+/* Add a transition to the base .ball class for smooth animation */
+.ball {
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+/* This is the style for the smaller, neighboring slides */
+.ball--inactive {
+  transform: scale(0.7);
+  opacity: 0.5;
+}
+
+/* This is the style for the large, centered slide */
+.ball--active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+
+.how-to-use-custom-pagination .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+  background-color: #9ca3af; /* A slightly different gray for distinction */
+  opacity: 1;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.how-to-use-custom-pagination .swiper-pagination-bullet-active {
+  background-color: #a78bfa; /* A lighter purple for active dot */
+  transform: scale(1.1);
+}
+
+@media (min-width: 768px) {
+  .how-to-use-custom-pagination .swiper-pagination-bullet {
+    width: 14px;
+    height: 14px;
+    margin: 0 6px;
+  }
 }
