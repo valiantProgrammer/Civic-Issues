@@ -22,7 +22,7 @@ const primaryLinks = [
   { href: '/contact', label: 'Contact Manager', icon: <ContactIcon /> },
 ];
 
-const profileHistoryLink = { href: '/profile', label: 'Profile', icon: <ProfileIcon /> };
+const profileHistoryLink = { href: '/user/profile', label: 'Profile', icon: <ProfileIcon /> };
 
 export default function Navbar({ onReportFilterChange }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
