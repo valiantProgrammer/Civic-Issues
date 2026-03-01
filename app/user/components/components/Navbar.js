@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import authApi from '@/lib/api';
 import { toast } from 'react-toastify';
-
+import Image from 'next/image';
 // Icons
 const HomeIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10M9 20v-6a2 2 0 012-2h2a2 2 0 012 2v6" /></svg>;
 const HelpIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9.247a1 1 0 011.414 0L12 11.586l2.358-2.359a1 1 0 111.414 1.414L13.414 13l2.358 2.359a1 1 0 01-1.414 1.414L12 14.414l-2.358 2.359a1 1 0 01-1.414-1.414L10.586 13l-2.358-2.359a1 1 0 010-1.414z" /></svg>;
@@ -272,10 +272,14 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
 
       <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:h-screen lg:fixed lg:bg-white lg:border-r">
         <div className="h-16 flex items-center px-4 border-b">
-          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white text-sm font-bold">CI</span>
-          </div>
-          <h1 className="ml-2 text-xl font-bold text-gray-900">Civic साथी</h1>
+          <Image
+                            src="/images/logo.png"
+                            alt="Civic Saathi Logo"
+                            width={100}
+                            height={100}
+                            className="w-[12vw] h-[12vw] md:w-[3.5vw] md:h-[3.5vw]"
+                        />
+                        <h1 className="text-xl font-bold text-slate-800 tracking-tight">Civic साथी</h1>
         </div>
         <div className="flex-1 overflow-y-auto">
           <NavContent />

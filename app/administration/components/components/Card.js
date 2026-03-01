@@ -17,7 +17,7 @@ const HIGHER_AUTHORITIES = [
   'Chief Minister\'s Office',
 ];
 
-const Card = ({ id, title, imageIndex, category, description, onAction, isCompleted, completedAction, severity, lat, lng, date, municipality, ward, type, reportedAt }) => {
+const Card = ({ id, title, imageIndex, category, description, onAction, isCompleted, completedAction, severity, lat, lng, date, municipality, ward, type, reportedAt, disableDetailsModal = false }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
   const [showPanoramicViewer, setShowPanoramicViewer] = useState(false);
@@ -123,7 +123,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md p-4 border border-gray-100 cursor-pointer" onClick={openDetails}>
+      <div className="bg-white rounded-lg shadow-md p-4 border border-gray-100 cursor-pointer" onClick={() => !disableDetailsModal && openDetails()}>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <div
             className="w-24 h-24 sm:w-16 sm:h-16 bg-gray-300 rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity duration-200 overflow-hidden"
@@ -149,7 +149,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
 
           <div className="flex-1 min-w-0">
             <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">{title}</h3>
-            <p className="text-gray-600 text-sm mt-1 cursor-pointer line-clamp-2" onClick={openDetails}>{description}</p>
+            <p className="text-gray-600 text-sm mt-1 cursor-pointer line-clamp-2" onClick={() => !disableDetailsModal && openDetails()}>{description}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] sm:text-xs">
               {severity && (
                 <span className={`px-2 py-1 rounded-full border ${severity === 'High' ? 'bg-red-50 text-red-700 border-red-200' :

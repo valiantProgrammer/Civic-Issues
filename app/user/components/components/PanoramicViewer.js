@@ -209,7 +209,7 @@ function CameraCapture({ onCapture, onCancel, setMessage }) {
 }
 
 // The main component
-export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
+export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox = false }) {
   const containerRef = useRef(null);
   const [isViewerReady, setIsViewerReady] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
@@ -223,6 +223,9 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
 
   // --- NEW STATE: To control the 3D viewer modal visibility ---
   const [showViewerModal, setShowViewerModal] = useState(false);
+
+  // Detect if we're in view-only mode (imageSrc provided, no onImageCaptured callback)
+  const isViewOnly = imageSrc && !onImageCaptured;
 
   const uploadToCloudinary = (file, onProgress) => {
     return new Promise((resolve, reject) => {
@@ -319,8 +322,26 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
   };
 
   return (
-    <div className="w-full">
-      <input type="file" ref={fileInputRef} onChange={handleFileSelected} className="hidden" />
+    <div className="w-full h-full">
+      {/* View-only mode: display viewer directly without any UI */}
+      {isViewOnly ? (
+        <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden">
+          {!isViewerReady && (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
+                <p className="text-gray-600">Loading panorama...</p>
+              </div>
+            </div>
+          )}
+          <div ref={containerRef} className="w-full h-full rounded-lg overflow-hidden">
+            <PanoramicViewer3D imageSrc={imageSrc} containerRef={containerRef} setIsViewerReady={setIsViewerReady} />
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Upload mode: original UI */}
+          <input type="file" ref={fileInputRef} onChange={handleFileSelected} className="hidden" />
       {message && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg bg-gray-800 text-white text-sm shadow-lg z-[10000]">
           {message}
@@ -383,8 +404,8 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
         )}
       </div>
 
-      {/* --- NEW: Uploaded Image URL Box --- */}
-      {imageSrc && !isUploading && (
+      {/* --- NEW: Uploaded Image URL Box --- Only show if hideInfoBox is false */}
+      {imageSrc && !isUploading && !hideInfoBox && (
         <div className="w-full p-4 border border-gray-300 bg-gray-50 rounded-lg">
           <h3 className="text-sm font-medium text-gray-700 mb-2">Panoramic Image Uploaded</h3>
           <div className="flex items-center justify-between bg-white p-3 border rounded-md">
@@ -448,6 +469,8 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured }) {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

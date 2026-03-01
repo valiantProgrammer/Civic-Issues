@@ -5,6 +5,7 @@ import { authApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import ReportDetailView from './components/ReportDetailView';
 
 const StarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>);
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>);
@@ -1655,7 +1656,7 @@ export default function AdminDashboardPage() {
                 <main className="flex-grow max-w-6xl mx-auto p-4 md:p-8 w-full">{renderCurrentView()}</main>
             </div>
             <AnimatePresence>
-                {selectedIssue && <IssueDetailModal key="detail-modal" issue={selectedIssue} onClose={() => setSelectedIssue(null)} onMediaClick={(url, type) => setFullscreenMedia({ url, type })} onGenerateSummary={handleGenerateSummary} aiSummary={aiSummary} isGeneratingSummary={isGeneratingSummary} />}
+                {selectedIssue && <ReportDetailView key="detail-modal" report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />}
                 {fullscreenMedia && <MediaFullscreenModal key="fullscreen-modal" media={fullscreenMedia} onClose={() => setFullscreenMedia(null)} />}
                 {rejectionTarget && <RejectionModal key="rejection-modal" issue={rejectionTarget} onCancel={() => setRejectionTarget(null)} onConfirm={handleConfirmRejection} onSuggestReason={handleSuggestReason} isSuggesting={isSuggestingReason} suggestedReason={suggestedReason}/>}
                 {approvalTarget && <ApprovalModal key="approval-modal" issue={approvalTarget} onCancel={() => setApprovalTarget(null)} onConfirm={handleConfirmApproval} />}
