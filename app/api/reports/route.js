@@ -34,7 +34,7 @@ export async function POST(request) {
         if (!reporter) {
             return NextResponse.json({ success: false, message: 'Reporter not found.' }, { status: 404 });
         }
-        const reporterName = reporter.fullName; // Use the authoritative name from DB
+        const reporterName = reporter.userName || 'Anonymous'; // Use the authoritative name from DB
 
         // 3. **FIXED**: Parse the request body as JSON instead of FormData
         const data = await request.json();
