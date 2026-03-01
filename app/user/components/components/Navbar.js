@@ -264,7 +264,7 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
               </svg>
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto mb-5">
             <NavContent />
           </div>
         </div>

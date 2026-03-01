@@ -69,7 +69,7 @@ export default function ReportedIssuesSection({ filter }) {
                             <ReportCard
                                 key={report._id}
                                 title={report.Title}
-                                time={report.timeOfReporting}
+                                time={report.createdAt || report.timeOfReporting}
                                 category={report.category}
                                 status={report.status}
                                 imageSrc={report.image}

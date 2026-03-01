@@ -218,12 +218,14 @@ export default function ProfileCard() {
       <style>{editButtonStyles}</style>
       <div className="bg-white rounded-lg shadow-xl overflow-hidden">
         {/* Account Type Badge */}
-        <div className="absolute top-15 right-15 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">
-          Standard User
-        </div>
 
         {/* Header Background */}
-        <div className="h-32 bg-gradient-to-r from-purple-500 to-purple-600"></div>
+        <div className="h-32 bg-gradient-to-r from-purple-500 to-purple-600">
+          <div className="relative top-1/6 w-fit left-5/6 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">
+            Standard User
+          </div>
+
+        </div>
 
         {/* Profile Content */}
         <div className="px-6 py-8 flex justify-around">

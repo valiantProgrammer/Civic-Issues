@@ -167,7 +167,7 @@ export default function ReportModal({ isOpen, onClose, report }) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">Reported</span>
-                <span className="text-sm font-medium text-gray-900">{timeAgo(report.timeOfReporting)}</span>
+                <span className="text-sm font-medium text-gray-900">{timeAgo(report.createdAt || report.timeOfReporting)}</span>
                 {/* <span className="text-sm font-medium text-gray-900">{report.timeOfReporting}</span> */}
               </div>
               <div className="flex items-center justify-between">
