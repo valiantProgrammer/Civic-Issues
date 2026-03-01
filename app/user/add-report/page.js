@@ -9,11 +9,14 @@ import Link from 'next/link'
 import LocationPicker from '../components/components/LocationPicker.js'
 import authApi from '@/lib/api.js'
 import { pass } from 'three/src/nodes/display/PassNode.js'
+import toast from 'react-hot-toast'
+import { getCookie } from '@/lib/api.js'
 
 function AddReportContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const verified = searchParams.get('verified')
+  const editId = searchParams.get('editId')
 
   const [formData, setFormData] = useState({
     title: '',
@@ -87,6 +90,9 @@ function AddReportContent() {
   }, []);
 
 
+  const [isEditingReport, setIsEditingReport] = useState(false)
+  const [editingReportId, setEditingReportId] = useState(null)
+  const [isLoadingReport, setIsLoadingReport] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [errors, setErrors] = useState({})
   const [imageFile, setImageFile] = useState(null)
@@ -137,9 +143,62 @@ function AddReportContent() {
     if (verified === 'true') {
       setIsEmailVerified(true)
       // Clean up the URL parameter
-      router.replace('/add-report')
+      router.replace('/user/add-report')
     }
   }, [verified, router])
+
+  // Load report data if editing
+  useEffect(() => {
+    const loadReportData = async () => {
+      if (!editId) return
+
+      setIsLoadingReport(true)
+      try {
+        const response = await authApi.getUserReports()
+        const reportToEdit = response.reports?.find(r => r._id === editId)
+        
+        if (reportToEdit) {
+          setIsEditingReport(true)
+          setEditingReportId(editId)
+          
+          // Pre-fill form data
+          setFormData(prev => ({
+            ...prev,
+            title: reportToEdit.category || reportToEdit.Title || '',
+            description: reportToEdit.Description || '',
+            coordinates: reportToEdit.locationCoordinates?.coordinates 
+              ? `${reportToEdit.locationCoordinates.coordinates[1]}, ${reportToEdit.locationCoordinates.coordinates[0]}` 
+              : prev.coordinates,
+            buildingName: reportToEdit.building || '',
+            streetName: reportToEdit.street || '',
+            locality: reportToEdit.locality || '',
+            propertyType: reportToEdit.propertyType || '',
+            severity: reportToEdit.severity || '',
+            uploadedImage: reportToEdit.image || ''
+          }))
+          
+          // Pre-load image
+          if (reportToEdit.image) {
+            setImagePreview(reportToEdit.image)
+            setPanoramicImage(reportToEdit.image)
+          }
+          
+          toast.success('Report loaded for editing')
+        } else {
+          toast.error('Could not find the report to edit')
+          router.push('/user')
+        }
+      } catch (error) {
+        console.error('Failed to load report:', error)
+        toast.error('Failed to load report details')
+        router.push('/user')
+      } finally {
+        setIsLoadingReport(false)
+      }
+    }
+    
+    loadReportData()
+  }, [editId])
 
   // Handle using current location
 
@@ -329,6 +388,7 @@ function AddReportContent() {
 
       const payload = {
         Title: formData.title,
+        category: formData.title,
         Description: formData.description,
         building: formData.buildingName,
         street: formData.streetName,
@@ -342,20 +402,53 @@ function AddReportContent() {
         verified: verification,
       };
 
-      const res = await authApi.submitReport(payload);
+      // If editing, update the existing report
+      if (isEditingReport && editingReportId) {
+        const updateRes = await fetch(`/api/reports/${editingReportId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+          },
+          body: JSON.stringify(payload)
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to submit report");
+        if (!updateRes.ok) {
+          throw new Error("Failed to update report");
+        }
+
+        await updateRes.json();
+        toast.success("Report updated and resubmitted for verification!");
+        
+        // Reset form and editing state
+        setFormData({
+          title: "", description: "", coordinates: "22.563282, 88.351286", buildingName: "", severity: "",
+          streetName: "", locality: "", propertyType: "", uploadedImage: "", useCurrentLocation: false,
+        });
+        setIsEditingReport(false);
+        setEditingReportId(null);
+        setImagePreview('');
+        setPanoramicImage('');
+        
+        // Navigate back to user page
+        setTimeout(() => router.push('/user'), 1500);
+      } else {
+        // Create new report
+        const res = await authApi.submitReport(payload);
+
+        if (!res.ok) {
+          throw new Error("Failed to submit report");
+        }
+
+        await res.json();
+        toast.success("Issue reported successfully!");
+
+        // Reset form
+        setFormData({
+          title: "", description: "", coordinates: "22.563282, 88.351286", buildingName: "", severity: "",
+          streetName: "", locality: "", propertyType: "", uploadedImage: "", useCurrentLocation: false,
+        });
       }
-
-      await res.json();
-      alert("Issue reported successfully!");
-
-      // Reset form
-      setFormData({
-        title: "", description: "", coordinates: "", buildingName: "", severity: "",
-        streetName: "", locality: "", propertyType: "", uploadedImage: "", useCurrentLocation: false,
-      });
       // ... reset other states
     } catch (err) {
       console.error("Error submitting report:", err);
@@ -375,9 +468,25 @@ function AddReportContent() {
       <Navbar />
       <main className="lg:ml-64 max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 pb-20">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Report An Issue</h1>
+          {isLoadingReport ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading report details...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                {isEditingReport ? 'Edit Rejected Report' : 'Report An Issue'}
+              </h1>
+              {isEditingReport && (
+                <p className="text-sm text-blue-600 mb-6">
+                  Edit the report details below and resubmit. Your report will be marked as submitted for verification.
+                </p>
+              )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
             {/* Panoramic Image Section */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -642,10 +751,12 @@ function AddReportContent() {
                 disabled={!formData.uploadedImage}
                 className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                Submit Report
+                {isEditingReport ? 'Resubmit Report' : 'Submit Report'}
               </button>
             </div>
           </form>
+            </>
+          )}
         </div>
       </main>
     </div>

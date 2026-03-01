@@ -223,10 +223,34 @@ export default function ReportDetailCard({ report, onClose }) {
               <p className="text-sm text-gray-900 capitalize">{report.severity || 'Medium'}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase">Location</p>
+              <p className="text-xs font-medium text-gray-500 uppercase">Street Name</p>
+              <p className="text-sm text-gray-900">{report.street || 'Not specified'}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase">Building/House Number</p>
+              <p className="text-sm text-gray-900">{report.building || 'Not specified'}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase">Locality</p>
+              <p className="text-sm text-gray-900">{report.locality || 'Not specified'}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase">Property Type</p>
+              <p className="text-sm text-gray-900">{report.propertyType || 'Not specified'}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 uppercase">Coordinates</p>
               <p className="text-sm text-gray-900">
-                {report.street || `${report.locationCoordinates}`}
+                {report.locationCoordinates?.coordinates 
+                  ? `${report.locationCoordinates.coordinates[1]}, ${report.locationCoordinates.coordinates[0]}` 
+                  : 'No coordinates available'}
               </p>
+              {report.ward && (
+                <p className="text-xs text-gray-600 mt-1">Ward: {report.ward}</p>
+              )}
+              {report.municipalityName && (
+                <p className="text-xs text-gray-600">Municipality: {report.municipalityName}</p>
+              )}
             </div>
             <div>
               <p className="text-xs font-medium text-gray-500 uppercase">Submitted On</p>

@@ -25,6 +25,7 @@ const reportSchema = new mongoose.Schema(
     {
         // --- Core Issue Details ---
         Title: { type: String, required: true, trim: true },
+        category: { type: String, trim: true },
         Description: { type: String, required: true, trim: true },
         severity: { type: String, enum: ['High', 'Medium', 'Low'], required: true },
         
@@ -38,6 +39,10 @@ const reportSchema = new mongoose.Schema(
             coordinates: { type: [Number], index: '2dsphere', required: true },
         },
         address: { type: String },
+        street: { type: String },
+        building: { type: String },
+        locality: { type: String },
+        propertyType: { type: String },
         ward: { type: String, required: true },
         municipalityName: { type: String, required: true },
         municipalityId: { type: mongoose.Schema.Types.ObjectId, ref: "Municipality" },

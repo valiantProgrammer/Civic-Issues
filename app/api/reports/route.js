@@ -39,7 +39,7 @@ export async function POST(request) {
         // 3. **FIXED**: Parse the request body as JSON instead of FormData
         const data = await request.json();
         console.log(data)
-        const { Title, Description, locationCoordinates, image, mediaUrl, thumbnailUrl, mediaType, severity, verified, category, sendToMunicipality } = data;
+        const { Title, Description, locationCoordinates, image, mediaUrl, thumbnailUrl, mediaType, severity, verified, category, sendToMunicipality, street, building, locality, propertyType } = data;
 
         // 4. Validate payload
         if (!Title || !Description || !locationCoordinates || !severity) {
@@ -110,6 +110,11 @@ export async function POST(request) {
             ReporterName: reporterName, // Using name from DB
             reporterId: new mongoose.Types.ObjectId(reporterId),
             locationCoordinates: { type: "Point", coordinates: coords },
+            address: building || street || locality || '',
+            street,
+            building,
+            locality,
+            propertyType,
             ward: wardDoc.ward_number,
             municipalityId: muni._id,
             municipalityName: muni.name,
