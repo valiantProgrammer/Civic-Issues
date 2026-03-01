@@ -6,7 +6,7 @@ export default async function middleware(request) {
     const accessToken = request.cookies.get('accessToken')?.value;
 
     
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/user-signin', request.url);
 
     
     if (!accessToken) {
