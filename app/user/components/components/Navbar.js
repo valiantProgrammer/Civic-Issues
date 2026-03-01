@@ -192,7 +192,7 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="absolute inset-0 bg-black/20" onClick={() => setIsMenuOpen(false)}></div>
+        <div className="absolute inset-0 bg-black/20 none" onClick={() => setIsMenuOpen(false)}></div>
         <div className="absolute top-0 left-0 h-full w-64 bg-white shadow-xl flex flex-col">
           <div className="p-4 border-b flex items-center justify-between h-16">
             <h2 className="font-bold text-xl text-gray-900">Menu</h2>

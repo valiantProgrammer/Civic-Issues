@@ -8,6 +8,7 @@ import PanoramicViewer from '../components/components/PanoramicViewer.js'
 import Link from 'next/link'
 import LocationPicker from '../components/components/LocationPicker.js'
 import authApi from '@/lib/api.js'
+import { pass } from 'three/src/nodes/display/PassNode.js'
 
 function AddReportContent() {
   const router = useRouter()
@@ -279,8 +280,12 @@ function AddReportContent() {
     }
 
     // --- 1. AI IMAGE VERIFICATION ON SUBMIT ---
+    let isVerificationAttempted = false;
     if (formData.uploadedImage && formData.title) {
+      isVerificationAttempted = true;
       setIsVerifying(true);
+      let isVerified = false; // Default to not verified
+      
       try {
         const verificationRes = await fetch('/api/verify-image-category', {
           method: 'POST',
@@ -291,31 +296,24 @@ function AddReportContent() {
           }),
         });
 
-        let verificationData = { isMatch: true }; // Default to true if verification passes
-
         if (verificationRes.ok) {
           try {
-            verificationData = await verificationRes.json();
+            const verificationData = await verificationRes.json();
+            isVerified = verificationData.isMatch === true; // Set verification based on API response
           } catch (parseError) {
-            console.error("Failed to parse verification response:", parseError);
-            // Keep default value if JSON parsing fails
+            // If parsing fails, keep isVerified as false (no error shown to user)
+            pass
           }
-        } else {
-          console.error("Verification service returned:", verificationRes.status);
-          // Keep default value if response is not ok
         }
-
-        console.log(verificationData.isMatch);
-        if (!verificationData.isMatch) {
-          setIsVerifying(false);
-          setVerification(false)
-          return; // Stop submission if verification fails
-        }
+        // If API returns error or response is not ok, isVerified stays false (no error shown to user)
       } catch (err) {
-        console.error("Verification error:", err);
-        setIsVerifying(false);
-        return; // Stop submission on error
+        // If verification request fails, keep isVerified as false (no error shown to user)
+        err = null;
       }
+      
+      // Update verification state - whether it passed or failed
+      setVerification(isVerified);
+      setIsVerifying(false);
     }
     // --- END OF VERIFICATION BLOCK ---
 
@@ -361,7 +359,11 @@ function AddReportContent() {
       // ... reset other states
     } catch (err) {
       console.error("Error submitting report:", err);
-      alert("There was an error submitting your report. Please try again.");
+      // Only show submission error if verification was not attempted
+      // (if verification was attempted and failed, we already submitted with verified:false)
+      if (!isVerificationAttempted) {
+        alert("There was an error submitting your report. Please try again.");
+      }
     } finally {
       // Ensure verification state is always reset
       setIsVerifying(false);
