@@ -223,7 +223,7 @@ export default function ProfileCard() {
         </div>
 
         {/* Header Background */}
-        <div className="h-32 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+        <div className="h-32 bg-gradient-to-r from-purple-500 to-purple-600"></div>
 
         {/* Profile Content */}
         <div className="px-6 py-8 flex justify-around">

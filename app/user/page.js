@@ -6,7 +6,7 @@ import Navbar from './components/components/Navbar';
 import Footer from './components/components/Footer';
 import ProfileCard from './components/components/ProfileCard';
 import ContactCard from './components/components/ContactCard';
-
+import HelpCard from './components/components/HelpCard';
 export default function Home() {
   const [reportFilter, setReportFilter] = useState('pending');
   const [activeView, setActiveView] = useState('reports'); // 'reports', 'profile', 'contact'
@@ -18,6 +18,7 @@ export default function Home() {
         onProfileClick={() => setActiveView('profile')}
         onContactClick={() => setActiveView('contact')}
         onReportsClick={() => setActiveView('reports')}
+        onHelpClick={() => setActiveView('help')}
       />
 
       <div className="flex flex-col flex-1 lg:ml-64">
@@ -31,6 +32,7 @@ export default function Home() {
             )}
             {activeView === 'profile' && <ProfileCard />}
             {activeView === 'contact' && <ContactCard />}
+            {activeView === 'help' && <HelpCard />}
           </div>
         </main>
         <Footer />

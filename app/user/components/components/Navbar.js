@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import authApi from '@/lib/api';
@@ -18,14 +18,38 @@ const LogoutIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24
 
 const primaryLinks = [
   { href: '/', label: 'Home', icon: <HomeIcon /> },
-  { href: '/help', label: 'Need Help', icon: <HelpIcon /> },
 ];
 
-export default function Navbar({ onReportFilterChange, onProfileClick, onContactClick, onReportsClick }) {
+export default function Navbar({ onReportFilterChange, onProfileClick, onContactClick, onReportsClick, onHelpClick}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedReportFilter, setSelectedReportFilter] = useState('pending');
+  const [activeSection, setActiveSection] = useState(null); // 'help', 'contact', 'profile', or null
+  const [pendingCount, setPendingCount] = useState(0);
+  const [approvedCount, setApprovedCount] = useState(0);
+  const [rejectedCount, setRejectedCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchReportCounts = async () => {
+      try {
+        const response = await authApi.getUserReports();
+        if (response.reports && Array.isArray(response.reports)) {
+          const pending = response.reports.filter(report => report.status === 'pending').length;
+          const approved = response.reports.filter(report => report.status === 'approved').length;
+          const rejected = response.reports.filter(report => report.status === 'rejected').length;
+
+          setPendingCount(pending);
+          setApprovedCount(approved);
+          setRejectedCount(rejected);
+        }
+      } catch (error) {
+        console.error('Failed to fetch report counts:', error);
+      }
+    };
+
+    fetchReportCounts();
+  }, []);
 
   const handleLogout = useCallback(async () => {
     await authApi.logout();
@@ -35,6 +59,7 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
 
   const handleReportFilterClick = (filterType) => {
     setSelectedReportFilter(filterType);
+    setActiveSection(null); // Clear section selection when viewing reports
     onReportFilterChange(filterType);
     setIsMenuOpen(false);
   };
@@ -46,10 +71,13 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
         href={href}
         className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
           isActive
-            ? 'bg-yellow-100 text-purple-700 font-semibold'
+            ? ' text-purple-700 font-semibold border-2 border-yellow-900 bg-gradient-to-r from-yellow-200 to-blue-200'
             : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
         }`}
-        onClick={() => setIsMenuOpen(false)}
+        onClick={() => {
+          setActiveSection(null);
+          setIsMenuOpen(false);
+        }}
       >
         {icon}
         <span>{label}</span>
@@ -76,10 +104,30 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
             ))}
             <button
               onClick={() => {
+                setActiveSection('help');
+                onHelpClick();
+                setIsMenuOpen(false);
+              }}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left transition-colors ${
+                activeSection === 'help'
+                  ? 'text-purple-700 font-semibold border-2 border-yellow-900 bg-gradient-to-r from-yellow-200 to-blue-200'
+                  : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
+              }`}
+            >
+              <HelpIcon />
+              <span>Need Help</span>
+            </button>
+            <button
+              onClick={() => {
+                setActiveSection('contact');
                 onContactClick();
                 setIsMenuOpen(false);
               }}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100 hover:text-purple-600 transition-colors"
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left transition-colors ${
+                activeSection === 'contact'
+                  ? 'text-purple-700 font-semibold border-2 border-yellow-900 bg-gradient-to-r from-yellow-200 to-blue-200'
+                  : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
+              }`}
             >
               <ContactIcon />
               <span>Contact Manager</span>
@@ -96,8 +144,8 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
               <button
                 key={link.type}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left transition-colors ${
-                  selectedReportFilter === link.type
-                    ? 'bg-yellow-100 text-purple-700 font-semibold'
+                  selectedReportFilter === link.type && activeSection === null
+                    ? ' text-purple-700 font-semibold border-1 border-yellow-900 bg-gradient-to-r from-yellow-200 to-blue-200'
                     : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
                 }`}
                 onClick={() => {
@@ -119,10 +167,15 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
           <div className="space-y-1">
             <button
               onClick={() => {
+                setActiveSection('profile');
                 onProfileClick();
                 setIsMenuOpen(false);
               }}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100 hover:text-purple-600 transition-colors"
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left transition-colors ${
+                activeSection === 'profile'
+                  ? 'text-purple-700 font-semibold border-2 border-yellow-900 bg-gradient-to-r from-yellow-200 to-blue-200'
+                  : 'text-gray-700 hover:bg-gray-100 hover:text-purple-600'
+              }`}
             >
               <ProfileIcon />
               <span>Profile</span>
@@ -136,15 +189,15 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
           </h3>
           <div className="grid grid-cols-3 gap-2 px-2">
             <div className="text-center bg-blue-100 p-2 rounded-lg">
-              <p className="font-bold text-blue-800 text-xl">2</p>
+              <p className="font-bold text-blue-800 text-xl">{pendingCount}</p>
               <p className="text-xs text-blue-700">Pending</p>
             </div>
             <div className="text-center bg-green-100 p-2 rounded-lg">
-              <p className="font-bold text-green-800 text-xl">0</p>
+              <p className="font-bold text-green-800 text-xl">{approvedCount}</p>
               <p className="text-xs text-green-700">Approved</p>
             </div>
             <div className="text-center bg-red-100 p-2 rounded-lg">
-              <p className="font-bold text-red-800 text-xl">0</p>
+              <p className="font-bold text-red-800 text-xl">{rejectedCount}</p>
               <p className="text-xs text-red-700">Rejected</p>
             </div>
           </div>
@@ -189,10 +242,15 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
 
       <div
         className={`lg:hidden fixed inset-0 z-50 transform transition-transform ease-in-out duration-300 ${
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          isMenuOpen ? 'translate-x-0 delay-0' : '-translate-x-full delay-300'
         }`}
       >
-        <div className="absolute inset-0 bg-black/20 none" onClick={() => setIsMenuOpen(false)}></div>
+        <div
+          className={`absolute inset-0 bg-black/50 transition-opacity ease-in-out duration-300 ${
+            isMenuOpen ? 'opacity-100 delay-300' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
         <div className="absolute top-0 left-0 h-full w-64 bg-white shadow-xl flex flex-col">
           <div className="p-4 border-b flex items-center justify-between h-16">
             <h2 className="font-bold text-xl text-gray-900">Menu</h2>
