@@ -75,7 +75,7 @@ const ProfilePage = () => {
             <div className="flex items-center mt-1">
                 <span className="text-slate-400">{icon}</span>
                 {isEditing && (label === 'Full Name' || label === 'Phone Number') ? (
-                    <input type="text" defaultValue={value} className="w-full ml-3 p-1 rounded bg-slate-100 border border-slate-300 focus:ring-2 focus:ring-orange-500 outline-none" />
+                    <input type="text" defaultValue={value} className="w-full ml-3 p-1 text-gray-800 rounded bg-slate-100 border border-slate-300 focus:ring-2 focus:ring-orange-500 outline-none" />
                 ) : (
                     <p className="text-slate-800 ml-3 text-base">{value}</p>
                 )}
@@ -121,7 +121,7 @@ const ProfilePage = () => {
 const Sidebar = ({ isOpen, onClose, pendingCount, approvedCount, rejectedCount, currentView, setCurrentView, onLogout }) => {
     const reportNavItems = [
         { id: 'pending', label: 'Pending Reports', icon: <HomeIcon /> },
-        { id: 'approved', label: 'Approved Reports', icon: <CheckIcon size={20} /> },
+        { id: 'verified', label: 'Verified Reports', icon: <CheckIcon size={20} /> },
         { id: 'rejected', label: 'Rejected Reports', icon: <CloseIcon size={20} /> },
     ];
     const managementNavItems = [
@@ -191,7 +191,7 @@ const IssueCard = ({ issue, onSelect, onApprove, onReject }) => (
 );
 
 const ArchivedIssueCard = ({ issue, onSelect, onMakePending }) => {
-    const isApproved = issue.status === 'approved';
+    const isApproved = issue.status === 'verified';
     return (
         <div onClick={() => onSelect(issue)} className={`p-4 rounded-2xl shadow-sm border cursor-pointer flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-0.5 ${isApproved ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
             <div className="flex-grow">
@@ -732,7 +732,7 @@ export default function AdminDashboardPage() {
 
     const updateIssueStatusInApi = async (issue, newStatus, reason = null) => {
         const originalIssues = [...allIssues];
-        const uiStatus = newStatus === 'approved' ? 'solved' : newStatus;
+        const uiStatus = newStatus;
         const updatedIssues = allIssues.map(i => i._id === issue._id ? { ...i, status: uiStatus, rejectionReason: reason } : i);
         setAllIssues(updatedIssues);
         try {
@@ -746,7 +746,7 @@ export default function AdminDashboardPage() {
 
     const handleConfirmApproval = () => {
         if (!approvalTarget) return;
-        updateIssueStatusInApi(approvalTarget, 'approved');
+        updateIssueStatusInApi(approvalTarget, 'verified');
         setApprovalTarget(null);
     };
 
@@ -762,7 +762,7 @@ export default function AdminDashboardPage() {
     };
 
     const filteredAndSortedIssues = React.useMemo(() => {
-        const statusToFilter = currentView === 'approved' ? 'approved' : currentView;
+        const statusToFilter = currentView === 'verified' ? 'verified' : currentView;
         let list = allIssues.filter(issue => issue.status === statusToFilter);
         console.log(list)
 
@@ -794,8 +794,12 @@ export default function AdminDashboardPage() {
             );
         }
 
-        const reportViews = ['pending', 'approved', 'rejected'];
+        const reportViews = ['pending', 'verified', 'rejected'];
         if (reportViews.includes(currentView)) {
+            // Show detail card if a report is selected, otherwise show the list
+            if (selectedIssue) {
+                return <ReportDetailView report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />;
+            }
             return (
                 <>
                     <div className="flex text-gray-500 flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
@@ -839,7 +843,7 @@ export default function AdminDashboardPage() {
                 isOpen={isMenuOpen}
                 onClose={() => setIsMenuOpen(false)}
                 pendingCount={allIssues.filter(i => i.status === 'pending').length}
-                approvedCount={allIssues.filter(i => i.status === 'approved').length}
+                approvedCount={allIssues.filter(i => i.status === 'verified').length}
                 rejectedCount={allIssues.filter(i => i.status === 'rejected').length}
                 currentView={currentView}
                 setCurrentView={setCurrentView}
@@ -852,18 +856,6 @@ export default function AdminDashboardPage() {
                 </main>
             </div>
             <AnimatePresence>
-                {selectedIssue && (
-                    <IssueDetailModal
-                        key={`detail-${selectedIssue._id}`} // Unique key for this modal
-                        issue={selectedIssue}
-                        onClose={() => setSelectedIssue(null)}
-                        onImageClick={setFullscreenImageUrl}
-                        file={setFileType}
-                        onGenerateSummary={handleGenerateSummary}
-                        aiSummary={aiSummary}
-                        isGeneratingSummary={isGeneratingSummary}
-                    />
-                )}
                 {fullscreenImageUrl && (
                     <MediaFullscreenModal
                         key="fullscreen-media" // Unique key for this modal
@@ -924,7 +916,7 @@ const ShieldIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="20" he
 const Sidebar = ({ isOpen, onClose, pendingCount, approvedCount, rejectedCount, currentView, setCurrentView }) => {
     const reportNavItems = [
         { id: 'pending', label: 'Pending Reports', icon: <HomeIcon /> },
-        { id: 'approved', label: 'Approved Reports', icon: <CheckIcon size={20} /> },
+        { id: 'verified', label: 'Verified Reports', icon: <CheckIcon size={20} /> },
         { id: 'rejected', label: 'Rejected Reports', icon: <CloseIcon size={20} /> },
     ];
     const managementNavItems = [
@@ -1492,7 +1484,7 @@ export default function AdminDashboardPage() {
 
     React.useEffect(() => {
         const fetchMoreIssues = async () => {
-            const statusToFetch = currentView === 'approved' ? 'solved' : currentView;
+            const statusToFetch = currentView === 'verified' ? 'verified' : currentView;
             if (currentView === 'pending' || isLoading || fetchedStatuses[currentView]) {
                 return;
             }
@@ -1553,21 +1545,21 @@ export default function AdminDashboardPage() {
 
     const updateIssueStatusInApi = async (issue, newStatus, reason = null) => {
         const originalIssues = [...allIssues];
-        const uiStatus = newStatus === 'approved' ? 'solved' : newStatus;
+        const uiStatus = newStatus;
         const updatedIssues = allIssues.map(i => i._id === issue._id ? { ...i, status: uiStatus, rejectionReason: reason } : i);
         setAllIssues(updatedIssues);
         try {
             // await authApi.updateReportStatus(issue._id, newStatus, reason);
-            toast.success(Report has been updated to ${newStatus}.);
+            toast.success(`Report has been updated to ${newStatus}.`);
         } catch (error) {
-            toast.error(Failed to update report: ${error.message});
+            toast.error(`Failed to update report: ${error.message}`);
             setAllIssues(originalIssues);
         }
     };
 
     const handleConfirmApproval = () => {
         if (!approvalTarget) return;
-        updateIssueStatusInApi(approvalTarget, 'approved');
+        updateIssueStatusInApi(approvalTarget, 'verified');
         setApprovalTarget(null);
     };
 
@@ -1582,8 +1574,8 @@ export default function AdminDashboardPage() {
         if (issueToUpdate) updateIssueStatusInApi(issueToUpdate, 'pending');
     };
 
-    const filteredAndSortedIssues = React.useMemo(() => {
-        const statusToFilter = currentView === 'approved' ? 'solved' : currentView;
+    const filteredAndSortedIssuesV2 = React.useMemo(() => {
+        const statusToFilter = currentView === 'verified' ? 'verified' : currentView;
         let list = allIssues.filter(issue => issue.status === statusToFilter);
         const trimmedFilter = filterValue.trim().toLowerCase();
         if (trimmedFilter) {
@@ -1605,8 +1597,12 @@ export default function AdminDashboardPage() {
         if (isLoading && !fetchedStatuses[currentView]) {
             return ( <div className="flex justify-center items-center h-64"><div className="text-center text-slate-500"><svg className="animate-spin mx-auto h-8 w-8 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p className="mt-4">Loading Reports...</p></div></div> );
         }
-        const reportViews = ['pending', 'approved', 'rejected'];
+        const reportViews = ['pending', 'verified', 'rejected'];
         if (reportViews.includes(currentView)) {
+            // Show detail card if a report is selected, otherwise show the list
+            if (selectedIssue) {
+                return <ReportDetailView report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />;
+            }
             return (
                 <>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
@@ -1641,27 +1637,28 @@ export default function AdminDashboardPage() {
     };
 
     return (
-        <div className="relative min-h-screen lg:flex bg-slate-50">
-            <Sidebar
-                isOpen={isMenuOpen}
-                onClose={() => setIsMenuOpen(false)}
-                pendingCount={allIssues.filter(i => i.status === 'pending').length}
-                approvedCount={allIssues.filter(i => i.status === 'solved').length}
-                rejectedCount={allIssues.filter(i => i.status === 'rejected').length}
-                currentView={currentView}
-                setCurrentView={setCurrentView}
-            />
-            <div className="flex-1 flex flex-col lg:ml-64">
-                <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                <main className="flex-grow max-w-6xl mx-auto p-4 md:p-8 w-full">{renderCurrentView()}</main>
+        <>
+            <div className="min-h-screen lg:flex bg-slate-50">
+                <Sidebar
+                    isOpen={isMenuOpen}
+                    onClose={() => setIsMenuOpen(false)}
+                    pendingCount={allIssues.filter(i => i.status === 'pending').length}
+                    approvedCount={allIssues.filter(i => i.status === 'solved').length}
+                    rejectedCount={allIssues.filter(i => i.status === 'rejected').length}
+                    currentView={currentView}
+                    setCurrentView={setCurrentView}
+                />
+                <div className="flex-1 flex flex-col lg:ml-64">
+                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
+                    <main className="flex-grow max-w-6xl mx-auto p-4 md:p-8 w-full">{renderCurrentView()}</main>
+                </div>
             </div>
             <AnimatePresence>
-                {selectedIssue && <ReportDetailView key="detail-modal" report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />}
                 {fullscreenMedia && <MediaFullscreenModal key="fullscreen-modal" media={fullscreenMedia} onClose={() => setFullscreenMedia(null)} />}
                 {rejectionTarget && <RejectionModal key="rejection-modal" issue={rejectionTarget} onCancel={() => setRejectionTarget(null)} onConfirm={handleConfirmRejection} onSuggestReason={handleSuggestReason} isSuggesting={isSuggestingReason} suggestedReason={suggestedReason}/>}
                 {approvalTarget && <ApprovalModal key="approval-modal" issue={approvalTarget} onCancel={() => setApprovalTarget(null)} onConfirm={handleConfirmApproval} />}
             </AnimatePresence>
-        </div>
+        </>
     );
 }
 */

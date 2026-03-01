@@ -64,6 +64,9 @@ body {
   }
 }
 
+select{
+  font: black;
+}
 
 /* Explorer sidebar scrollbar */
 .explorer-scrollbar {

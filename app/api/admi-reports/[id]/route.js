@@ -14,9 +14,9 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const { status, rejectedReason } = body;
 
-    const validClientStatuses = ["pending", "solved", "rejected", "approved"];
+    const validClientStatuses = ["pending", "verified", "solved", "rejected", "approved"];
     if (!status || !validClientStatuses.includes(status)) {
-      return NextResponse.json({ message: "A valid status ('pending', 'approved', 'rejected') is required" }, { status: 400 });
+      return NextResponse.json({ message: "A valid status ('pending', 'verified', 'approved', 'rejected') is required" }, { status: 400 });
     }
     const finalStatus = status;
     const updatePayload = { status: finalStatus };

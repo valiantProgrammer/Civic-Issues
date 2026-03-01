@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
 
-const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0, forwarded: 0 } }) => {
+// Icons
+const PendingIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const ApprovedIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const RejectedIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const LogoutIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
+
+const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0 }, currentView = 'pending', setCurrentView = () => {} }) => {
   const [open, setOpen] = useState(false);
-
-  const pageLinks = {
-    Pending: '/',
-    Approved: '/approved',
-    Rejected: '/rejected',
-    Forwarded: '/forwarded'
-  };
 
   return (
     <>
@@ -19,8 +18,17 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0, forwarded: 0 }
           <div className="flex justify-between items-center h-16">
             {/* Left side - Logo and Site Name */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-md flex-shrink-0"></div>
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900">Administration</h1>
+              <Image
+                src="/images/logo.png"
+                alt="Civic Saathi Logo"
+                width={100}
+                height={100}
+                className="w-[12vw] h-[12vw] md:w-[3.5vw] md:h-[3.5vw]"
+              />
+              <div className="flex flex-col">
+                <h1 className="text-sm font-bold text-slate-800 tracking-tight">Civic साथी</h1>
+                <p className="text-xs text-gray-600">Administration</p>
+              </div>
             </div>
 
             {/* Right side - Hamburger Menu */}
@@ -65,26 +73,43 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0, forwarded: 0 }
                     <div className="text-lg font-bold text-red-700">{stats.rejected || 0}</div>
                     <div className="text-xs text-red-800">Rejected</div>
                   </div>
-                  <div className="rounded-md border border-purple-200 bg-purple-50 text-center py-3">
-                    <div className="text-lg font-bold text-purple-700">{stats.forwarded || 0}</div>
-                    <div className="text-xs text-purple-800">Forwarded</div>
-                  </div>
+
                 </div>
               </div>
 
               {/* Navigation */}
               <div className="space-y-2 mb-8">
                 <h3 className="text-sm font-medium text-gray-700">Navigation</h3>
-                {Object.entries(pageLinks).map(([section, href]) => (
-                  <Link
-                    key={section}
-                    href={href}
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md hover:bg-gray-50 text-gray-800 text-sm font-medium transition-colors"
-                  >
-                    {section} Reports
-                  </Link>
-                ))}
+                <button
+                  onClick={() => { setCurrentView('pending'); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left ${
+                    currentView === 'pending'
+                      ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                      : 'text-gray-800 hover:bg-gray-50'
+                  }`}
+                >
+                  <PendingIcon /> Pending Reports
+                </button>
+                <button
+                  onClick={() => { setCurrentView('approved'); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left ${
+                    currentView === 'approved'
+                      ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                      : 'text-gray-800 hover:bg-gray-50'
+                  }`}
+                >
+                  <ApprovedIcon /> Approved Reports
+                </button>
+                <button
+                  onClick={() => { setCurrentView('rejected'); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left ${
+                    currentView === 'rejected'
+                      ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                      : 'text-gray-800 hover:bg-gray-50'
+                  }`}
+                >
+                  <RejectedIcon /> Rejected Reports
+                </button>
               </div>
 
               {/* Logout */}
@@ -106,10 +131,16 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0, forwarded: 0 }
         {/* Logo Section */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-md"></div>
+              <Image
+                            src="/images/logo.png"
+                            alt="Civic Saathi Logo"
+                            width={100}
+                            height={100}
+                            className="w-[12vw] h-[12vw] md:w-[3.5vw] md:h-[3.5vw]"
+                        />
             <div>
-              <h2 className="font-bold text-gray-900">Administration</h2>
-              <p className="text-xs text-gray-500">Dashboard</p>
+              <h1 className="text-lg font-bold text-slate-800 tracking-tight">Civic साथी</h1>
+              <p className="text-xs text-gray-600">Administration</p>
             </div>
           </div>
         </div>
@@ -130,25 +161,42 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0, forwarded: 0 }
               <div className="text-xl font-bold text-red-700">{stats.rejected || 0}</div>
               <div className="text-xs text-red-800">Rejected</div>
             </div>
-            <div className="rounded-lg border border-purple-200 bg-purple-50 p-3 text-center">
-              <div className="text-xl font-bold text-purple-700">{stats.forwarded || 0}</div>
-              <div className="text-xs text-purple-800">Forwarded</div>
-            </div>
           </div>
         </div>
 
         {/* Navigation Section */}
         <div className="p-4 space-y-2 flex-1">
           <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Reports</h3>
-          {Object.entries(pageLinks).map(([section, href]) => (
-            <Link
-              key={section}
-              href={href}
-              className="block px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 text-sm font-medium transition-colors border border-transparent hover:border-gray-200"
-            >
-              {section} Reports
-            </Link>
-          ))}
+          <button
+            onClick={() => setCurrentView('pending')}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+              currentView === 'pending'
+                ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                : 'text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-200'
+            }`}
+          >
+            <PendingIcon /> Pending Reports
+          </button>
+          <button
+            onClick={() => setCurrentView('approved')}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+              currentView === 'approved'
+                ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                : 'text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-200'
+            }`}
+          >
+            <ApprovedIcon /> Approved Reports
+          </button>
+          <button
+            onClick={() => setCurrentView('rejected')}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+              currentView === 'rejected'
+                ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                : 'text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-200'
+            }`}
+          >
+            <RejectedIcon /> Rejected Reports
+          </button>
         </div>
 
         {/* Logout Section */}

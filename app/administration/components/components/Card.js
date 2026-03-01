@@ -215,8 +215,8 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
       </div>
 
       {showConfirmation && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={(e) => { if (e.target === e.currentTarget) cancelAction(); }}>
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Action</h3>
             <p className="text-gray-600 mb-4">
               Are you sure you want to <span className="font-medium">{pendingAction?.toLowerCase()}</span> this task?
@@ -224,7 +224,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
             {pendingAction === 'Rejected' && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Rejection (Optional)</label>
-                <textarea className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" rows="3" placeholder="Describe the reason..." value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} />
+                <textarea className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-black" rows="3" placeholder="Describe the reason..." value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} />
                 <button
                   type="button"
                   onClick={async () => {
@@ -256,8 +256,8 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
       )}
 
       {showForwardForm && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={(e) => { if (e.target === e.currentTarget) setShowForwardForm(false); }}>
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold text-gray-900 mb-4">Forward Task</h3>
             <div className="flex border-b border-gray-200 mb-4">
               <button
@@ -280,7 +280,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Target Municipality</label>
                     <select
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-black"
                       value={forwardData.targetMunicipality}
                       onChange={(e) => setForwardData({ ...forwardData, targetMunicipality: e.target.value, targetWard: '' })}
                       required={forwardType === 'municipality'}
@@ -292,7 +292,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Target Ward</label>
                     <select
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-black"
                       value={forwardData.targetWard}
                       onChange={(e) => setForwardData({ ...forwardData, targetWard: e.target.value })}
                       disabled={!forwardData.targetMunicipality}
@@ -309,7 +309,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Select Authority</label>
                   <select
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-black"
                     value={forwardData.targetAuthority}
                     onChange={(e) => setForwardData({ ...forwardData, targetAuthority: e.target.value })}
                     required={forwardType === 'authority'}
@@ -323,7 +323,7 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Forwarding</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="w-full text-black border border-gray-300 rounded-md px-3 py-2"
                   rows="3"
                   placeholder="Provide a reason..."
                   value={forwardData.reason}
