@@ -11,6 +11,8 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@react-three/drei": "^10.7.6",
+    "@tensorflow-models/mobilenet": "^2.1.1",
+    "@tensorflow/tfjs": "^4.22.0",
     "cloudinary": "^2.7.0",
     "framer-motion": "^12.23.12",
     "fs": "^0.0.1-security",

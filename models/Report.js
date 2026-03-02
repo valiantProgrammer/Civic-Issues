@@ -73,6 +73,23 @@ const reportSchema = new mongoose.Schema(
         rejectionReason: { type: String },
         verified: { type: Boolean, default: false }, // For AI verification
         
+        // --- ML-Based Severity Validation ---
+        mlPredictedSeverity: {
+            type: String,
+            enum: ['Low', 'Medium', 'High'],
+        },
+        mlConfidence: {
+            type: Number,
+            min: 0,
+            max: 1,
+        },
+        severityVerified: {
+            type: Boolean,
+            default: false,
+        },
+        severityWarning: { type: String },
+        severityMatchedKeywords: [String],
+        
         history: [HistoryEntrySchema],
     },
     { 

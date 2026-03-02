@@ -11,6 +11,7 @@ import authApi from '@/lib/api.js'
 import { pass } from 'three/src/nodes/display/PassNode.js'
 import toast from 'react-hot-toast'
 import { getCookie } from '@/lib/api.js'
+import { classifyImage } from '@/utils/imageClassifier.js'
 
 function AddReportContent() {
   const router = useRouter()
@@ -338,45 +339,133 @@ function AddReportContent() {
       return;
     }
 
-    // --- 1. AI IMAGE VERIFICATION ON SUBMIT ---
+    // --- 1. AI IMAGE VERIFICATION ON SUBMIT (TensorFlow.js First) ---
     let isVerificationAttempted = false;
     if (formData.uploadedImage && formData.title) {
       isVerificationAttempted = true;
       setIsVerifying(true);
       let isVerified = false; // Default to not verified
-      
-      try {
-        const verificationRes = await fetch('/api/verify-image-category', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            imageUrl: formData.uploadedImage,
-            category: formData.title,
-          }),
-        });
 
-        if (verificationRes.ok) {
-          try {
-            const verificationData = await verificationRes.json();
-            isVerified = verificationData.isMatch === true; // Set verification based on API response
-          } catch (parseError) {
-            // If parsing fails, keep isVerified as false (no error shown to user)
-            pass
+      try {
+        // Step 1: Try client-side TensorFlow classification (fast, free, no quota)
+        console.log('Starting TensorFlow image classification...');
+        const tfResult = await classifyImage(formData.uploadedImage, formData.title);
+        console.log('TensorFlow result:', tfResult);
+        
+        // Use TensorFlow result if confidence is high (>40%)
+        if (tfResult.confidence > 0.4) {
+          isVerified = tfResult.isMatch;
+          toast.success(`✓ Image verified locally: ${tfResult.reason}`);
+        } else {
+          // If confidence is low, fallback to server-side Gemini API
+          console.log('TensorFlow confidence low, trying server verification...');
+          const verificationRes = await fetch('/api/verify-image-category', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imageUrl: formData.uploadedImage,
+              category: formData.title,
+            }),
+          });
+
+          if (verificationRes.ok) {
+            try {
+              const verificationData = await verificationRes.json();
+              isVerified = verificationData.isMatch === true;
+              
+              // Check for caution flag (API quota exceeded)
+              if (verificationData.cautionFlag) {
+                toast.success(`Image allowed with manual review: ${verificationData.reason}`);
+              }
+            } catch (parseError) {
+              // Keep isVerified as false if parsing fails
+              console.error('Parse error:', parseError);
+            }
           }
         }
-        // If API returns error or response is not ok, isVerified stays false (no error shown to user)
-      } catch (err) {
-        // If verification request fails, keep isVerified as false (no error shown to user)
-        err = null;
+      } catch (tfError) {
+        // TensorFlow failed, try API fallback
+        console.warn('TensorFlow error:', tfError);
+        
+        try {
+          const verificationRes = await fetch('/api/verify-image-category', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imageUrl: formData.uploadedImage,
+              category: formData.title,
+            }),
+          });
+
+          if (verificationRes.ok) {
+            const verificationData = await verificationRes.json();
+            isVerified = verificationData.isMatch === true;
+          }
+        } catch (apiError) {
+          // Both methods failed, keep isVerified as false
+          console.error('Both verification methods failed:', apiError);
+        }
       }
-      
+
       // Update verification state - whether it passed or failed
       setVerification(isVerified);
       setIsVerifying(false);
     }
     // --- END OF VERIFICATION BLOCK ---
 
-    // --- 2. PROCEED WITH SUBMISSION IF VERIFICATION PASSED ---
+    // --- 2. ML-BASED SEVERITY VALIDATION ---
+    let finalSeverity = formData.severity;
+    let aiVerified = verification;
+    let severityWarning = null;
+    let mlPredictedSeverity = null;
+    let mlConfidence = null;
+    let mlMatchedKeywords = [];
+
+    try {
+      const severityValidationRes = await fetch('/api/validate-severity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          category: formData.title,
+          severity: formData.severity ? formData.severity.charAt(0).toUpperCase() + formData.severity.slice(1).toLowerCase() : 'Medium',
+          imageUrl: formData.uploadedImage
+        })
+      });
+
+      if (severityValidationRes.ok) {
+        const severityData = await severityValidationRes.json();
+        console.log('Severity validation result:', severityData);
+        
+        // Capture ML prediction data
+        mlPredictedSeverity = severityData.mlPrediction.severity;
+        mlConfidence = severityData.mlPrediction.confidence;
+        mlMatchedKeywords = severityData.mlPrediction.matchedKeywords || [];
+        
+        // Update final severity with ML prediction
+        finalSeverity = severityData.finalSeverity;
+        
+        // Apply severity comparison logic:
+        // - If ML severity > user severity: aiVerified = FALSE (don't trust lower user severity)
+        // - If ML severity <= user severity: aiVerified = TRUE (trust the stricter one)
+        if (!severityData.aiVerified) {
+          aiVerified = false;
+          severityWarning = severityData.warning;
+          toast.error(`⚠️ Severity Mismatch: ${severityData.warning}`);
+        } else {
+          toast.success(`✓ Severity verified: ML suggests ${finalSeverity}`);
+        }
+      } else {
+        console.warn('Severity validation failed:', severityValidationRes.status);
+        // Continue with user-provided severity if validation fails
+      }
+    } catch (severityError) {
+      console.warn('Severity validation error:', severityError);
+      // Continue with user-provided severity if validation fails
+    }
+
+    // --- 3. PROCEED WITH SUBMISSION ---
     try {
       let locationCoordinates = [];
       if (formData.coordinates) {
@@ -398,8 +487,13 @@ function AddReportContent() {
         ReporterName: reporterDetails.fullName,
         locationCoordinates,
         image: formData.uploadedImage,
-        severity: formData.severity,
-        verified: verification,
+        severity: finalSeverity.charAt(0).toUpperCase() + finalSeverity.slice(1).toLowerCase(),
+        verified: aiVerified,
+        mlPredictedSeverity: mlPredictedSeverity ? mlPredictedSeverity.charAt(0).toUpperCase() + mlPredictedSeverity.slice(1).toLowerCase() : null,
+        mlConfidence,
+        severityVerified: aiVerified,
+        severityWarning,
+        severityMatchedKeywords: mlMatchedKeywords
       };
 
       // If editing, update the existing report
@@ -434,28 +528,34 @@ function AddReportContent() {
         setTimeout(() => router.push('/user'), 1500);
       } else {
         // Create new report
-        const res = await authApi.submitReport(payload);
+        try {
+          const res = await authApi.submitReport(payload);
+          toast.success("Issue reported successfully!");
 
-        if (!res.ok) {
-          throw new Error("Failed to submit report");
+          // Reset form
+          setFormData({
+            title: "", description: "", coordinates: "22.563282, 88.351286", buildingName: "", severity: "",
+            streetName: "", locality: "", propertyType: "", uploadedImage: "", useCurrentLocation: false,
+          });
+          
+          // Redirect to user page after successful submission
+          setTimeout(() => router.push('/user'), 1500);
+        } catch (apiError) {
+          // The error is already thrown by authApi.submitReport
+          console.error('Report submission error:', apiError);
+          throw apiError;
         }
-
-        await res.json();
-        toast.success("Issue reported successfully!");
-
-        // Reset form
-        setFormData({
-          title: "", description: "", coordinates: "22.563282, 88.351286", buildingName: "", severity: "",
-          streetName: "", locality: "", propertyType: "", uploadedImage: "", useCurrentLocation: false,
-        });
       }
       // ... reset other states
     } catch (err) {
       console.error("Error submitting report:", err);
-      // Only show submission error if verification was not attempted
+      // Show detailed error message
+      const errorMessage = err.message || "Failed to submit report. Please try again.";
+      toast.error(`❌ ${errorMessage}`);
+      // Only show alert if verification was not attempted
       // (if verification was attempted and failed, we already submitted with verified:false)
       if (!isVerificationAttempted) {
-        alert("There was an error submitting your report. Please try again.");
+        alert(`Error: ${errorMessage}`);
       }
     } finally {
       // Ensure verification state is always reset

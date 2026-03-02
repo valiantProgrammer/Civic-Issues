@@ -28,12 +28,16 @@ export async function PUT(request, { params }) {
 
         // 2. Parse request body
         const data = await request.json();
-        const { Title, Description, category, locationCoordinates, image, severity, verified, building, street, locality, propertyType } = data;
+        const { Title, Description, category, locationCoordinates, image, severity, verified, building, street, locality, propertyType, mlPredictedSeverity, mlConfidence, severityVerified, severityWarning, severityMatchedKeywords } = data;
 
         // 3. Validate required fields
         if (!Title || !Description || !locationCoordinates || !severity) {
             return NextResponse.json({ success: false, message: "Missing required report fields." }, { status: 400 });
         }
+
+        // Normalize severity to title case (High, Medium, Low)
+        const normalizedSeverity = severity.charAt(0).toUpperCase() + severity.slice(1).toLowerCase();
+        const normalizedMlSeverity = mlPredictedSeverity ? mlPredictedSeverity.charAt(0).toUpperCase() + mlPredictedSeverity.slice(1).toLowerCase() : null;
 
         // 4. Get the report and verify ownership
         const Report = await getReportModel();
@@ -93,7 +97,7 @@ export async function PUT(request, { params }) {
         report.Title = Title;
         report.category = category;
         report.Description = Description;
-        report.severity = severity;
+        report.severity = normalizedSeverity;
         report.verified = verified;
         report.image = image;
         report.locationCoordinates = { type: "Point", coordinates: coords };
@@ -105,6 +109,12 @@ export async function PUT(request, { params }) {
         report.ward = wardDoc.ward_number;
         report.municipalityId = muni._id;
         report.municipalityName = muni.name;
+        // ML-based severity validation fields
+        report.mlPredictedSeverity = normalizedMlSeverity;
+        report.mlConfidence = mlConfidence;
+        report.severityVerified = severityVerified;
+        report.severityWarning = severityWarning;
+        report.severityMatchedKeywords = severityMatchedKeywords;
 
         // 8. Reset status and history - mark as newly submitted
         report.status = 'pending';

@@ -39,12 +39,17 @@ export async function POST(request) {
         // 3. **FIXED**: Parse the request body as JSON instead of FormData
         const data = await request.json();
         console.log(data)
-        const { Title, Description, locationCoordinates, image, mediaUrl, thumbnailUrl, mediaType, severity, verified, category, sendToMunicipality, street, building, locality, propertyType } = data;
+        const { Title, Description, locationCoordinates, image, mediaUrl, thumbnailUrl, mediaType, severity, verified, category, sendToMunicipality, street, building, locality, propertyType, mlPredictedSeverity, mlConfidence, severityVerified, severityWarning, severityMatchedKeywords } = data;
 
         // 4. Validate payload
         if (!Title || !Description || !locationCoordinates || !severity) {
             return NextResponse.json({ success: false, message: "Missing required report fields." }, { status: 400 });
         }
+
+        // Normalize severity to title case (High, Medium, Low)
+        const normalizedSeverity = severity.charAt(0).toUpperCase() + severity.slice(1).toLowerCase();
+        const normalizedMlSeverity = mlPredictedSeverity ? mlPredictedSeverity.charAt(0).toUpperCase() + mlPredictedSeverity.slice(1).toLowerCase() : null;
+
         console.log(Title)
         console.log(Description)
         console.log(locationCoordinates)
@@ -106,7 +111,7 @@ export async function POST(request) {
             Title,
             Description,
             category,
-            severity,
+            severity: normalizedSeverity,
             ReporterName: reporterName, // Using name from DB
             reporterId: new mongoose.Types.ObjectId(reporterId),
             locationCoordinates: { type: "Point", coordinates: coords },
@@ -125,7 +130,13 @@ export async function POST(request) {
             verified,
             sendToMunicipality: true, // Automatically flag for municipal attention
             assignedTo: assignedAdmin._id,
-            assignedRole: assignedAdmin.authority
+            assignedRole: assignedAdmin.authority,
+            // ML-based severity validation fields
+            mlPredictedSeverity: normalizedMlSeverity,
+            mlConfidence,
+            severityVerified,
+            severityWarning,
+            severityMatchedKeywords
         });
         
         await newReport.save();
@@ -134,11 +145,31 @@ export async function POST(request) {
 
     } catch (error) {
         console.error("Error saving report:", error.message, error.stack);
+        
         // Handle JSON parsing errors specifically
         if (error instanceof SyntaxError) {
-             return NextResponse.json({ error: "Invalid JSON format in request body.", details: error.message }, { status: 400 });
+             return NextResponse.json({ 
+               error: "Invalid JSON format in request body.", 
+               details: error.message 
+            }, { status: 400 });
         }
-        return NextResponse.json({ error: "Internal server error", details: error.message }, { status: 500 });
+        
+        // Handle MongoDB validation errors
+        if (error.name === 'ValidationError') {
+          const messages = Object.values(error.errors).map(e => e.message);
+          return NextResponse.json({ 
+            error: "Validation error", 
+            details: messages.join('; '),
+            message: messages.join('; ')
+          }, { status: 400 });
+        }
+        
+        // Generic error response
+        return NextResponse.json({ 
+          error: "Internal server error", 
+          details: error.message,
+          message: error.message
+        }, { status: 500 });
     }
 }
 
