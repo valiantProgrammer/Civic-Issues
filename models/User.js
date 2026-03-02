@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
     timeOfLogin: String,
     email: String,
     password: String,
+    profilePicture: { type: String, default: null },
   },
   { collection: "User" }
 );

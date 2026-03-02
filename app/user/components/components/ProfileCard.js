@@ -77,7 +77,8 @@ export default function ProfileCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editData, setEditData] = useState({ phone: "", address: "", lat: "", lng: "" });
+  const [editData, setEditData] = useState({ phone: "", address: "", lat: "", lng: "", profilePicture: null });
+  const [profilePicturePreview, setProfilePicturePreview] = useState(null);
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
@@ -106,7 +107,11 @@ export default function ProfileCard() {
             address: data.user.address || "",
             lat: "",
             lng: "",
+            profilePicture: null,
           });
+          if (data.user.profilePicture) {
+            setProfilePicturePreview(data.user.profilePicture);
+          }
           setError(null);
         } else {
           setError(data.message || "Failed to fetch profile");
@@ -132,6 +137,33 @@ export default function ProfileCard() {
     }));
   };
 
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfilePicturePreview(reader.result);
+      setEditData((prev) => ({
+        ...prev,
+        profilePicture: file,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleCopyUserId = async () => {
     const userIdText = user.userId || "N/A";
     try {
@@ -151,16 +183,17 @@ export default function ProfileCard() {
 
     setUpdating(true);
     try {
+      const formData = new FormData();
+      formData.append('phone', editData.phone);
+      formData.append('address', editData.address);
+      if (editData.profilePicture) {
+        formData.append('profilePicture', editData.profilePicture);
+      }
+
       const response = await fetch("/api/user-profile", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        body: JSON.stringify({
-          phone: editData.phone,
-          address: editData.address,
-        }),
+        body: formData,
       });
 
       const data = await response.json();
@@ -173,6 +206,9 @@ export default function ProfileCard() {
       if (data.success) {
         setUser(data.user);
         setShowEditModal(false);
+        if (data.user.profilePicture) {
+          setProfilePicturePreview(data.user.profilePicture);
+        }
         toast.success("Profile updated successfully!");
       } else {
         toast.error(data.message || "Failed to update profile");
@@ -231,10 +267,14 @@ export default function ProfileCard() {
         <div className="px-6 py-8 flex justify-around">
           {/* Profile Avatar and Name */}
           <div className="flex flex-col items-center -mt-16 mb-8">
-            <div className="w-32 h-32 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-4">
-              <span className="text-4xl text-white font-bold">
-                {user.userName?.charAt(0)?.toUpperCase() || "U"}
-              </span>
+            <div className="w-32 h-32 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-4 overflow-hidden">
+              {profilePicturePreview ? (
+                <img src={profilePicturePreview} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-4xl text-white font-bold">
+                  {user.userName?.charAt(0)?.toUpperCase() || "U"}
+                </span>
+              )}
             </div>
             <div className="text-center">
               <h1 className="text-3xl font-bold text-gray-800">
@@ -329,6 +369,38 @@ export default function ProfileCard() {
               </div>
 
               <div className="p-6 space-y-6">
+                {/* Profile Picture Upload Section */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Profile Picture
+                  </label>
+                  <div className="flex flex-col items-center">
+                    <div className="w-24 h-24 bg-gray-200 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center overflow-hidden mb-4">
+                      {profilePicturePreview ? (
+                        <img src={profilePicturePreview} alt="Profile Preview" className="w-full h-full object-cover" />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      id="profilePictureInput"
+                      accept="image/*"
+                      onChange={handleProfilePictureChange}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="profilePictureInput"
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer font-semibold transition"
+                    >
+                      Choose Image
+                    </label>
+                    <p className="text-xs text-gray-500 mt-2">Max 5MB, JPG/PNG</p>
+                  </div>
+                </div>
+
                 {/* Phone Number Section */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">

@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
         userId: { type: Number, unique: true },
         password: { type: String, required: true, select: false },
         address: { type: String },
+        profilePicture: { type: String, default: null },
     },
     {
         collection: "Admins",
