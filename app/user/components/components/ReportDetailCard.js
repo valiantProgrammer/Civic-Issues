@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PanoramaModal from './PanoramaModal.js';
 import VideoPlayerModal from './VideoPlayerModal.js';
+import ReportHistory from './ReportHistory.js';
 import toast from 'react-hot-toast';
 import authApi from '@/lib/api.js';
 
@@ -210,7 +211,7 @@ export default function ReportDetailCard({ report, onClose }) {
       `}</style>
       <div className="bg-white rounded-lg shadow-lg overflow-y-auto flex flex-col max-h-screen report-detail-scrollbar">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 px-6 py-6 flex justify-between items-start border-b-2 border-slate-700 shadow-sm">
+        <div className="sticky top-0 bg-slate-800 px-6 py-6 flex justify-between items-start border-b-2 z-100 border-slate-700 shadow-sm">
           <div className="flex-1">
             <h2 className="text-2xl font-semibold text-white mb-1 tracking-tight">{report.Title}</h2>
             <p className="text-slate-300 text-sm font-normal">{report.category}</p>
@@ -400,44 +401,10 @@ export default function ReportDetailCard({ report, onClose }) {
           </div>
         </div>
 
-        {/* Admin Processing Information */}
-        {report.history && report.history.length > 0 && (
-          <div className="px-6 py-8 border-b bg-gradient-to-r from-slate-50 to-blue-50">
-            <h3 className="text-lg font-bold text-slate-900 mb-6 tracking-tight">Admin Processing History</h3>
-            <div className="space-y-4">
-              {report.history.map((entry, index) => (
-                <div key={index} className="bg-white rounded-lg border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${
-                          entry.action === 'created' ? 'bg-blue-100 text-blue-800' :
-                          entry.action === 'approved' ? 'bg-green-100 text-green-800' :
-                          entry.action === 'rejected' ? 'bg-red-100 text-red-800' :
-                          entry.action === 'forwarded' ? 'bg-purple-100 text-purple-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {entry.action.charAt(0).toUpperCase() + entry.action.slice(1)}
-                        </span>
-                      </div>
-                      <p className="text-base text-slate-700">
-                        <span className="font-bold text-slate-900">{entry.actorName || 'System'}</span>
-                        <span className="text-slate-500"> • {entry.actorRole || 'Unknown'}</span>
-                      </p>
-                      <p className="text-sm text-slate-500 mt-1">{formatDate(entry.timestamp)}</p>
-                    </div>
-                  </div>
-                  {entry.notes && (
-                    <div className="mt-4 p-4 bg-slate-100 rounded border-l-4 border-orange-500">
-                      <p className="text-sm font-bold text-slate-700 uppercase mb-2">Notes/Reason:</p>
-                      <p className="text-base text-slate-800">{entry.notes}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Admin Processing Information - Detailed Audit Trail */}
+        <div className="px-6 py-8 border-b">
+          <ReportHistory history={report.history} />
+        </div>
 
         {/* Impact & Statistics */}
         <div className="px-6 py-8 border-b bg-blue-50">

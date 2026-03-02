@@ -14,6 +14,7 @@ const administrativeHeadSchema = new mongoose.Schema(
         municipalId: { type: mongoose.mongo.ObjectId },
         userId: { type: Number, unique: true }, 
         password: { type: String, required: true, select: false },
+        profilePicture: { type: String, default: null },
     },
     { 
         collection: "AdministrativeHeads",

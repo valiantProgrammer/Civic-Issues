@@ -1,14 +1,32 @@
-import { useState } from 'react';
+'use client'
+
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { authApi } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 // Icons
 const PendingIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const ApprovedIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const RejectedIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const ProfileIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const LogoutIcon = () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
 
 const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0 }, currentView = 'pending', setCurrentView = () => {} }) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await authApi.logout();
+      toast.success('You have been logged out.');
+      router.push('/');
+    } catch (error) {
+      toast.error('Failed to logout. Please try again.');
+      console.error('Logout error:', error);
+    }
+  }, [router]);
 
   return (
     <>
@@ -110,11 +128,23 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0 }, currentView 
                 >
                   <RejectedIcon /> Rejected Reports
                 </button>
+                <button
+                  onClick={() => { setCurrentView('profile'); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left ${
+                    currentView === 'profile'
+                      ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                      : 'text-gray-800 hover:bg-gray-50'
+                  }`}
+                >
+                  <ProfileIcon /> My Profile
+                </button>
               </div>
 
               {/* Logout */}
               <div className="p-3 border-t border-gray-200">
-                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 text-red-600 rounded-md hover:bg-red-50 font-semibold transition-colors text-sm">
+                <button 
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-red-600 rounded-md hover:bg-red-50 font-semibold transition-colors text-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
                   </svg>
@@ -196,6 +226,16 @@ const Navbar = ({ stats = { pending: 0, approved: 0, rejected: 0 }, currentView 
             }`}
           >
             <RejectedIcon /> Rejected Reports
+          </button>
+          <button
+            onClick={() => setCurrentView('profile')}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+              currentView === 'profile'
+                ? 'text-purple-700 font-semibold bg-gradient-to-r from-yellow-200 to-blue-200 border-2 border-yellow-900'
+                : 'text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-200'
+            }`}
+          >
+            <ProfileIcon /> My Profile
           </button>
         </div>
 

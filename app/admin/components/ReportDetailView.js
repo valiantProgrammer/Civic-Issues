@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import toast from 'react-hot-toast'
 import PanoramicViewer from '@/app/user/components/components/PanoramicViewer'
+import ReportHistory from '@/app/user/components/components/ReportHistory'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const rejectButtonStyles = `
@@ -405,29 +406,8 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
             </div>
           )}
 
-          {/* History/Timeline */}
-          {report.history && report.history.length > 0 && (
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Action History</h3>
-              <div className="space-y-4">
-                {report.history.map((entry, idx) => (
-                  <div key={idx} className="flex gap-4 pb-4 border-b border-gray-200 last:border-b-0">
-                    <div className="min-w-12">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                        <span className="text-purple-600 font-bold">{idx + 1}</span>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-gray-900 capitalize">{entry.action}</p>
-                      <p className="text-sm text-gray-600">{entry.actorName || 'System'} • {entry.actorRole}</p>
-                      {entry.notes && <p className="text-sm text-gray-700 mt-1">{entry.notes}</p>}
-                      <p className="text-xs text-gray-500 mt-1">{formatDate(entry.timestamp)}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* History/Timeline - Detailed Audit Trail */}
+          <ReportHistory history={report.history} />
         </div>
 
         {/* Footer */}

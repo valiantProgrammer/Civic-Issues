@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getUserModel } from '@/models/User';
+import { getAdministrativeHeadModel } from '@/models/Administrative';
 import { verifyToken } from '@/lib/auth';
 
 export async function GET(request) {
@@ -24,6 +25,36 @@ export async function GET(request) {
             );
         }
 
+        // Try to find in AdministrativeHead first (if role is adminHead)
+        if (payload.role === 'adminHead') {
+            const AdministrativeHead = await getAdministrativeHeadModel();
+            const adminHead = await AdministrativeHead.findById(payload.userId).select('-password');
+
+            if (!adminHead) {
+                return NextResponse.json(
+                    { success: false, message: 'Administrative head not found' },
+                    { status: 404 }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                fullName: adminHead.fullName,
+                email: adminHead.email,
+                phone: adminHead.phone,
+                age: adminHead.age,
+                designation: adminHead.designation,
+                authority: adminHead.authority,
+                municipality: adminHead.municipality,
+                userId: adminHead.userId,
+                profilePicture: adminHead.profilePicture,
+                municipalId: adminHead.municipalId,
+                _id: adminHead._id,
+                createdAt: adminHead.createdAt
+            }, { status: 200 });
+        }
+
+        // Otherwise, get regular User
         const User = await getUserModel();
         const user = await User.findById(payload.userId).select('-password');
 
@@ -81,10 +112,80 @@ export async function PUT(request) {
             );
         }
 
-        const body = await request.json();
-        const { phone, address } = body;
+        // Parse form data or JSON
+        let updateData = {};
+        const contentType = request.headers.get('content-type');
+        
+        if (contentType?.includes('multipart/form-data')) {
+            const formData = await request.formData();
+            
+            // Extract fields from FormData
+            for (let [key, value] of formData) {
+                if (key === 'profilePicture' && value instanceof File) {
+                    // Handle file upload - for now, just store the file name or base64
+                    // In production, you'd want to upload to cloud storage
+                    const base64 = await value.arrayBuffer().then(buf => 
+                        Buffer.from(buf).toString('base64')
+                    );
+                    updateData[key] = `data:${value.type};base64,${base64}`;
+                } else if (!(value instanceof File)) {
+                    updateData[key] = value;
+                }
+            }
+        } else {
+            // Regular JSON update
+            updateData = await request.json();
+        }
 
-        // Validate required fields
+        // Handle administrative head updates
+        if (payload.role === 'adminHead') {
+            const AdministrativeHead = await getAdministrativeHeadModel();
+            
+            // Allowed fields for update
+            const allowedFields = ['fullName', 'phone', 'age', 'designation', 'authority', 'municipality', 'profilePicture'];
+            const filteredData = {};
+            
+            allowedFields.forEach(field => {
+                if (updateData[field] !== undefined) {
+                    filteredData[field] = updateData[field];
+                }
+            });
+
+            const adminHead = await AdministrativeHead.findByIdAndUpdate(
+                payload.userId,
+                filteredData,
+                { new: true, select: '-password' }
+            );
+
+            if (!adminHead) {
+                return NextResponse.json(
+                    { success: false, message: 'Administrative head not found' },
+                    { status: 404 }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                message: 'Profile updated successfully',
+                fullName: adminHead.fullName,
+                email: adminHead.email,
+                phone: adminHead.phone,
+                age: adminHead.age,
+                designation: adminHead.designation,
+                authority: adminHead.authority,
+                municipality: adminHead.municipality,
+                userId: adminHead.userId,
+                profilePicture: adminHead.profilePicture,
+                municipalId: adminHead.municipalId,
+                _id: adminHead._id,
+                createdAt: adminHead.createdAt
+            }, { status: 200 });
+        }
+
+        // Handle regular user updates
+        const { phone, address } = updateData;
+
+        // Validate required fields for regular user
         if (!phone || !address) {
             return NextResponse.json(
                 { success: false, message: 'Phone and address are required' },
