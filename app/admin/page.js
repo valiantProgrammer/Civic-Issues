@@ -697,7 +697,7 @@ export default function AdminDashboardPage() {
 
     const callGeminiAPI = async (prompt) => {
         console.log(prompt)
-        const apiKey = "AIzaSyBbeBGU73nXaJ26DtLp7vj_2_aEg60lAHg";
+        const apiKey = process.env.GEMINI_API_KEY;
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
         try {
             const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });

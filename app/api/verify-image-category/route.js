@@ -6,8 +6,8 @@ import fetch from 'node-fetch';
 // It's crucial to initialize this outside the handler so it's reused across requests.
 // Ensure you have GEMINI_API_KEY in your .env.local file.
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// Use gemini-1.5-flash as the model (gemini-2.0-flash might not be available yet)
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// Use gemini-2.0-flash as the model (latest and fastest)
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 /**
  * --- Step 2: Helper Function to Process the Image ---

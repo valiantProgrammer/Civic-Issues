@@ -85,8 +85,8 @@ const Card = ({ id, title, imageIndex, category, description, onAction, isComple
   };
 
   const callGeminiAPI = async (prompt) => {
-    const apiKey = "YOUR_GEMINI_API_KEY";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     try {
       const response = await fetch(url, {
