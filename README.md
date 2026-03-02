@@ -311,7 +311,7 @@ Developed by the talented team:
 
 - [**RUPAYAN DEY**](https://github.com/valiantProgrammer) - Full Stack Developer & Project Head. 
 - [**RISHIKA MUKHERJEE**](https://github.com/bitsByRishika/) - Frontend Developer & UI/UX Designer
-- **RITAM PAUL** - Backend Developer & Database Architect
+- [**RITAM PAUL**](https://github.com/ritampaul192/) - Backend Developer & Database Architect
 - **SOMMIDHYA BISWAS** - QA Tester & Documentation Specialist
 
 ---
