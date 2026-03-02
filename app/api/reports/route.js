@@ -109,6 +109,7 @@ export async function POST(request) {
 
         // 7. Generate unique ticket ID
         const ticketId = await generateTicketId();
+        console.log('✅ Generated Ticket ID:', ticketId);
 
         // 8. Create and save the new report
         const Report = await getReportModel();
@@ -146,6 +147,7 @@ export async function POST(request) {
         });
         
         await newReport.save();
+        console.log('✅ Report saved with Ticket ID:', newReport.ticketId, 'Report ID:', newReport._id);
 
         // 9. Send confirmation email to user
         try {
