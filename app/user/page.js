@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ReportedIssuesSection from './components/components/ReportedIssuesSection';
 import ReportDetailCard from './components/components/ReportDetailCard.js';
 import FloatingAddButton from './components/components/FloatingAddButton.js';
@@ -10,9 +11,19 @@ import ContactCard from './components/components/ContactCard';
 import HelpCard from './components/components/HelpCard';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const filterParam = searchParams.get('filter') || 'pending';
+  
   const [reportFilter, setReportFilter] = useState('pending');
   const [activeView, setActiveView] = useState('reports'); // 'reports', 'profile', 'contact', 'help'
   const [selectedReport, setSelectedReport] = useState(null);
+
+  // Initialize filter from URL parameter
+  useEffect(() => {
+    if (filterParam && ['pending', 'approved', 'rejected'].includes(filterParam)) {
+      setReportFilter(filterParam);
+    }
+  }, [filterParam]);
 
   return (
     <div className="relative lg:flex">

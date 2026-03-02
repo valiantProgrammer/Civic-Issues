@@ -37,6 +37,8 @@
 - **Category Selection**: Choose from predefined issue categories (Pothole, Water Leakage, Street Light, etc.)
 - **Location Precision**: Automatic GPS coordinates or manual location picker
 - **Media Evidence**: Attach photos or videos as evidence
+- **Unique Ticket ID**: Every report gets a unique alphanumeric ID (CIVIC-YYYYMMDD-XXXXX) for easy reference
+- **Email Notifications**: Receive automatic email confirmations and status updates at every stage
 - **Issue Tracking**: Track the progress of reported issues in real-time
 - **Status Updates**: Receive notifications on issue status (Pending, Verified, Approved, Rejected)
 - **Issue History**: View all previously reported issues and their resolutions
@@ -248,7 +250,14 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 GEMINI_API_KEY=your_gemini_api_key
+
+# Email Configuration for Notifications
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+ADMIN_PORTAL_URL=https://your-admin-portal.com
 ```
+
+> **Note**: For Gmail, use an App Password, not your regular password. See [QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md) for detailed email setup instructions.
 
 4. **Run development server**
 ```bash

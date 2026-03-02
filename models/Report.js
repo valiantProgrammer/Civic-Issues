@@ -23,6 +23,15 @@ const HistoryEntrySchema = new mongoose.Schema({
 
 const reportSchema = new mongoose.Schema(
     {
+        // --- Ticket ID (Unique alphanumeric identifier) ---
+        ticketId: { 
+            type: String, 
+            unique: true, 
+            required: true, 
+            trim: true,
+            index: true
+        },
+
         // --- Core Issue Details ---
         Title: { type: String, required: true, trim: true },
         category: { type: String, trim: true },

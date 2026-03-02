@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getReportModel } from '@/models/Report';
 import mongoose from 'mongoose';
+import { getUserModel } from '@/models/User';
+import { sendReportNotificationEmail } from '@/lib/emailService';
 
 
 export async function PUT(request, { params }) {
@@ -42,6 +44,21 @@ export async function PUT(request, { params }) {
 
     if (!updatedReport) {
       return NextResponse.json({ message: "Report not found" }, { status: 404 });
+    }
+
+    // Send email notification to user based on status change
+    try {
+      const userModel = await getUserModel();
+      const user = await userModel.findById(updatedReport.reporterId).select('email').lean();
+      
+      if (user && user.email) {
+        const emailStatus = finalStatus === 'verified' ? 'verified' : finalStatus;
+        const reason = finalStatus === 'rejected' ? rejectedReason : undefined;
+        await sendReportNotificationEmail(user.email, updatedReport, emailStatus, reason);
+      }
+    } catch (emailError) {
+      console.error("Error sending status update email:", emailError.message);
+      // Don't block report status update if email fails
     }
 
     return NextResponse.json(updatedReport);

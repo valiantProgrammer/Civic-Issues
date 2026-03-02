@@ -215,7 +215,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
         <div className={`sticky top-0 bg-gradient-to-r from-orange-500 to-orange-400 text-white p-6 flex justify-between items-center transition-all ${!isScrolled ? 'rounded-t-3xl' : ''}`}>
           <div>
             <h2 className="text-2xl font-bold">Report Details</h2>
-            <p className="text-purple-100 text-sm mt-1">ID: {report._id}</p>
+            <p className="text-purple-100 text-sm mt-1">Ticket ID: {report.ticketId || report._id}</p>
           </div>
           <button
             onClick={onClose}
@@ -262,6 +262,31 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
               </span>
             )}
           </div>
+
+          {/* Ticket ID */}
+          {report.ticketId && (
+            <div className="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200 rounded-lg p-4">
+              <p className="text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Ticket ID</p>
+              <div className="flex items-center gap-3">
+                <code className="bg-slate-800 text-slate-100 px-4 py-2 rounded font-mono text-sm font-semibold flex-1 tracking-wider">
+                  {report.ticketId}
+                </code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(report.ticketId);
+                    // Toast would need to be imported or handled differently in admin view
+                    alert('Ticket ID copied');
+                  }}
+                  className="flex-shrink-0 p-2 hover:bg-slate-200 rounded transition-colors duration-200 text-slate-700"
+                  title="Copy to clipboard"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Issue Details Grid */}
           <div className={`border rounded-lg p-6 ${getStatusColor(report.status)}`}>

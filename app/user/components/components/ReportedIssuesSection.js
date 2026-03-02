@@ -62,6 +62,8 @@ export default function ReportedIssuesSection({ filter, onReportSelect }) {
                             category={report.category}
                             status={report.status}
                             imageSrc={report.image}
+                            description={report.Description}
+                            report={report}
                             onClick={() => handleReportClick(report)}
                         />
                     ))}

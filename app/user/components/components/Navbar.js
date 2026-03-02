@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import authApi from '@/lib/api';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -20,7 +20,7 @@ const primaryLinks = [
   { href: '/', label: 'Home', icon: <HomeIcon /> },
 ];
 
-export default function Navbar({ onReportFilterChange, onProfileClick, onContactClick, onReportsClick, onHelpClick}) {
+export default function Navbar({ onReportFilterChange = () => {}, onProfileClick = () => {}, onContactClick = () => {}, onReportsClick = () => {}, onHelpClick = () => {}}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedReportFilter, setSelectedReportFilter] = useState('pending');
   const [activeSection, setActiveSection] = useState(null); // 'help', 'contact', 'profile', or null
@@ -29,6 +29,16 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
   const [rejectedCount, setRejectedCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnAddReportPage = pathname === '/user/add-report';
+
+  // Initialize filter from URL parameter
+  useEffect(() => {
+    const filterParam = searchParams.get('filter') || 'pending';
+    if (['pending', 'approved', 'rejected'].includes(filterParam)) {
+      setSelectedReportFilter(filterParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchReportCounts = async () => {
@@ -60,7 +70,16 @@ export default function Navbar({ onReportFilterChange, onProfileClick, onContact
   const handleReportFilterClick = (filterType) => {
     setSelectedReportFilter(filterType);
     setActiveSection(null); // Clear section selection when viewing reports
-    onReportFilterChange(filterType);
+    
+    // If on add-report page, navigate to user page with filter parameter
+    if (isOnAddReportPage) {
+      router.push(`/user?filter=${filterType}`);
+    } else {
+      // If already on user page, just update the filter
+      onReportFilterChange(filterType);
+    }
+    
+    onReportsClick();
     setIsMenuOpen(false);
   };
 

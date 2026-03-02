@@ -3,6 +3,45 @@
 import { useState } from "react";
 import PanoramaModal from "./PanoramaModal.js";
 
+// Helper function to calculate days ago
+const getDaysAgo = (date) => {
+  const now = new Date();
+  const reportDate = new Date(date);
+  const diffTime = Math.abs(now - reportDate);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) return 'today';
+  if (diffDays === 1) return '1 day ago';
+  return `${diffDays} days ago`;
+};
+
+// Helper function to format date as "20th feb, 2026, 12:45"
+const formatDetailedDate = (date) => {
+  const d = new Date(date);
+  const day = d.getDate();
+  const month = d.toLocaleString('en-US', { month: 'short' }).toLowerCase();
+  const year = d.getFullYear();
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  
+  // Add ordinal suffix (st, nd, rd, th)
+  let daySuffix = 'th';
+  if (day === 1 || day === 21 || day === 31) daySuffix = 'st';
+  else if (day === 2 || day === 22) daySuffix = 'nd';
+  else if (day === 3 || day === 23) daySuffix = 'rd';
+  
+  return `${day}${daySuffix} ${month}, ${year}, ${hours}:${minutes}`;
+};
+
+// Helper function to get location string
+const getLocationString = (report) => {
+  const parts = [];
+  if (report.building) parts.push(report.building);
+  if (report.street) parts.push(report.street);
+  if (report.locality) parts.push(report.locality);
+  return parts.length > 0 ? parts.join(', ') : 'Location not specified';
+};
+
 export default function ReportCard({
   title,
   time,
@@ -10,6 +49,8 @@ export default function ReportCard({
   status,
   imageSrc,
   onClick,
+  description,
+  report,
 }) {
   const [isPanoramaModalOpen, setIsPanoramaModalOpen] = useState(false);
 
@@ -135,8 +176,13 @@ export default function ReportCard({
           <h3 className="text-sm font-medium text-gray-900 truncate leading-tight">
             {title}
           </h3>
+          {/* Description with time since submission */}
+          <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-snug">
+            {description ? description.substring(0, 80) + (description.length > 80 ? '...' : '') : 'No description'} <span className="text-gray-500">report submitted {report && time ? getDaysAgo(time) : 'recently'}</span>
+          </p>
+          {/* Date, time, and location */}
           <p className="text-xs text-gray-500 mt-1 leading-tight">
-            {time} • {category}
+            {report && time ? formatDetailedDate(time) : ''} {report ? `at ${getLocationString(report)}` : ''}
           </p>
         </div>
 

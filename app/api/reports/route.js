@@ -6,6 +6,8 @@ import { getMunicipalityModel } from '@/models/Municipalities';
 import { getUserModel } from '@/models/User';
 import { getAdministrativeHeadModel } from '@/models/Administrative';
 import { verifyToken } from '@/lib/auth';
+import { generateTicketId } from '@/utils/generateTicketId';
+import { sendReportNotificationEmail, sendAdminNotificationEmail } from '@/lib/emailService';
 
 /**
  * Handles the creation of a new civic issue report.
@@ -105,7 +107,10 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: `No primary authority found for ${muni.name} to assign the report to.` }, { status: 404 });
         }
 
-        // 7. Create and save the new report
+        // 7. Generate unique ticket ID
+        const ticketId = await generateTicketId();
+
+        // 8. Create and save the new report
         const Report = await getReportModel();
         const newReport = new Report({
             Title,
@@ -131,6 +136,7 @@ export async function POST(request) {
             sendToMunicipality: true, // Automatically flag for municipal attention
             assignedTo: assignedAdmin._id,
             assignedRole: assignedAdmin.authority,
+            ticketId: ticketId, // Add unique ticket ID
             // ML-based severity validation fields
             mlPredictedSeverity: normalizedMlSeverity,
             mlConfidence,
@@ -141,7 +147,37 @@ export async function POST(request) {
         
         await newReport.save();
 
-        return NextResponse.json({ message: "Report submitted and assigned successfully", report: newReport }, { status: 201 });
+        // 9. Send confirmation email to user
+        try {
+            const userModel = await getUserModel();
+            const user = await userModel.findById(reporterId).select('email').lean();
+            
+            if (user && user.email) {
+                await sendReportNotificationEmail(user.email, newReport, 'submitted');
+            }
+        } catch (emailError) {
+            console.error("Error sending user notification email:", emailError.message);
+            // Don't block report creation if email fails
+        }
+
+        // 10. Send admin notification email
+        try {
+            const adminModel = await getAdministrativeHeadModel();
+            const admin = await adminModel.findById(assignedAdmin._id).select('email').lean();
+            
+            if (admin && admin.email) {
+                await sendAdminNotificationEmail(admin.email, newReport);
+            }
+        } catch (emailError) {
+            console.error("Error sending admin notification email:", emailError.message);
+            // Don't block report creation if email fails
+        }
+
+        return NextResponse.json({ 
+            message: "Report submitted and assigned successfully", 
+            report: newReport,
+            ticketId: ticketId 
+        }, { status: 201 });
 
     } catch (error) {
         console.error("Error saving report:", error.message, error.stack);
