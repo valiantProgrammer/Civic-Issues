@@ -1,3 +1,5 @@
+'use client'
+
 import Navbar from '../user/components/components/Navbar.js'
 import Footer from '../user/components/components/Footer.js'
 import Link from 'next/link'
