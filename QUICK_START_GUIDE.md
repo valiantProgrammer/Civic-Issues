@@ -32,8 +32,8 @@ Users receive emails at different report stages:
 2. Create `.env.local` file (copy `.env.example`):
 
 ```bash
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
 ADMIN_PORTAL_URL=https://your-admin-portal.com/admin
 ```
 
@@ -43,7 +43,7 @@ ADMIN_PORTAL_URL=https://your-admin-portal.com/admin
 3. Enable **2-Step Verification** (if not already enabled)
 4. See **App passwords** and create one for Mail/Windows Computer
 5. Copy the 16-character password: `xxxx xxxx xxxx xxxx`
-6. Paste into `.env.local` as `EMAIL_PASS`
+6. Paste into `.env.local` as `SMTP_PASSWORD`
 
 ### Step 3: Restart Application
 ```bash
@@ -142,7 +142,7 @@ npm run dev  # or your dev server command
 ### If Emails Don't Work
 1. Check browser console for errors
 2. Check server console for email error logs
-3. Check `.env.local` has correct EMAIL_USER and EMAIL_PASS
+3. Check `.env.local` has correct SMTP_USERNAME and SMTP_PASSWORD
 4. Verify 2-Factor auth enabled for Gmail app password
 5. Check spam/junk folder
 
@@ -203,7 +203,7 @@ Next Steps: Edit your report and resubmit for admin review
 
 ### Problem: Emails not sending
 **Solution:**
-1. Check EMAIL_USER and EMAIL_PASS in `.env.local`
+1. Check SMTP_USERNAME and SMTP_PASSWORD in `.env.local`
 2. Restart dev server after updating `.env.local`
 3. Check server console for "Error sending email" logs
 4. If Gmail: verify App Password (not regular password)

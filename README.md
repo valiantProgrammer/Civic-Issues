@@ -252,8 +252,8 @@ JWT_SECRET=your_jwt_secret_key
 GEMINI_API_KEY=your_gemini_api_key
 
 # Email Configuration for Notifications
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
 ADMIN_PORTAL_URL=https://your-admin-portal.com
 ```
 

@@ -95,8 +95,8 @@ Successfully implemented a comprehensive email notification system with unique a
 
 #### 5. `.env.example` (30 lines)
 **Purpose**: Environment variable template
-- EMAIL_USER configuration
-- EMAIL_PASS documentation
+- SMTP_USERNAME configuration
+- SMTP_PASSWORD documentation
 - ADMIN_PORTAL_URL setting
 - Alternative email provider examples
 
@@ -196,7 +196,7 @@ ticketId: {
   - Added "Unique Ticket ID" feature
   - Added "Email Notifications" feature
 - ✅ Updated installation instructions:
-  - Added EMAIL_USER, EMAIL_PASS variables
+  - Added SMTP_USERNAME, SMTP_PASSWORD variables
   - Added ADMIN_PORTAL_URL variable
   - Added note about Gmail app password
   - Added reference to QUICK_START_GUIDE.md
@@ -306,8 +306,8 @@ User receives email with:
 
 ### Mandatory Setup
 1. Create `.env.local` file
-2. Add EMAIL_USER (your email address)
-3. Add EMAIL_PASS (app password or regular password)
+2. Add SMTP_USERNAME (your email address)
+3. Add SMTP_PASSWORD (app password or regular password)
 
 ### Optional
 - ADMIN_PORTAL_URL (for email links)

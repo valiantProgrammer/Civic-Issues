@@ -109,8 +109,8 @@ Each email includes:
 
 3. **Update `.env.local`**
    ```
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASS=xxxx xxxx xxxx xxxx
+   SMTP_USERNAME=your-email@gmail.com
+   SMTP_PASSWORD=xxxx xxxx xxxx xxxx
    ADMIN_PORTAL_URL=https://your-admin-portal.com/admin
    ```
 
@@ -228,7 +228,7 @@ Each email includes:
 ## Troubleshooting
 
 ### Emails not sending
-1. Check EMAIL_USER and EMAIL_PASS are correct
+1. Check SMTP_USERNAME and SMTP_PASSWORD are correct
 2. Verify `.env.local` file exists and is readable
 3. Check Gmail app password (if using Gmail)
 4. Look for error logs in server console
