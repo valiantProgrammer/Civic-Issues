@@ -309,8 +309,8 @@ The application tracks:
 
 Developed by the talented team:
 
-- [**RUPAYAN DEY**](https://github.com/valiantProgrammer) - Full Stack Developer & Project Head & 
-- **RISHIKA MUKHERJEE** - Frontend Developer & UI/UX Designer
+- [**RUPAYAN DEY**](https://github.com/valiantProgrammer) - Full Stack Developer & Project Head. 
+- [**RISHIKA MUKHERJEE**](https://github.com/bitsByRishika/) - Frontend Developer & UI/UX Designer
 - **RITAM PAUL** - Backend Developer & Database Architect
 - **SOMMIDHYA BISWAS** - QA Tester & Documentation Specialist
 
