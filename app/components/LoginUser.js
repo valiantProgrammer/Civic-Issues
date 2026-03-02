@@ -95,9 +95,11 @@ export default function LoginUser() {
                                     className="absolute right-3 top-0 bottom-0 my-auto text-gray-500 hover:text-gray-700 focus:outline-none flex items-center"
                                     tabIndex={-1}
                                 >
-                                    <span className="material-symbols-outlined text-2xl">
-                                        {showPassword ? 'visibility' : 'visibility_off'}
-                                    </span>
+                                    <img
+                                        src={showPassword ? '/visibility.svg' : '/visibilityOff.svg'}
+                                        alt={showPassword ? 'Hide password' : 'Show password'}
+                                        className="w-6 h-6"
+                                    />
                                 </button>
                             </div>
                             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}

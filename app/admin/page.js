@@ -298,6 +298,7 @@ const RegisterAdminHeadPage = () => {
     const [errors, setErrors] = React.useState({});
     const [apiError, setApiError] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const authorityCategory = ['High', 'Medium', 'Low'];
 
@@ -376,15 +377,41 @@ const RegisterAdminHeadPage = () => {
                     }).map(([id, { label, type, placeholder }]) => (
                         <div key={id}>
                             <label htmlFor={id} className="font-medium text-slate-700">{label}</label>
-                            <input
-                                id={id}
-                                type={type}
-                                placeholder={placeholder}
-                                value={formData[id]}
-                                onChange={handleChange}
-                                className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
-                                disabled={isLoading}
-                            />
+                            {id === 'password' ? (
+                                <div className="relative">
+                                    <input
+                                        id={id}
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder={placeholder}
+                                        value={formData[id]}
+                                        onChange={handleChange}
+                                        className={`w-full mt-2 p-3 pr-10 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
+                                        disabled={isLoading}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-0 bottom-0 my-auto text-gray-500 hover:text-gray-700 focus:outline-none flex items-center"
+                                        tabIndex={-1}
+                                    >
+                                        <img
+                                            src={showPassword ? '/visibility.svg' : '/visibilityOff.svg'}
+                                            alt={showPassword ? 'Hide password' : 'Show password'}
+                                            className="w-6 h-6"
+                                        />
+                                    </button>
+                                </div>
+                            ) : (
+                                <input
+                                    id={id}
+                                    type={type}
+                                    placeholder={placeholder}
+                                    value={formData[id]}
+                                    onChange={handleChange}
+                                    className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
+                                    disabled={isLoading}
+                                />
+                            )}
                             {errors[id] && <p className="text-red-500 text-sm mt-1">{errors[id]}</p>}
                         </div>
                     ))}
@@ -447,6 +474,7 @@ const RegisterAdminPage = () => {
     const [errors, setErrors] = React.useState({});
     const [apiError, setApiError] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const authorityCategory = ['High', 'Medium', 'Low'];
 
@@ -517,19 +545,45 @@ const RegisterAdminPage = () => {
                         phone: { label: 'Phone Number', type: 'tel', placeholder: 'e.g., 1212121212' },
                         age: { label: 'Age', type: 'number', placeholder: 'e.g., 45' },
                         password: { label: 'Password', type: 'password', placeholder: '••••••••' },
-                        address: { label: 'Address', type: 'text', placeholder: 'e.g., Kolkata, WestBangal' }
+                        address: { label: 'Address', type: 'text', placeholder: 'e.g., Kolkata, WestBengal' }
                     }).map(([id, { label, type, placeholder }]) => (
                         <div key={id}>
                             <label htmlFor={id} className="font-medium text-slate-700">{label}</label>
-                            <input
-                                id={id}
-                                type={type}
-                                placeholder={placeholder}
-                                value={formData[id]}
-                                onChange={handleChange}
-                                className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
-                                disabled={isLoading}
-                            />
+                            {id === 'password' ? (
+                                <div className="relative">
+                                    <input
+                                        id={id}
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder={placeholder}
+                                        value={formData[id]}
+                                        onChange={handleChange}
+                                        className={`w-full mt-2 p-3 pr-10 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
+                                        disabled={isLoading}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-0 bottom-0 my-auto text-gray-500 hover:text-gray-700 focus:outline-none flex items-center"
+                                        tabIndex={-1}
+                                    >
+                                        <img
+                                            src={showPassword ? '/visibility.svg' : '/visibilityOff.svg'}
+                                            alt={showPassword ? 'Hide password' : 'Show password'}
+                                            className="w-6 h-6"
+                                        />
+                                    </button>
+                                </div>
+                            ) : (
+                                <input
+                                    id={id}
+                                    type={type}
+                                    placeholder={placeholder}
+                                    value={formData[id]}
+                                    onChange={handleChange}
+                                    className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-slate-300 focus:ring-orange-500 focus:border-orange-500'}`}
+                                    disabled={isLoading}
+                                />
+                            )}
                             {errors[id] && <p className="text-red-500 text-sm mt-1">{errors[id]}</p>}
                         </div>
                     ))}
