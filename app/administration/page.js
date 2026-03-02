@@ -67,6 +67,11 @@ export default function HomePage() {
         return filtered;
     }, [reports, currentView, searchQuery]);
 
+    // Close report details when switching tabs
+    useEffect(() => {
+      setSelectedReport(null);
+    }, [currentView]);
+
     const handleAction = (action, reportId, augmentedDescription) => {
         if (action === 'Approved') {
             handleApprove(reportId);

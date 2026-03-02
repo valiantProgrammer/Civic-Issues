@@ -25,6 +25,16 @@ export default function Home() {
     }
   }, [filterParam]);
 
+  // Close report details when switching tabs
+  useEffect(() => {
+    setSelectedReport(null);
+  }, [activeView]);
+
+  // Close report details when switching report filters (pending/approved/rejected)
+  useEffect(() => {
+    setSelectedReport(null);
+  }, [reportFilter]);
+
   return (
     <div className="relative lg:flex">
       <Navbar 

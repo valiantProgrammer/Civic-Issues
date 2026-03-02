@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import LocationPicker from "./LocationPicker";
 
 const editButtonStyles = `
   .edit-profile-btn {
@@ -77,7 +76,7 @@ export default function ProfileCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editData, setEditData] = useState({ phone: "", address: "", lat: "", lng: "", profilePicture: null });
+  const [editData, setEditData] = useState({ phone: "", address: "", profilePicture: null });
   const [profilePicturePreview, setProfilePicturePreview] = useState(null);
   const [updating, setUpdating] = useState(false);
 
@@ -105,8 +104,6 @@ export default function ProfileCard() {
           setEditData({
             phone: data.user.phone || "",
             address: data.user.address || "",
-            lat: "",
-            lng: "",
             profilePicture: null,
           });
           if (data.user.profilePicture) {
@@ -127,15 +124,6 @@ export default function ProfileCard() {
 
     fetchUserProfile();
   }, []);
-
-  const handleLocationChange = (locationData) => {
-    setEditData((prev) => ({
-      ...prev,
-      address: locationData.address,
-      lat: locationData.lat,
-      lng: locationData.lng,
-    }));
-  };
 
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
@@ -417,20 +405,16 @@ export default function ProfileCard() {
 
                 {/* Address Section */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    📍 Address (Pick from Map)
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Address
                   </label>
-                  <LocationPicker
-                    onLocationChange={handleLocationChange}
-                    initialCenter={{ lat: 22.5726, lng: 88.3639 }}
+                  <input
+                    type="text"
+                    value={editData.address}
+                    onChange={(e) => setEditData({ ...editData, address: e.target.value })}
+                    placeholder="Enter your address"
+                    className="w-full text-gray-900 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                   />
-                  {editData.address && (
-                    <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                      <p className="text-sm text-gray-700">
-                        <strong>Selected Address:</strong> {editData.address}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 {/* Action Buttons */}
