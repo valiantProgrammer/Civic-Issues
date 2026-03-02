@@ -166,7 +166,7 @@ export default function HomePage() {
                                     {searchQuery && (
                                         <button
                                             onClick={() => setSearchQuery('')}
-                                            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                                            className="absolute right-3 top-2 text-gray-400 hover:text-gray-600"
                                         >
                                             ✕
                                         </button>
