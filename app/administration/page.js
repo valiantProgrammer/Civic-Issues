@@ -178,7 +178,7 @@ export default function HomePage() {
                         {searchQuery && (
                             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                                 <p className="text-sm text-blue-800">
-                                    Found <span className="font-semibold">{filteredReports.length}</span> {currentView} report{filteredReports.length !== 1 ? 's' : ''} matching "<span className="font-semibold">{searchQuery}</span>"
+                                    Found <span className="font-semibold">{filteredReports.length}</span> {currentView} report{filteredReports.length !== 1 ? 's' : ''} matching &quot;<span className="font-semibold">{searchQuery}</span>&quot;
                                 </p>
                             </div>
                         )}

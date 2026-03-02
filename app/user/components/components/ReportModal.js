@@ -8,13 +8,12 @@ export default function ReportModal({ isOpen, onClose, report }) {
   const [isPanoramaModalOpen, setIsPanoramaModalOpen] = useState(false)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
 
-  // Check at render time but after hooks are declared
-  if (!isOpen || !report) {
-    return null;
-  }
-
   // 3. The useEffect hook now only handles side effects (keyboard events and body scroll).
   useEffect(() => {
+    if (!isOpen || !report) {
+      return;
+    }
+
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
         onClose()
@@ -28,7 +27,12 @@ export default function ReportModal({ isOpen, onClose, report }) {
       document.removeEventListener('keydown', handleEscape)
       document.body.style.overflow = 'unset'
     }
-  }, [isOpen, onClose]) // This effect only depends on isOpen and onClose
+  }, [isOpen, onClose, report])
+
+  // Check at render time
+  if (!isOpen || !report) {
+    return null;
+  } // This effect only depends on isOpen and onClose
 
   // Check if the source is a video by its file extension
   const isVideo = report.image && /\.(mp4|webm|ogg)$/i.test(report.image);

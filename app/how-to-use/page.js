@@ -139,7 +139,7 @@ export default function HowToUse() {
             <h2 className="text-4xl font-bold text-center mb-12 text-purple-600">Best Practices</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-2xl font-bold mb-4 text-green-600">✓ Do's</h3>
+                <h3 className="text-2xl font-bold mb-4 text-green-600">✓ Do&apos;s</h3>
                 <ul className="space-y-3 text-lg text-gray-700">
                   <li>✓ Report issues promptly when discovered</li>
                   <li>✓ Provide accurate location information</li>
@@ -150,7 +150,7 @@ export default function HowToUse() {
                 </ul>
               </div>
               <div className="bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-2xl font-bold mb-4 text-red-600">✗ Don'ts</h3>
+                <h3 className="text-2xl font-bold mb-4 text-red-600">✗ Don&apos;ts</h3>
                 <ul className="space-y-3 text-lg text-gray-700">
                   <li>✗ Submit false or misleading reports</li>
                   <li>✗ Provide vague location details</li>

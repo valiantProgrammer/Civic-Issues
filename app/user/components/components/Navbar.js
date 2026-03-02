@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import authApi from '@/lib/api';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -29,16 +29,7 @@ export default function Navbar({ onReportFilterChange = () => {}, onProfileClick
   const [rejectedCount, setRejectedCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isOnAddReportPage = pathname === '/user/add-report';
-
-  // Initialize filter from URL parameter
-  useEffect(() => {
-    const filterParam = searchParams.get('filter') || 'pending';
-    if (['pending', 'approved', 'rejected'].includes(filterParam)) {
-      setSelectedReportFilter(filterParam);
-    }
-  }, [searchParams]);
 
   useEffect(() => {
     const fetchReportCounts = async () => {

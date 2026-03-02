@@ -78,7 +78,7 @@ function VerifyEmailContent() {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h1>
             <p className="text-gray-600">
-              We've sent a 6-digit pincode to
+              We&apos;ve sent a 6-digit pincode to
             </p>
             <p className="text-blue-600 font-medium">{email}</p>
           </div>

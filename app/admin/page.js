@@ -187,7 +187,7 @@ const RejectionModal = ({ issue, onConfirm, onCancel, onSuggestReason, isSuggest
                     <h3 className="text-xl font-bold text-slate-900">Reason for Rejection</h3>
                     <button onClick={() => onSuggestReason(issue.Description)} disabled={isSuggesting} className="flex items-center text-sm font-semibold text-orange-600 hover:text-orange-800 disabled:text-slate-400"><SparklesIcon className={`mr-2 h-5 w-5 ${isSuggesting ? 'animate-spin' : ''}`} />{isSuggesting ? 'Thinking...' : 'Suggest Reason'}</button>
                 </div>
-                <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">"{issue.Description}"</span></p>
+                <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">&quot;{issue.Description}&quot;</span></p>
                 <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g., Duplicate report, insufficient information..." className="w-full text-black h-28 p-3 rounded-lg bg-slate-100 border border-slate-300"></textarea>
                 <div className="mt-6 flex justify-end space-x-3">
                     <button onClick={onCancel} className="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 font-semibold">Cancel</button>
@@ -779,7 +779,7 @@ export default function AdminDashboardPage() {
             case 'locateWard': return <div><LocateWardPage /></div>;
             case 'addAdminHead': return <div><RegisterAdminHeadPage /></div>;
             case 'addAdmin': return <div><RegisterAdminPage /></div>;
-            case 'profile': return <div><ProfilePage profile={profile} /></div>;
+            case 'profile': return <div><AdminProfile profile={profile} /></div>;
             default: return null;
         }
     };

@@ -90,7 +90,7 @@ export default function ContactUs() {
         <section className="bg-gradient-to-r from-pink-600 to-purple-800 text-white py-16 px-4 md:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6">Contact Us</h1>
-            <p className="text-xl md:text-2xl mb-4">We'd Love to Hear From You</p>
+            <p className="text-xl md:text-2xl mb-4">We&apos;d Love to Hear From You</p>
             <p className="text-lg">Have questions or feedback? Reach out to our team anytime.</p>
           </div>
         </section>

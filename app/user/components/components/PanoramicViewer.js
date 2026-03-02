@@ -368,7 +368,7 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
                 <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.07-.894l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.93 1.486l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               </div>
               <p className="text-gray-600 font-medium mb-1">Capture Media Evidence</p>
-              <p className="text-sm text-gray-500">Use your device's camera</p>
+              <p className="text-sm text-gray-500">Use your device&apos;s camera</p>
             </button>
 
             <div className="relative flex items-center">
@@ -445,7 +445,7 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
               <button onClick={() => handleOptionClick('video')} className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Video</button>
               <button onClick={() => setIsChoosing(false)} className="w-full px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 mt-2">Cancel</button>
             </div>
-            {actionType === 'capture' && <p className="text-xs text-gray-400 mt-3">Note: Panorama mode depends on your device's camera app.</p>}
+            {actionType === 'capture' && <p className="text-xs text-gray-400 mt-3">Note: Panorama mode depends on your device&apos;s camera app.</p>}
           </div>
         </div>
       )}

@@ -283,7 +283,7 @@ export default function SignupUser() {
                             <div className="px-6 py-4">
                                 <h3 className="text-lg font-medium text-gray-900 mb-2">Verify Your Email</h3>
                                 <p className="text-sm text-gray-600 mb-4">
-                                    We've sent a 6-digit code to <span className="font-semibold">{formData.email}</span>
+                                    We&apos;ve sent a 6-digit code to <span className="font-semibold">{formData.email}</span>
                                 </p>
                                 <div className="mb-4">
                                     <div className="flex justify-center space-x-2">

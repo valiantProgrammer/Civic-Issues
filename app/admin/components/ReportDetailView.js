@@ -591,7 +591,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                   {isSuggestingReason ? 'Thinking...' : 'Suggest Reason'}
                 </button>
               </div>
-              <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">"{report.Description}"</span></p>
+              <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">&quot;{report.Description}&quot;</span></p>
               <textarea 
                 value={rejectionReason} 
                 onChange={(e) => setRejectionReason(e.target.value)} 

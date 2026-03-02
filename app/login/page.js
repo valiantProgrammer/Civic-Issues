@@ -113,7 +113,7 @@ export default function Login() {
 
           {/* Info Section */}
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Don't have an account?</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Don&apos;t have an account?</h3>
             <p className="text-gray-700 mb-6">
               Create a new account to start reporting civic issues and making a difference in your community.
             </p>
