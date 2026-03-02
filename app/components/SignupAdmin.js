@@ -21,6 +21,8 @@ export default function SignupAdmin() {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -87,15 +89,29 @@ export default function SignupAdmin() {
             }).map(([id, { label, type, placeholder }]) => (
               <div key={id}>
                 <label htmlFor={id} className="font-medium text-gray-700">{label}</label>
-                <input
-                  id={id}
-                  type={type}
-                  placeholder={placeholder}
-                  value={formData[id]}
-                  onChange={handleChange}
-                  className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'}`}
-                  disabled={isLoading}
-                />
+                <div className="relative">
+                  <input
+                    id={id}
+                    type={(id === 'password' ? showPassword : id === 'confirmPassword' ? showConfirmPassword : false) ? 'text' : type}
+                    placeholder={placeholder}
+                    value={formData[id]}
+                    onChange={handleChange}
+                    className={`w-full mt-2 p-3 ${(id === 'password' || id === 'confirmPassword') ? 'pr-10' : ''} border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'}`}
+                    disabled={isLoading}
+                  />
+                  {(id === 'password' || id === 'confirmPassword') && (
+                    <button
+                      type="button"
+                      onClick={() => id === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-0 bottom-0 my-auto text-gray-500 hover:text-gray-700 focus:outline-none flex items-center"
+                      tabIndex={-1}
+                    >
+                      <span className="material-symbols-outlined text-2xl">
+                        {(id === 'password' ? showPassword : showConfirmPassword) ? 'visibility' : 'visibility_off'}
+                      </span>
+                    </button>
+                  )}
+                </div>
                 {errors[id] && <p className="text-red-500 text-sm mt-1">{errors[id]}</p>}
               </div>
             ))}

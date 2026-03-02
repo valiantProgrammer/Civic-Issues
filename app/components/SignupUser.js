@@ -26,6 +26,8 @@ export default function SignupUser() {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [canResendOTP, setCanResendOTP] = useState(true);
     const [resendTimeout, setResendTimeout] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const modalRef = useRef(null);
     const otpInputRefs = useRef([]);
@@ -202,16 +204,28 @@ export default function SignupUser() {
                         }).map(([id, { label, type, placeholder }]) => (
                             <div key={id}>
                                 <label htmlFor={id} className="font-medium text-gray-700">{label}</label>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 relative">
                                     <input
                                         id={id}
-                                        type={type}
+                                        type={(id === 'password' ? showPassword : id === 'confirmPassword' ? showConfirmPassword : false) ? 'text' : type}
                                         value={formData[id]}
                                         onChange={handleChange}
                                         placeholder={placeholder}
-                                        className={`w-full mt-2 p-3 border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'}`}
+                                        className={`w-full mt-2 p-3 ${(id === 'password' || id === 'confirmPassword') ? 'pr-10' : ''} border rounded-md outline-none focus:ring-2 ${errors[id] ? 'border-red-500 ring-red-300' : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'}`}
                                         disabled={isLoading}
                                     />
+                                    {(id === 'password' || id === 'confirmPassword') && (
+                                        <button
+                                            type="button"
+                                            onClick={() => id === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute right-3 top-0 bottom-0 my-auto text-gray-500 hover:text-gray-700 focus:outline-none flex items-center"
+                                            tabIndex={-1}
+                                        >
+                                            <span className="material-symbols-outlined text-2xl">
+                                                {(id === 'password' ? showPassword : showConfirmPassword) ? 'visibility' : 'visibility_off'}
+                                            </span>
+                                        </button>
+                                    )}
                                 </div>
                                 {errors[id] && <p className="text-red-500 text-sm mt-1">{errors[id]}</p>}
                             </div>

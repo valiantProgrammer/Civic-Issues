@@ -70,11 +70,10 @@ const Header = () => {
 
 
   const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Interactive Features', href: '#features' },
-    { name: 'How to Use', href: '#how' },
-    { name: 'Contact Us', href: '#contact' },
-    // { name: 'Contact Manager', href: '/contact/page.js' },
+    { name: 'About', href: '/about' },
+    { name: 'Interactive Features', href: '/features' },
+    { name: 'How to Use', href: '/how-to-use' },
+    { name: 'Contact Us', href: '/contact-us' },
   ];
 
   return (
@@ -122,15 +121,15 @@ const Header = () => {
         <div className="flex-grow p-6 flex flex-col">
           <nav className="flex flex-col gap-2">
             {navLinks.map((link, index) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
-                onClick={handleSmoothScroll}
+                onClick={() => setIsOpen(false)}
                 className={`block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-purple-600 text-lg font-semibold transition-all duration-300 transform ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}
                 style={{ transitionDelay: `${150 + index * 75}ms `}}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
