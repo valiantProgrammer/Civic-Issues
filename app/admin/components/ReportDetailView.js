@@ -211,49 +211,53 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
   return (
     <>
       <style>{rejectButtonStyles}</style>
-      <div className="bg-white shadow-lg border border-gray-200 w-full rounded-3xl flex flex-col max-h-[95vh]">
+      <div className="bg-white shadow-lg overflow-y-auto flex flex-col max-h-[95vh]">
         {/* Header */}
-        <div className={`sticky top-0 bg-gradient-to-r from-orange-500 to-orange-400 text-white p-6 flex justify-between items-center transition-all ${!isScrolled ? 'rounded-t-3xl' : ''}`}>
-          <div>
-            <h2 className="text-2xl font-bold">Report Details</h2>
-            <p className="text-purple-100 text-sm mt-1">Ticket ID: {report.ticketId || report._id}</p>
+        <div className={`sticky top-0 bg-slate-800 text-white px-6 py-6 flex justify-between items-start border-b-2 z-50 border-slate-700 shadow-sm transition-all`}>
+          <div className="flex-1">
+            <h2 className="text-2xl font-semibold text-white mb-1 tracking-tight">{report.Title}</h2>
+            <p className="text-slate-300 text-sm font-normal">{report.category}</p>
           </div>
           <button
             onClick={onClose}
-            className="bg-white font-black bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all"
+            className="text-slate-300 hover:text-white hover:bg-slate-700 p-2 rounded-lg transition-all duration-200 ml-4"
+            aria-label="Close report"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         </div>
 
         {/* Content */}
         <div 
-          className="p-6 space-y-6 overflow-y-auto flex-1"
+          className="overflow-y-auto flex-1 pl-3"
           ref={contentRef}
           onScroll={handleScroll}
         >
-          {/* Media - NOW ON TOP - Shows image and opens pano viewer on click */}
+          {/* Media */}
           {report.image && (
-            <div 
-              className="w-full rounded-lg overflow-hidden bg-gray-900 h-80 shadow-md border-2 border-gray-400 cursor-pointer hover:shadow-lg transition-all"
-              onClick={() => setFullscreenImage(report.image)}
-              role="button"
-              tabIndex={0}
-              onKeyPress={(e) => e.key === 'Enter' && setFullscreenImage(report.image)}
-            >
-              <img 
-                src={report.image} 
-                alt="Report Issue" 
-                className="w-full h-full object-cover hover:brightness-110 transition-all"
-                loading="lazy"
-              />
+            <div className="px-6 py-6 border-b">
+              <div
+                className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden hover:opacity-90 transition-opacity"
+                onClick={() => setFullscreenImage(report.image)}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => e.key === 'Enter' && setFullscreenImage(report.image)}
+              >
+                <img 
+                  src={report.image} 
+                  alt="Report Issue" 
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-2 text-center">Click to view full size</p>
             </div>
           )}
 
           {/* Status Badge */}
-          <div className="flex justify-between items-start">
+          <div className="px-6 py-4 border-b flex justify-between items-center bg-blue-50">
             <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${getStatusBadgeColor(report.status)}`}>
               {report.status?.charAt(0).toUpperCase() + report.status?.slice(1)}
             </span>
@@ -266,19 +270,18 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
 
           {/* Ticket ID */}
           {report.ticketId && (
-            <div className="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200 rounded-lg p-4">
+            <div className="px-6 py-4 bg-gradient-to-r from-slate-100 to-slate-50 border-b border-slate-200">
               <p className="text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Ticket ID</p>
               <div className="flex items-center gap-3">
-                <code className="bg-slate-800 text-slate-100 px-4 py-2 rounded font-mono text-sm font-semibold flex-1 tracking-wider">
+                <code className="bg-slate-800 text-slate-100 px-4 py-2 rounded-lg font-mono text-sm font-semibold flex-1">
                   {report.ticketId}
                 </code>
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(report.ticketId);
-                    // Toast would need to be imported or handled differently in admin view
-                    alert('Ticket ID copied');
+                    toast.success('Ticket ID copied to clipboard');
                   }}
-                  className="flex-shrink-0 p-2 hover:bg-slate-200 rounded transition-colors duration-200 text-slate-700"
+                  className="flex-shrink-0 p-2 hover:bg-slate-200 rounded-lg transition-colors duration-200 text-slate-700 hover:text-slate-900"
                   title="Copy to clipboard"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -286,87 +289,126 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                   </svg>
                 </button>
               </div>
+              <p className="text-xs text-slate-500 mt-2">Use this ID to reference the report</p>
             </div>
           )}
 
-          {/* Issue Details Grid */}
-          <div className={`border rounded-lg p-6 ${getStatusColor(report.status)}`}>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Issue Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Title</p>
-                <p className="text-gray-900 font-medium">{report.Title}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Category</p>
-                <p className="text-gray-900 font-medium">{report.category || report.Title}</p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-sm font-semibold text-gray-600 mb-1">Description</p>
-                <p className="text-gray-900 whitespace-pre-wrap">{report.Description}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Severity</p>
-                <p className="text-gray-900 font-medium">{report.severity}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Reported Date</p>
-                <p className="text-gray-900">{formatDate(report.createdAt)}</p>
-              </div>
+          {/* Description */}
+          <div className="px-6 py-6 border-b">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">Description</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {report.Description || 'No additional description provided'}
+            </p>
+          </div>
+
+          {/* Details - Table Format */}
+          <div className="px-6 py-8 border-b">
+            <h3 className="text-lg font-bold text-slate-900 mb-6 tracking-tight">Issue Information</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 w-1/3 text-base">Category</td>
+                    <td className="px-4 py-4 text-slate-900 font-medium text-base">{report.category || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Severity</td>
+                    <td className="px-4 py-4">
+                      <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${
+                        report.severity === 'High' ? 'bg-red-100 text-red-900' :
+                        report.severity === 'Medium' ? 'bg-yellow-100 text-yellow-900' :
+                        'bg-green-100 text-green-900'
+                      }`}>
+                        {report.severity || 'Medium'}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Reported Date</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{formatDate(report.createdAt)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 className="text-lg font-bold text-slate-900 mt-8 mb-6 tracking-tight">Location Information</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 w-1/3 text-base">Ward Number</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.ward || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Municipality</td>
+                    <td className="px-4 py-4 text-slate-900 font-bold text-base">{report.municipalityName || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Building</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.building || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Street</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.street || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Locality</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.locality || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Property Type</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.propertyType || 'Not specified'}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Coordinates</td>
+                    <td className="px-4 py-4 text-slate-900 font-mono text-sm">
+                      {report.locationCoordinates?.coordinates 
+                        ? `${report.locationCoordinates.coordinates[1]}, ${report.locationCoordinates.coordinates[0]}`
+                        : 'Not available'}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          {/* Reporter Details */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Reporter Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Name</p>
-                <p className="text-gray-900 font-medium">{report.ReporterName || 'Anonymous'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Reporter ID</p>
-                <p className="text-gray-900 font-medium text-sm">{report.reporterId || 'N/A'}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Location Details */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Location Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Ward Number</p>
-                <p className="text-gray-900 font-medium">{report.ward || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Municipality</p>
-                <p className="text-gray-900 font-medium">{report.municipalityName || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Building</p>
-                <p className="text-gray-900 font-medium">{report.building || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Street</p>
-                <p className="text-gray-900 font-medium">{report.street || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Locality</p>
-                <p className="text-gray-900 font-medium">{report.locality || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-600 mb-1">Property Type</p>
-                <p className="text-gray-900 font-medium">{report.propertyType || 'N/A'}</p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-sm font-semibold text-gray-600 mb-1">Coordinates</p>
-                <p className="text-gray-900 font-medium">
-                  {report.locationCoordinates?.coordinates 
-                    ? `${report.locationCoordinates.coordinates[1]}, ${report.locationCoordinates.coordinates[0]}`
-                    : 'N/A'}
-                </p>
-              </div>
+          {/* Processing Information Table */}
+          <div className="px-6 py-8 border-b">
+            <h3 className="text-lg font-bold text-slate-900 mb-6 tracking-tight">Report Processing Information</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 w-1/3 text-base">Reported By</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.ReporterName || 'Anonymous'}</td>
+                    <td className="px-4 py-4">
+                      <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">Submitted</span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Verified By</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.verifiedBy || report.verifiedByName || 'Pending'}</td>
+                    <td className="px-4 py-4">
+                      {report.verified || report.verifiedBy ? (
+                        <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">✓ Verified</span>
+                      ) : (
+                        <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Pending</span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-4 font-semibold text-slate-700 bg-slate-100 text-base">Processed By</td>
+                    <td className="px-4 py-4 text-slate-900 text-base">{report.processedBy || report.processedByName || 'Not Yet Processed'}</td>
+                    <td className="px-4 py-4">
+                      {report.processedBy || report.processedByName ? (
+                        <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">✓ Processed</span>
+                      ) : (
+                        <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">Pending</span>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -586,10 +628,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-slate-900">Reason for Rejection</h3>
-                <button onClick={handleSuggestReason} disabled={isSuggestingReason} className="flex items-center text-sm font-semibold text-orange-600 hover:text-orange-800 disabled:text-slate-400">
-                  <SparklesIcon className={`mr-2 h-5 w-5 ${isSuggestingReason ? 'animate-spin' : ''}`} />
-                  {isSuggestingReason ? 'Thinking...' : 'Suggest Reason'}
-                </button>
+                
               </div>
               <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">&quot;{report.Description}&quot;</span></p>
               <textarea 

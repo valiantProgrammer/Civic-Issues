@@ -142,7 +142,7 @@ export default function HomePage() {
             </div>
             
             {/* Main Content - Adjusted for sidebar on lg */}
-            <div className="flex-1 lg:ml-64">
+            <div className="flex-1 lg:ml-64 p-6">
                 {selectedReport ? (
                     <ReportDetailView report={selectedReport} onClose={() => setSelectedReport(null)} userRole="administration" onApprove={() => handleApprove(selectedReport._id)} onReject={(reason) => handleReject(selectedReport._id, reason)} onSend={handleSendToMunicipality} />
                 ) : currentView === 'profile' ? (
