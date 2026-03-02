@@ -247,6 +247,7 @@ Click on the image or video to view the full media evidence in high quality.
 <div class="animated-block" style="padding: 25px; margin: 20px 0;">
   <h3 style="margin-top: 0; text-align: center;">⚡ Our Technology Arsenal</h3>
 </div>
+
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
