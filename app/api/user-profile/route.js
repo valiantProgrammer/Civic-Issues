@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getUserModel } from '@/models/User';
 import { getAdministrativeHeadModel } from '@/models/Administrative';
+import { getAdminModel } from '@/models/Admin';
 import { verifyToken } from '@/lib/auth';
 
 export async function GET(request) {
@@ -18,6 +19,8 @@ export async function GET(request) {
 
         // Verify token and get userId
         const payload = await verifyToken(token);
+        console.log('Token payload:', { userId: payload?.userId, role: payload?.role });
+        
         if (!payload || !payload.userId) {
             return NextResponse.json(
                 { success: false, message: 'Unauthorized - Invalid token' },
@@ -25,40 +28,71 @@ export async function GET(request) {
             );
         }
 
-        // Try to find in AdministrativeHead first (if role is adminHead)
+        // Handle AdminHead role (Administrative Head)
         if (payload.role === 'adminHead') {
             const AdministrativeHead = await getAdministrativeHeadModel();
             const adminHead = await AdministrativeHead.findById(payload.userId).select('-password');
 
-            if (!adminHead) {
-                return NextResponse.json(
-                    { success: false, message: 'Administrative head not found' },
-                    { status: 404 }
-                );
+            if (adminHead) {
+                console.log('Found administrative head:', adminHead._id);
+                return NextResponse.json({
+                    success: true,
+                    fullName: adminHead.fullName,
+                    email: adminHead.email,
+                    phone: adminHead.phone,
+                    age: adminHead.age,
+                    designation: adminHead.designation,
+                    authority: adminHead.authority,
+                    municipality: adminHead.municipality,
+                    userId: adminHead.userId,
+                    profilePicture: adminHead.profilePicture,
+                    municipalId: adminHead.municipalId,
+                    _id: adminHead._id,
+                    createdAt: adminHead.createdAt
+                }, { status: 200 });
             }
-
-            return NextResponse.json({
-                success: true,
-                fullName: adminHead.fullName,
-                email: adminHead.email,
-                phone: adminHead.phone,
-                age: adminHead.age,
-                designation: adminHead.designation,
-                authority: adminHead.authority,
-                municipality: adminHead.municipality,
-                userId: adminHead.userId,
-                profilePicture: adminHead.profilePicture,
-                municipalId: adminHead.municipalId,
-                _id: adminHead._id,
-                createdAt: adminHead.createdAt
-            }, { status: 200 });
+            
+            console.log('Administrative head not found for userId:', payload.userId);
+            return NextResponse.json(
+                { success: false, message: 'Administrative head not found' },
+                { status: 404 }
+            );
         }
 
-        // Otherwise, get regular User
+        // Handle Admin role (Regular Admin)
+        if (payload.role === 'admin') {
+            const Admin = await getAdminModel();
+            const admin = await Admin.findById(payload.userId).select('-password');
+
+            if (admin) {
+                console.log('Found admin:', admin._id);
+                return NextResponse.json({
+                    success: true,
+                    fullName: admin.fullName,
+                    email: admin.email,
+                    phone: admin.phone,
+                    age: admin.age,
+                    address: admin.address,
+                    userId: admin.userId,
+                    profilePicture: admin.profilePicture,
+                    _id: admin._id,
+                    createdAt: admin.createdAt
+                }, { status: 200 });
+            }
+
+            console.log('Admin not found for userId:', payload.userId);
+            return NextResponse.json(
+                { success: false, message: 'Admin not found' },
+                { status: 404 }
+            );
+        }
+
+        // Handle regular User role
         const User = await getUserModel();
         const user = await User.findById(payload.userId).select('-password');
 
         if (!user) {
+            console.log('User not found for userId:', payload.userId, 'with role:', payload.role);
             return NextResponse.json(
                 { success: false, message: 'User not found' },
                 { status: 404 }
@@ -179,6 +213,48 @@ export async function PUT(request) {
                 municipalId: adminHead.municipalId,
                 _id: adminHead._id,
                 createdAt: adminHead.createdAt
+            }, { status: 200 });
+        }
+
+        // Handle admin updates (Regular Admin)
+        if (payload.role === 'admin') {
+            const Admin = await getAdminModel();
+            
+            // Allowed fields for update
+            const allowedFields = ['fullName', 'phone', 'age', 'address', 'profilePicture'];
+            const filteredData = {};
+            
+            allowedFields.forEach(field => {
+                if (updateData[field] !== undefined) {
+                    filteredData[field] = updateData[field];
+                }
+            });
+
+            const admin = await Admin.findByIdAndUpdate(
+                payload.userId,
+                filteredData,
+                { new: true, select: '-password' }
+            );
+
+            if (!admin) {
+                return NextResponse.json(
+                    { success: false, message: 'Admin not found' },
+                    { status: 404 }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                message: 'Profile updated successfully',
+                fullName: admin.fullName,
+                email: admin.email,
+                phone: admin.phone,
+                age: admin.age,
+                address: admin.address,
+                userId: admin.userId,
+                profilePicture: admin.profilePicture,
+                _id: admin._id,
+                createdAt: admin.createdAt
             }, { status: 200 });
         }
 

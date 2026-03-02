@@ -72,24 +72,32 @@ export default function AdminProfile() {
       });
 
       const data = await response.json();
+      console.log('Profile API response:', data);
 
-      if (data.success && data.user) {
-        setProfile(data.user);
-        setFormData({
-          fullName: data.user.fullName || '',
-          age: data.user.age || '',
-          phone: data.user.phone || '',
-          email: data.user.email || '',
-          address: data.user.address || '',
-        });
-        if (data.user.profilePicture) {
-          setProfilePicturePreview(data.user.profilePicture);
-        }
-      } else {
-        toast.error(data.message || 'Failed to fetch profile');
+      // Handle both wrapped (user field) and unwrapped responses
+      const profileData = data.user || data;
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch profile');
+      }
+
+      if (!profileData || !profileData.fullName) {
+        throw new Error('Invalid profile data received');
+      }
+
+      setProfile(profileData);
+      setFormData({
+        fullName: profileData.fullName || '',
+        age: profileData.age || '',
+        phone: profileData.phone || '',
+        email: profileData.email || '',
+        address: profileData.address || '',
+      });
+      if (profileData.profilePicture) {
+        setProfilePicturePreview(profileData.profilePicture);
       }
     } catch (error) {
-      toast.error('Failed to load profile');
+      toast.error(error.message || 'Failed to load profile');
       console.error('Profile fetch error:', error);
     } finally {
       setLoading(false);
@@ -143,17 +151,32 @@ export default function AdminProfile() {
       });
 
       const result = await response.json();
+      console.log('Update response:', result);
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to update profile');
+      }
 
       if (result.success) {
-        setProfile(result.user);
+        // Extract profile data - API returns it directly, not in a nested 'user' field for admin
+        const profileData = result.user || result;
+        
+        // Filter out success and message fields
+        const { success, message, ...cleanData } = profileData;
+        
+        setProfile(cleanData);
+        setFormData(cleanData);
         setIsEditing(false);
         setProfilePicture(null);
+        if (cleanData.profilePicture) {
+          setProfilePicturePreview(cleanData.profilePicture);
+        }
         toast.success('Profile updated successfully!');
       } else {
         toast.error(result.message || 'Failed to update profile');
       }
     } catch (error) {
-      toast.error('Failed to save profile');
+      toast.error(error.message || 'Failed to save profile');
       console.error('Save error:', error);
     } finally {
       setSaving(false);

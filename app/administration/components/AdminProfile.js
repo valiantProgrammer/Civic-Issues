@@ -71,10 +71,20 @@ export default function AdminProfile() {
     setLoading(true);
     try {
       const response = await authApi.getUserProfile();
-      setProfile(response);
-      setFormData(response);
-      setProfilePictureUrl(response.profilePicture || null);
+      console.log('Profile response:', response);
+      
+      // Extract profile data - handle both wrapped and unwrapped responses
+      const profileData = response.user || response;
+      
+      if (!profileData || !profileData.fullName) {
+        throw new Error('Invalid profile data received');
+      }
+      
+      setProfile(profileData);
+      setFormData(profileData);
+      setProfilePictureUrl(profileData.profilePicture || null);
     } catch (error) {
+      console.error('Profile fetch error:', error);
       toast.error(`Failed to load profile: ${error.message}`);
     } finally {
       setLoading(false);
@@ -107,12 +117,19 @@ export default function AdminProfile() {
       }
 
       const response = await authApi.updateAdministrativeProfile(updatedData);
+      console.log('Update profile response:', response);
+      
       setProfile(response);
+      setFormData(response);
       setIsEditing(false);
       setProfilePictureFile(null);
+      if (response.profilePicture) {
+        setProfilePictureUrl(response.profilePicture);
+      }
       toast.success('Profile updated successfully!');
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`);
+      console.error('Profile update error:', error);
     } finally {
       setIsSaving(false);
     }
