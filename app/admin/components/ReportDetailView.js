@@ -498,7 +498,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Target Municipality</label>
                     <select
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                      className="w-full border text-black border-gray-300 rounded-md px-3 py-2 bg-white"
                       value={forwardData.targetMunicipality}
                       onChange={(e) => setForwardData({ ...forwardData, targetMunicipality: e.target.value, targetWard: '' })}
                       required={forwardType === 'municipality'}
@@ -510,7 +510,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Target Ward</label>
                     <select
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                      className="w-full border text-black border-gray-300 rounded-md px-3 py-2 bg-white"
                       value={forwardData.targetWard}
                       onChange={(e) => setForwardData({ ...forwardData, targetWard: e.target.value })}
                       disabled={!forwardData.targetMunicipality}
@@ -527,7 +527,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Select Authority</label>
                   <select
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white"
+                    className="w-full border text-black border-gray-300 rounded-md px-3 py-2 bg-white"
                     value={forwardData.targetAuthority}
                     onChange={(e) => setForwardData({ ...forwardData, targetAuthority: e.target.value })}
                     required={forwardType === 'authority'}
@@ -541,7 +541,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Forwarding</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="w-full border text-black border-gray-300 rounded-md px-3 py-2"
                   rows="3"
                   placeholder="Provide a reason..."
                   value={forwardData.reason}
