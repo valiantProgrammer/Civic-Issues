@@ -4,6 +4,43 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import toast from 'react-hot-toast'
 import PanoramicViewer from '@/app/user/components/components/PanoramicViewer'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const rejectButtonStyles = `
+  .reject-btn {
+    background-color: white;
+    border: 2px solid #b91c1c;
+    color: #dc2626;
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .reject-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
+
+  .reject-btn:hover::before {
+    transform: translateX(0);
+  }
+
+  .reject-btn:hover {
+    color: white;
+    border-color: #dc2626;
+  }
+`;
+
+const SparklesIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>);
 
 const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onReject, onSend }) => {
   const [similarReports, setSimilarReports] = useState({ areaCount: 0, categoryCount: 0, totalSimilar: 0 })
@@ -11,6 +48,11 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
   const [fullscreenImage, setFullscreenImage] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showSendModal, setShowSendModal] = useState(false)
+  const [showApprovalModal, setShowApprovalModal] = useState(false)
+  const [showRejectionModal, setShowRejectionModal] = useState(false)
+  const [rejectionReason, setRejectionReason] = useState('')
+  const [isSuggestingReason, setIsSuggestingReason] = useState(false)
+  const [suggestedReason, setSuggestedReason] = useState('')
   const [forwardType, setForwardType] = useState('municipality')
   const [forwardData, setForwardData] = useState({
     targetMunicipality: '',
@@ -60,6 +102,51 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
     setForwardType('municipality')
     setForwardData({ targetMunicipality: '', targetWard: '', targetAuthority: '', reason: '' })
     toast.success('Report forwarded successfully')
+  }
+
+  const handleConfirmApproval = () => {
+    if (onApprove) {
+      onApprove()
+    }
+    setShowApprovalModal(false)
+    toast.success('Report approved successfully')
+  }
+
+  const handleConfirmRejection = () => {
+    if (!rejectionReason.trim()) {
+      toast.error('Please provide a rejection reason')
+      return
+    }
+    if (onReject) {
+      onReject(rejectionReason)
+    }
+    setShowRejectionModal(false)
+    setRejectionReason('')
+    setSuggestedReason('')
+    toast.success('Report rejected successfully')
+  }
+
+  const handleSuggestReason = async () => {
+    setIsSuggestingReason(true)
+    try {
+      const response = await fetch('/api/admin-reports/suggest-rejection-reason', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: report.Description })
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setSuggestedReason(data.suggestedReason || 'Unable to generate suggestion')
+        setRejectionReason(data.suggestedReason || '')
+      } else {
+        toast.error('Failed to generate suggestion')
+      }
+    } catch (error) {
+      toast.error('Error suggesting reason')
+      console.error(error)
+    } finally {
+      setIsSuggestingReason(false)
+    }
   }
 
   useEffect(() => {
@@ -122,9 +209,10 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
 
   return (
     <>
+      <style>{rejectButtonStyles}</style>
       <div className="bg-white shadow-lg border border-gray-200 w-full rounded-3xl flex flex-col max-h-[95vh]">
         {/* Header */}
-        <div className={`sticky top-0 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 flex justify-between items-center transition-all ${!isScrolled ? 'rounded-t-3xl' : ''}`}>
+        <div className={`sticky top-0 bg-gradient-to-r from-orange-500 to-orange-400 text-white p-6 flex justify-between items-center transition-all ${!isScrolled ? 'rounded-t-3xl' : ''}`}>
           <div>
             <h2 className="text-2xl font-bold">Report Details</h2>
             <p className="text-purple-100 text-sm mt-1">ID: {report._id}</p>
@@ -319,6 +407,35 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
 
         {/* Footer */}
         <div className={`bg-gray-50 border-t border-gray-200 p-6 flex justify-end gap-3 transition-all ${!isScrolled ? 'rounded-b-3xl' : ''}`}>
+          {/* Admin Role - Pending Reports */}
+          {userRole === 'admin' && report.status === 'pending' && (
+            <>
+              <button
+                onClick={() => setShowRejectionModal(true)}
+                className="reject-btn px-6 py-2 rounded-lg font-medium"
+              >
+                Reject
+              </button>
+              <button
+                onClick={() => setShowApprovalModal(true)}
+                className="px-6 py-2 bg-green-600 hover:bg-green-900 text-white rounded-lg font-medium transition-colors"
+              >
+                Approve
+              </button>
+            </>
+          )}
+
+          {/* Admin Role - Rejected Reports */}
+          {userRole === 'admin' && report.status === 'rejected' && (
+            <button
+              onClick={() => onReject && onReject(null)}
+              className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors"
+            >
+              Make Pending
+            </button>
+          )}
+
+          {/* Administration Role */}
           {userRole === 'administration' && (
             <>
               <button
@@ -328,13 +445,13 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
                 Send to Municipality
               </button>
               <button
-                onClick={() => onReject && onReject(null)}
-                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors"
+                onClick={() => setShowRejectionModal(true)}
+                className="reject-btn px-6 py-2 rounded-lg font-medium"
               >
                 Reject
               </button>
               <button
-                onClick={() => onApprove && onApprove()}
+                onClick={() => setShowApprovalModal(true)}
                 className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
               >
                 Approve
@@ -436,6 +553,54 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
           </div>
         </div>
       )}
+
+      {/* Approval Modal */}
+      <AnimatePresence>
+        {showApprovalModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowApprovalModal(false)}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6">
+              <h3 className="text-xl font-bold mb-4 text-slate-900">Confirm Approval</h3>
+              <p className="text-sm text-slate-600 mb-3">Are you sure you want to approve this report?</p>
+              <div className="bg-slate-100 p-4 rounded-lg mb-4">
+                <p className="font-medium text-slate-800">{report.Description}</p>
+                <p className="text-sm text-slate-600 mt-1">Reported by: {report.ReporterName || 'Anonymous'}</p>
+              </div>
+              <div className="mt-6 flex justify-end space-x-3">
+                <button onClick={() => setShowApprovalModal(false)} className="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 font-semibold">Cancel</button>
+                <button onClick={handleConfirmApproval} className="px-5 py-2.5 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600">Confirm Approval</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Rejection Modal */}
+      <AnimatePresence>
+        {showRejectionModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowRejectionModal(false)}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-slate-900">Reason for Rejection</h3>
+                <button onClick={handleSuggestReason} disabled={isSuggestingReason} className="flex items-center text-sm font-semibold text-orange-600 hover:text-orange-800 disabled:text-slate-400">
+                  <SparklesIcon className={`mr-2 h-5 w-5 ${isSuggestingReason ? 'animate-spin' : ''}`} />
+                  {isSuggestingReason ? 'Thinking...' : 'Suggest Reason'}
+                </button>
+              </div>
+              <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">"{report.Description}"</span></p>
+              <textarea 
+                value={rejectionReason} 
+                onChange={(e) => setRejectionReason(e.target.value)} 
+                placeholder="e.g., Duplicate report, insufficient information..." 
+                className="w-full text-black h-28 p-3 rounded-lg bg-slate-100 border border-slate-300"
+              />
+              <div className="mt-6 flex justify-end space-x-3">
+                <button onClick={() => { setShowRejectionModal(false); setRejectionReason(''); setSuggestedReason(''); }} className="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 font-semibold">Cancel</button>
+                <button onClick={handleConfirmRejection} disabled={!rejectionReason.trim()} className="px-5 py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:bg-red-300">Confirm Rejection</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Fullscreen Panoramic Viewer */}
       {fullscreenImage && (

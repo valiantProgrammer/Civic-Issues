@@ -103,8 +103,8 @@ const ProfilePage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <InfoField icon={<MailIcon />} label="Email Address" value={profileData.email} />
                     <InfoField icon={<PhoneIcon />} label="Phone Number" value={profileData.phone} isEditing={isEditing} />
-                    <InfoField icon={<BuildingIcon />} label="Municipality" value={profileData.userId} />
-                    <InfoField icon={<ShieldIcon />} label="Authority Level" value={profileData?.Address} />
+                    <InfoField icon={<BuildingIcon />} label="User Id" value={profileData.userId} />
+                    <InfoField icon={<ShieldIcon />} label="Authority Level" value="Admin" />
                 </div>
                 <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <button onClick={handleEditToggle} className={`w-full py-2.5 px-5 font-semibold rounded-lg transition-colors ${isEditing ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-orange-600 hover:bg-orange-700 text-white'}`}>
@@ -262,7 +262,7 @@ const RejectionModal = ({ issue, onConfirm, onCancel, onSuggestReason, isSuggest
                     <button onClick={() => onSuggestReason(issue.Description)} disabled={isSuggesting} className="flex items-center text-sm font-semibold text-orange-600 hover:text-orange-800 disabled:text-slate-400"><SparklesIcon className={`mr-2 h-5 w-5 ${isSuggesting ? 'animate-spin' : ''}`} />{isSuggesting ? 'Thinking...' : 'Suggest Reason'}</button>
                 </div>
                 <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">"{issue.Description}"</span></p>
-                <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g., Duplicate report, insufficient information..." className="w-full h-28 p-3 rounded-lg bg-slate-100 border border-slate-300"></textarea>
+                <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g., Duplicate report, insufficient information..." className="w-full text-black h-28 p-3 rounded-lg bg-slate-100 border border-slate-300"></textarea>
                 <div className="mt-6 flex justify-end space-x-3">
                     <button onClick={onCancel} className="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 font-semibold">Cancel</button>
                     <button onClick={() => onConfirm(reason)} disabled={!reason.trim()} className="px-5 py-2.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:bg-red-300">Confirm Rejection</button>
@@ -798,7 +798,28 @@ export default function AdminDashboardPage() {
         if (reportViews.includes(currentView)) {
             // Show detail card if a report is selected, otherwise show the list
             if (selectedIssue) {
-                return <ReportDetailView report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />;
+                return (
+                    <ReportDetailView 
+                        report={selectedIssue} 
+                        onClose={() => setSelectedIssue(null)} 
+                        userRole="admin"
+                        onApprove={() => {
+                            updateIssueStatusInApi(selectedIssue, 'verified');
+                            setSelectedIssue(null);
+                        }}
+                        onReject={(reason) => {
+                            if (selectedIssue.status === 'rejected') {
+                                // Convert rejected to pending directly
+                                updateIssueStatusInApi(selectedIssue, 'pending');
+                                setSelectedIssue(null);
+                            } else {
+                                // For pending reports, set for rejection (will show modal)
+                                setRejectionTarget(selectedIssue);
+                                setSelectedIssue(null);
+                            }
+                        }}
+                    />
+                );
             }
             return (
                 <>
@@ -807,7 +828,7 @@ export default function AdminDashboardPage() {
                         <div className="mt-4 sm:mt-0 flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-3 sm:space-y-0">
                             <div className="flex items-center space-x-2"><label className="text-sm text-slate-600 shrink-0">Filter By</label><select value={filterBy} onChange={e => { setFilterBy(e.target.value); setFilterValue(''); }} className="px-3 py-2 rounded-md border border-slate-300 bg-white text-sm"><option value="none">All Fields</option><option value="ward">Ward</option><option value="reporter">Reporter</option></select></div>
                             <div className="relative w-full sm:w-auto"><input value={filterValue} onChange={e => setFilterValue(e.target.value)} placeholder={`Search...`} className="pl-10 pr-4 py-2 w-full sm:w-48 rounded-md border border-slate-300 bg-white" /><svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
-                            <div className="flex items-center space-x-2"><label className="text-sm text-slate-600">Sort</label><select value={sortOrder} onChange={e => setSortOrder(e.target.value)} className="px-3 py-2 rounded-md border border-slate-300 bg-white text-sm"><option value="newest">Newest</option><option value="oldest">Oldest</option></select></div>
+                            <div className="flex items-center space-x-2"><label className="text-sm text-slate-600">Sort</label><select value={sortOrder} onChange={e => setSortOrder(e.target.value)} className="px-3 py-2 rounded-md border border-slate-300 bg-white text-sm text-slate-900 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="newest">Newest</option><option value="oldest">Oldest</option></select></div>
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -1601,7 +1622,28 @@ export default function AdminDashboardPage() {
         if (reportViews.includes(currentView)) {
             // Show detail card if a report is selected, otherwise show the list
             if (selectedIssue) {
-                return <ReportDetailView report={selectedIssue} onClose={() => setSelectedIssue(null)} userRole="admin" />;
+                return (
+                    <ReportDetailView 
+                        report={selectedIssue} 
+                        onClose={() => setSelectedIssue(null)} 
+                        userRole="admin"
+                        onApprove={() => {
+                            updateIssueStatusInApi(selectedIssue, 'verified');
+                            setSelectedIssue(null);
+                        }}
+                        onReject={(reason) => {
+                            if (selectedIssue.status === 'rejected') {
+                                // Convert rejected to pending directly
+                                updateIssueStatusInApi(selectedIssue, 'pending');
+                                setSelectedIssue(null);
+                            } else {
+                                // For pending reports, set for rejection (will show modal)
+                                setRejectionTarget(selectedIssue);
+                                setSelectedIssue(null);
+                            }
+                        }}
+                    />
+                );
             }
             return (
                 <>
