@@ -5,13 +5,13 @@ import PanoramaModal from './PanoramaModal.js'
 import VideoPlayerModal from './VideoPlayerModal.js'
 
 export default function ReportModal({ isOpen, onClose, report }) {
-  // 1. This check is now at the very top to prevent errors.
+  const [isPanoramaModalOpen, setIsPanoramaModalOpen] = useState(false)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
+  // Check at render time but after hooks are declared
   if (!isOpen || !report) {
     return null;
   }
-
-  const [isPanoramaModalOpen, setIsPanoramaModalOpen] = useState(false)
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
 
   // 3. The useEffect hook now only handles side effects (keyboard events and body scroll).
   useEffect(() => {

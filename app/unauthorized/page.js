@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 // --- SVG Icon Components ---
 const LockIcon = () => (
@@ -49,10 +50,9 @@ export default function UnauthorizedPage() {
                     >
                         Go Back
                     </button>
-                    {/* Replaced Next.js Link with a standard anchor tag */}
-                    <a href="/" className="w-full sm:w-auto px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors">
+                    <Link href="/" className="w-full sm:w-auto px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors text-center">
                         Return to Homepage
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="mt-12 flex items-center justify-center space-x-3 text-slate-500">
