@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ReportDetailView from './components/ReportDetailView';
+import AdminProfile from './components/AdminProfile';
 
 const StarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>);
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>);
@@ -41,82 +42,7 @@ const VerifiedBadgeIcon = () => (
 );
 // --- Sub-Components ---
 
-const ProfilePage = () => {
-    const [profileData, setProfileData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isEditing, setIsEditing] = useState(false);
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            setIsLoading(true);
-            try {
-                const data = await authApi.getProfile();
-                setProfileData(data.user);
-            } catch (error) {
-                toast.error(`Failed to fetch profile: ${error.message}`);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchProfile();
-    }, []);
-
-    const handleEditToggle = () => {
-        if (isEditing) {
-            // TODO: Add API call to update profile data
-            toast.success("Profile updated successfully!");
-        }
-        setIsEditing(!isEditing);
-    };
-
-    const InfoField = ({ icon, label, value, isEditing }) => (
-        <div>
-            <label className="text-sm font-semibold text-slate-500">{label}</label>
-            <div className="flex items-center mt-1">
-                <span className="text-slate-400">{icon}</span>
-                {isEditing && (label === 'Full Name' || label === 'Phone Number') ? (
-                    <input type="text" defaultValue={value} className="w-full ml-3 p-1 text-gray-800 rounded bg-slate-100 border border-slate-300 focus:ring-2 focus:ring-orange-500 outline-none" />
-                ) : (
-                    <p className="text-slate-800 ml-3 text-base">{value}</p>
-                )}
-            </div>
-        </div>
-    );
-
-    if (isLoading) {
-        return <div className="text-center p-10">Loading profile...</div>;
-    }
-    if (!profileData) {
-        return <div className="text-center p-10 text-red-500">Could not load profile data.</div>;
-    }
-
-    return (
-        <div>
-            <h1 className="text-3xl font-bold text-slate-800">Admin Profile</h1>
-            <p className="text-slate-500 mt-1">Manage your profile information and account settings.</p>
-            <div className="w-full bg-white p-8 mt-8 rounded-xl shadow-md border border-slate-200">
-                <div className="flex flex-col items-center text-center border-b border-slate-200 pb-6">
-                    <img src={`https://ui-avatars.com/api/?name=${profileData.fullName}&background=random`} alt="Profile Avatar" className="w-24 h-24 rounded-full object-cover ring-4 ring-orange-100" />
-                    <h2 className="mt-4 text-2xl font-bold text-slate-900">{profileData.fullName}</h2>
-                    <p className="text-slate-600">{profileData.designation || 'Admin'}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <InfoField icon={<MailIcon />} label="Email Address" value={profileData.email} />
-                    <InfoField icon={<PhoneIcon />} label="Phone Number" value={profileData.phone} isEditing={isEditing} />
-                    <InfoField icon={<BuildingIcon />} label="User Id" value={profileData.userId} />
-                    <InfoField icon={<ShieldIcon />} label="Authority Level" value="Admin" />
-                </div>
-                <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                    <button onClick={handleEditToggle} className={`w-full py-2.5 px-5 font-semibold rounded-lg transition-colors ${isEditing ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-orange-600 hover:bg-orange-700 text-white'}`}>
-                        {isEditing ? 'Save Changes' : 'Edit Profile'}
-                    </button>
-                    <button className="w-full py-2.5 px-5 font-semibold rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors">Change Password</button>
-                </div>
-            </div>
-        </div>
-    );
-};//ADDED THIS PAGE TO SEE THE PROFILE PAGE AFTER CLICKING PROFILE IN SIDEBAR
-
+// Previous inline ProfilePage component removed - now using AdminProfile.js component
 
 const Sidebar = ({ isOpen, onClose, pendingCount, approvedCount, rejectedCount, currentView, setCurrentView, onLogout }) => {
     const reportNavItems = [
@@ -1673,7 +1599,7 @@ export default function AdminDashboardPage() {
             case 'registerWard': return <RegisterWardPage />;
             case 'locateWard': return <LocateWardPage />;
             case 'addAdminHead': return <RegisterAdminHeadPage />;
-            case 'profile': return <ProfilePage />;
+            case 'profile': return <AdminProfile />;
             default: return null;
         }
     };
