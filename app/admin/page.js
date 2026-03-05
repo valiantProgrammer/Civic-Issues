@@ -8,6 +8,7 @@ import Image from 'next/image';
 import ReportDetailView from './components/ReportDetailView';
 import AdminProfile from './components/AdminProfile';
 import PanoramaModal from '@/app/user/components/components/PanoramaModal';
+import ReportCard from '@/app/user/components/components/ReportCard';
 
 const StarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>);
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>);
@@ -104,35 +105,6 @@ const Header = ({ onOpenMenu }) => (
         <div className="max-w-6xl mx-auto px-4"><div className="flex items-center justify-between h-16 border-b border-slate-200"><h1 className="text-xl font-bold text-slate-800 tracking-tight">Admin Dashboard</h1><button onClick={onOpenMenu} className="p-2 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" aria-label="Open menu"><MenuIcon /></button></div></div>
     </header>
 );
-
-const IssueCard = ({ issue, onSelect, onApprove, onReject }) => (
-    <div onClick={() => onSelect(issue)} className={`group p-4 rounded-2xl shadow-sm border border-slate-200 cursor-pointer flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-lg hover:border-slate-300 hover:-translate-y-1 ${issue.verified === true ? "bg-green-50" : "bg-white"}`}>
-        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100"><img src={issue.image} alt={issue.Description} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" /></div>
-        <div className="flex-grow"><p className="font-semibold text-slate-800">{issue.Description} </p><p className="text-sm text-slate-500 mt-1">{issue.Title} • Reported by: {issue.ReporterName || 'Anonymous'}</p></div>
-        {issue.verified ? <abbr title='Ai verified'><VerifiedBadgeIcon /></abbr> : ''}
-        <div className="flex-shrink-0 flex items-center space-x-2">
-            <button onClick={(e) => { e.stopPropagation(); onReject(issue); }} className="p-3 rounded-full text-white bg-red-500 hover:bg-red-600 transition-all duration-200 transform hover:scale-110" aria-label="Reject issue"><CloseIcon size={18} /></button>
-            <button onClick={(e) => { e.stopPropagation(); onApprove(issue); }} className="p-3 rounded-full text-white bg-green-500 hover:bg-green-600 transition-all duration-200 transform hover:scale-110" aria-label="Approve issue"><CheckIcon size={18} /></button>
-        </div>
-    </div>
-);
-
-const ArchivedIssueCard = ({ issue, onSelect, onMakePending }) => {
-    const isApproved = issue.status === 'verified';
-    return (
-        <div onClick={() => onSelect(issue)} className={`p-4 rounded-2xl shadow-sm border cursor-pointer flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-0.5 ${isApproved ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
-            <div className="flex-grow">
-                <p className={`font-semibold ${isApproved ? 'text-green-900' : 'text-slate-800'} ${issue.status === 'rejected' ? 'line-through' : ''}`}>{issue.Description}</p>
-                {issue.status === 'rejected' && issue.rejectionReason && (<p className="text-sm text-red-600 mt-1">Reason: {issue.rejectionReason}</p>)}
-            </div>
-            <div className="flex-shrink-0 flex items-center space-x-3">
-                <button onClick={(e) => { e.stopPropagation(); onMakePending(issue._id); }} className="text-sm px-3 py-1 rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">Make Pending</button>
-                {isApproved && <div className="p-2 rounded-full bg-green-500 text-white"><CheckIcon size={16} /></div>}
-                {issue.status === 'rejected' && <div className="p-2 rounded-full bg-red-500 text-white"><CloseIcon size={16} /></div>}
-            </div>
-        </div>
-    );
-};
 
 const getSeverityClasses = (severity) => {
     switch (severity) {
@@ -802,14 +774,21 @@ export default function AdminDashboardPage() {
                             <div className="flex items-center space-x-2"><label className="text-sm text-slate-600">Sort</label><select value={sortOrder} onChange={e => setSortOrder(e.target.value)} className="px-3 py-2 rounded-md border border-slate-300 bg-white text-sm text-slate-900 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="newest">Newest</option><option value="oldest">Oldest</option></select></div>
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         {filteredAndSortedIssues.length > 0 ? (
-                            filteredAndSortedIssues.map(issue => {
-                                if (currentView === 'pending') {
-                                    return <IssueCard key={issue._id} issue={issue} onSelect={setSelectedIssue} onApprove={setApprovalTarget} onReject={setRejectionTarget} />;
-                                }
-                                return <ArchivedIssueCard key={issue._id} issue={issue} onSelect={setSelectedIssue} onMakePending={handleMakePending} />;
-                            })
+                            filteredAndSortedIssues.map(issue => (
+                                <ReportCard
+                                    key={issue._id}
+                                    title={issue.Title}
+                                    time={issue.timeOfReporting || issue.createdAt || issue.reportedAt}
+                                    category={issue.category}
+                                    status={issue.status}
+                                    imageSrc={issue.image}
+                                    onClick={() => setSelectedIssue(issue)}
+                                    description={issue.Description}
+                                    report={issue}
+                                />
+                            ))
                         ) : (
                             <div className="text-center py-12 text-slate-500"><p>No reports found for this category or filter.</p></div>
                         )}
@@ -957,34 +936,6 @@ const Header = ({ onOpenMenu }) => (
         <div className="max-w-6xl mx-auto px-4"><div className="flex items-center justify-between h-16 border-b border-slate-200"><h1 className="text-xl font-bold text-slate-800 tracking-tight">Admin Dashboard</h1><button onClick={onOpenMenu} className="p-2 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" aria-label="Open menu"><MenuIcon /></button></div></div>
     </header>
 );
-
-const IssueCard = ({ issue, onSelect, onApprove, onReject }) => (
-    <div onClick={() => onSelect(issue)} className="group bg-white p-4 rounded-2xl shadow-sm border border-slate-200 cursor-pointer flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-lg hover:border-slate-300 hover:-translate-y-1">
-        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100"><img src={issue.thumbnailUrl || issue.image} alt={issue.Description} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" /></div>
-        <div className="flex-grow"><p className="font-semibold text-slate-800">{issue.Description}</p><p className="text-sm text-slate-500 mt-1">{issue.Title} • Reported by: {issue.ReporterName || 'Anonymous'}</p></div>
-        <div className="flex-shrink-0 flex items-center space-x-2">
-            <button onClick={(e) => { e.stopPropagation(); onReject(issue); }} className="p-3 rounded-full text-white bg-red-500 hover:bg-red-600 transition-all duration-200 transform hover:scale-110" aria-label="Reject issue"><CloseIcon size={18} /></button>
-            <button onClick={(e) => { e.stopPropagation(); onApprove(issue); }} className="p-3 rounded-full text-white bg-green-500 hover:bg-green-600 transition-all duration-200 transform hover:scale-110" aria-label="Approve issue"><CheckIcon size={18} /></button>
-        </div>
-    </div>
-);
-
-const ArchivedIssueCard = ({ issue, onSelect, onMakePending }) => {
-    const isApproved = issue.status === 'solved';
-    return (
-        <div onClick={() => onSelect(issue)} className={p-4 rounded-2xl shadow-sm border cursor-pointer flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-0.5 ${isApproved ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}}>
-            <div className="flex-grow">
-                <p className={font-semibold ${isApproved ? 'text-green-900' : 'text-slate-800'} ${issue.status === 'rejected' ? 'line-through' : ''}}>{issue.Description}</p>
-                {issue.status === 'rejected' && issue.rejectionReason && (<p className="text-sm text-red-600 mt-1">Reason: {issue.rejectionReason}</p>)}
-            </div>
-            <div className="flex-shrink-0 flex items-center space-x-3">
-                <button onClick={(e) => { e.stopPropagation(); onMakePending(issue._id); }} className="text-sm px-3 py-1 rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">Make Pending</button>
-                {isApproved && <div className="p-2 rounded-full bg-green-500 text-white"><CheckIcon size={16} /></div>}
-                {issue.status === 'rejected' && <div className="p-2 rounded-full bg-red-500 text-white"><CloseIcon size={16} /></div>}
-            </div>
-        </div>
-    );
-};
 
 const getSeverityClasses = (severity) => {
     switch (severity) {
@@ -1444,6 +1395,11 @@ export default function AdminDashboardPage() {
         };
     }, []);
 
+    // Close report details when switching tabs
+    React.useEffect(() => {
+        setSelectedIssue(null);
+    }, [currentView]);
+
     React.useEffect(() => {
         const fetchInitialIssues = async () => {
             setIsLoading(true);
@@ -1585,7 +1541,7 @@ export default function AdminDashboardPage() {
         if (issueToUpdate) updateIssueStatusInApi(issueToUpdate, 'pending');
     };
 
-    const filteredAndSortedIssuesV2 = React.useMemo(() => {
+    const filteredAndSortedIssues = React.useMemo(() => {
         const statusToFilter = currentView === 'verified' ? 'verified' : currentView;
         let list = allIssues.filter(issue => issue.status === statusToFilter);
         const trimmedFilter = filterValue.trim().toLowerCase();
@@ -1650,14 +1606,21 @@ export default function AdminDashboardPage() {
                             <div className="flex items-center space-x-2"><label className="text-sm text-slate-600">Sort</label><select value={sortOrder} onChange={e => setSortOrder(e.target.value)} className="px-3 py-2 rounded-md border border-slate-300 bg-white text-sm"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         {filteredAndSortedIssues.length > 0 ? (
-                            filteredAndSortedIssues.map(issue => {
-                                if (currentView === 'pending') {
-                                    return <IssueCard key={issue._id} issue={issue} onSelect={setSelectedIssue} onApprove={setApprovalTarget} onReject={setRejectionTarget} />;
-                                }
-                                return <ArchivedIssueCard key={issue._id} issue={issue} onSelect={setSelectedIssue} onMakePending={handleMakePending} />;
-                            })
+                            filteredAndSortedIssues.map(issue => (
+                                <ReportCard
+                                    key={issue._id}
+                                    title={issue.Title}
+                                    time={issue.timeOfReporting || issue.createdAt || issue.reportedAt}
+                                    category={issue.category}
+                                    status={issue.status}
+                                    imageSrc={issue.image}
+                                    onClick={() => setSelectedIssue(issue)}
+                                    description={issue.Description}
+                                    report={issue}
+                                />
+                            ))
                         ) : (<div className="text-center py-12 text-slate-500"><p>No reports found for this category or filter.</p></div>)}
                     </div>
                 </>
