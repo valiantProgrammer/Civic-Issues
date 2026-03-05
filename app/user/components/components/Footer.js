@@ -1,5 +1,4 @@
-import Link from 'next/link'
-
+import { useState } from 'react';
 export default function Footer(onHelpClick = () => {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
