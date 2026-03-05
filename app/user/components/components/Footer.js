@@ -1,5 +1,5 @@
 import { useState } from 'react';
-export default function Footer(onHelpClick = () => {}) {
+export default function Footer({ onHelpClick = () => {} }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   return (
