@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function Footer() {
+export default function Footer(onReportsClick = () => {}, onHelpClick = () => {}) {
   return (
     <footer className="bg-white border-t border-gray-200 py-3 fixed w-full z-50 bottom-0">
       <div className=" mx-auto px-3 sm:px-4 lg:px-8">

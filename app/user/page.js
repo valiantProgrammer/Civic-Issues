@@ -63,7 +63,7 @@ export default function Home() {
             {activeView === 'help' && <HelpCard />}
           </div>
         </main>
-        <Footer />
+        <Footer onHelpClick={() => setActiveView('help')} />
       </div>
     </div> 
   );
