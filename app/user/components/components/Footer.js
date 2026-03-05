@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 export default function Footer(onHelpClick = () => {}) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   return (
     <footer className="bg-white border-t border-gray-200 py-3 fixed w-full z-50 bottom-0">
