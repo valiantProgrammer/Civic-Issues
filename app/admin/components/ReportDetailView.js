@@ -628,7 +628,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-slate-900">Reason for Rejection</h3>
-                
+                  
               </div>
               <p className="text-sm text-slate-600 mb-3">Rejecting report: <span className="font-medium">&quot;{report.Description}&quot;</span></p>
               <textarea 

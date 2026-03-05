@@ -109,6 +109,8 @@ export default function UserProfile() {
     const [error, setError] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editData, setEditData] = useState({ phone: "", address: "", lat: "", lng: "" });
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [profilePicturePreview, setProfilePicturePreview] = useState(null);
     const [updating, setUpdating] = useState(false);
     const router = useRouter();
 
@@ -142,6 +144,9 @@ export default function UserProfile() {
                         lat: "",
                         lng: "",
                     });
+                    if (data.user.profilePicture) {
+                        setProfilePicturePreview(data.user.profilePicture);
+                    }
                     setError(null);
                 } else {
                     setError(data.message || "Failed to fetch profile");
@@ -167,6 +172,28 @@ export default function UserProfile() {
         }));
     };
 
+    const handleProfilePictureChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select a valid image file');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('File size must be less than 5MB');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setProfilePicturePreview(reader.result);
+            setProfilePicture(file);
+        };
+        reader.readAsDataURL(file);
+    };
+
     const handleCopyUserId = async () => {
         const userIdText = user.userId || "N/A";
         try {
@@ -186,16 +213,17 @@ export default function UserProfile() {
 
         setUpdating(true);
         try {
+            const formData = new FormData();
+            formData.append('phone', editData.phone);
+            formData.append('address', editData.address);
+            if (profilePicture) {
+                formData.append('profilePicture', profilePicture);
+            }
+
             const response = await fetch("/api/user-profile", {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 credentials: "include",
-                body: JSON.stringify({
-                    phone: editData.phone,
-                    address: editData.address,
-                }),
+                body: formData,
             });
 
             const data = await response.json();
@@ -207,6 +235,10 @@ export default function UserProfile() {
 
             if (data.success) {
                 setUser(data.user);
+                if (data.user.profilePicture) {
+                    setProfilePicturePreview(data.user.profilePicture);
+                }
+                setProfilePicture(null);
                 setShowEditModal(false);
                 toast.success("Profile updated successfully!");
             } else {
@@ -272,10 +304,16 @@ export default function UserProfile() {
                         {/* Profile Picture and Name */}
                         <div className="flex flex-col items-center -mt-16 mb-6">
                             <div className="w-full">
-                                <div className="w-32 h-32 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-4">
-                                    <span className="text-4xl text-white font-bold">
-                                        {user.userName?.charAt(0)?.toUpperCase() || "U"}
-                                    </span>
+                                <div className="relative w-32 h-32 mx-auto mb-4">
+                                    <div className="w-32 h-32 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                                        {profilePicturePreview ? (
+                                            <img src={profilePicturePreview} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                                        ) : (
+                                            <span className="text-4xl text-white font-bold">
+                                                {user.userName?.charAt(0)?.toUpperCase() || "U"}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="text-center">
                                     <h1 className="text-3xl font-bold text-gray-800">
@@ -373,6 +411,42 @@ export default function UserProfile() {
                             </div>
 
                             <div className="p-6 space-y-6">
+                                {/* Profile Picture Section */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                        Profile Picture
+                                    </label>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-24 h-24 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                                            {profilePicturePreview ? (
+                                                <img src={profilePicturePreview} alt="Preview" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <span className="text-2xl text-white font-bold">
+                                                    {user.userName?.charAt(0)?.toUpperCase() || "U"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <input
+                                                type="file"
+                                                id="profilePictureInput"
+                                                accept="image/*"
+                                                onChange={handleProfilePictureChange}
+                                                className="hidden"
+                                            />
+                                            <label
+                                                htmlFor="profilePictureInput"
+                                                className="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-semibold text-center cursor-pointer"
+                                            >
+                                                Choose Image
+                                            </label>
+                                            {profilePicture && (
+                                                <p className="text-xs text-green-600 mt-2">✓ Image selected</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* Phone Number Section */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-2">
