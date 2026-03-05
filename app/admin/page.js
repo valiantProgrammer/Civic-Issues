@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ReportDetailView from './components/ReportDetailView';
 import AdminProfile from './components/AdminProfile';
+import PanoramaModal from '@/app/user/components/components/PanoramaModal';
 
 const StarIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>);
 const MenuIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>);
@@ -154,7 +155,7 @@ const IssueDetailModal = ({ issue, onClose, onImageClick, file, onGenerateSummar
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-40" onClick={onClose}>
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto overflow-hidden">
-                <div className="p-2 bg-slate-50 relative"><img src={issue.image} alt="Issue" onClick={async () => { onImageClick(issue.image) }} className="w-full h-64 object-cover rounded-xl cursor-pointer" /><button onClick={onClose} className="absolute top-4 right-4 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-2 z-10" aria-label="Close"><CloseIcon size={22} strokeWidth={3} /></button></div>
+                <div className="p-2 bg-slate-50 relative"><img src={issue.image} alt="Issue" onClick={async () => { onImageClick(issue.image) }} className="w-full h-64 object-cover rounded-xl cursor-pointer" /><button onClick={onClose} className="absolute top-4 right-4 bg-gray-900/85 hover:bg-gray-800/95 border-2 border-white rounded-full p-2 z-10 transition-all shadow-lg" aria-label="Close" title="Close"><CloseIcon size={22} strokeWidth={3} /></button></div>
                 <div className="p-6">
                     <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                         <div><p className="font-semibold text-slate-500">Reported On</p><p className="text-slate-900">{formattedDate}</p></div>
@@ -228,30 +229,20 @@ const ApprovalModal = ({ issue, onConfirm, onCancel }) => (
 //     );
 // };
 
-const MediaFullscreenModal = ({ imageUrl, fileType, onClose }) => {//ADDED THIS TO INCLUDE BOTH IMAGES AND VIDEOS
-    const panoramaRef = React.useRef(null);
-
-    React.useEffect(() => {
-        if (!imageUrl || !panoramaRef.current || !window.pannellum) return;
-        const viewer = window.pannellum.viewer(panoramaRef.current, { type: "equirectangular", panorama: imageUrl, autoLoad: true, showZoomCtrl: false, showFullscreenCtrl: false });
-        return () => { viewer.destroy(); };
-    }, [imageUrl]);
-
-    if (!imageUrl) return null;
-
-    return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50" onClick={onClose}>
-            <button onClick={onClose} className="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 rounded-full p-3 z-10"><CloseIcon strokeWidth={3} /></button>
-            {fileType === 'video' ? (
+const MediaFullscreenModal = ({ imageUrl, fileType, onClose }) => {
+    // Only show PanoramaModal for image files, use plain video player for videos
+    if (fileType === 'video') {
+        return (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50" onClick={onClose}>
+                <button onClick={onClose} className="absolute top-6 right-6 bg-gray-900/85 hover:bg-gray-800/95 border-2 border-white rounded-full p-3 z-10 transition-all shadow-lg hover:shadow-xl" title="Close viewer" aria-label="Close viewer"><CloseIcon strokeWidth={3} /></button>
                 <video src={imageUrl} controls autoPlay className="max-w-full max-h-full" onClick={(e) => e.stopPropagation()} />
-            ) : (
-                // <div ref={panoramaRef} style={{ width: "100vw", height: "100vh" }} />
-                <div ref={panoramaRef} style={{ width: "100vw", height: "100vh" }} onClick={(e) => e.stopPropagation()} />
-            )}
-        </motion.div>
-    );
-};
+            </motion.div>
+        );
+    }
 
+    // For images, use PanoramaModal which includes panorama + image viewing
+    return <PanoramaModal imageUrl={imageUrl} onClose={onClose} />;
+};
 
 const RegisterMunicipalityPage = () => (
     <div>
@@ -850,9 +841,9 @@ export default function AdminDashboardPage() {
                 setCurrentView={setCurrentView}
                 onLogout={handleLogout}
             />
-            <div className="flex-1 flex flex-col lg:ml-64">
+            <div className="flex-1 flex flex-col lg:ml-68">
                 <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                <main className="flex-grow max-w-6xl mx-auto p-4 md:p-8 w-full">
+                <main className="bg-gray-50 py-3 px-3 sm:px-4 lg:px-8 lg:py-8 mb-12">
                     {renderCurrentView()}
                 </main>
             </div>
@@ -1111,24 +1102,43 @@ const ApprovalModal = ({ issue, onConfirm, onCancel }) => (
 //         </motion.div>
 //     );
 // };
-const MediaFullscreenModal = ({ media, onClose }) => {//ADDED THIS TO INCLUDE BOTH IMAGES AND VIDEOS
+const AdminMediaViewer = ({ media, onClose }) => {
     const panoramaRef = React.useRef(null);
+    const [viewMode, setViewMode] = React.useState("pano");
+    const viewerRef = React.useRef(null);
     
     React.useEffect(() => {
-        if (!media || media.type !== 'image' || !panoramaRef.current || !window.pannellum) return;
+        if (!media || media.type !== 'image' || !panoramaRef.current || !window.pannellum || viewMode !== 'pano') return;
+        if (viewerRef.current) {
+            viewerRef.current.destroy();
+            viewerRef.current = null;
+        }
         const viewer = window.pannellum.viewer(panoramaRef.current, { type: "equirectangular", panorama: media.url, autoLoad: true, showZoomCtrl: false, showFullscreenCtrl: false });
-        return () => { viewer.destroy(); };
-    }, [media]);
+        viewerRef.current = viewer;
+        return () => { 
+            if (viewerRef.current) {
+                viewerRef.current.destroy();
+                viewerRef.current = null;
+            }
+        };
+    }, [media, viewMode]);
 
     if (!media) return null;
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50" onClick={onClose}>
             <button onClick={onClose} className="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 rounded-full p-3 z-10"><CloseIcon strokeWidth={3} /></button>
+            {media.type !== 'video' && (
+                <div className="absolute top-6 left-6 z-10 flex gap-2">
+                    <button onClick={() => setViewMode("image")} className={`px-4 py-2 rounded-lg font-medium transition-all ${viewMode === "image" ? "bg-blue-600 text-white shadow-lg" : "bg-gray-600 hover:bg-gray-700 text-white"}`}>📷 Image</button>
+                    <button onClick={() => setViewMode("pano")} className={`px-4 py-2 rounded-lg font-medium transition-all ${viewMode === "pano" ? "bg-blue-600 text-white shadow-lg" : "bg-gray-600 hover:bg-gray-700 text-white"}`}>360° Pano</button>
+                </div>
+            )}
             {media.type === 'video' ? (
                 <video src={media.url} controls autoPlay className="max-w-full max-h-full" onClick={(e) => e.stopPropagation()} />
+            ) : viewMode === "image" ? (
+                <img src={media.url} alt="Full view" className="max-w-full max-h-full object-contain" onClick={(e) => e.stopPropagation()} />
             ) : (
-                // <div ref={panoramaRef} style={{ width: "100vw", height: "100vh" }} />
                 <div ref={panoramaRef} style={{ width: "100vw", height: "100vh" }} onClick={(e) => e.stopPropagation()} />
             )}
         </motion.div>
@@ -1681,7 +1691,7 @@ export default function AdminDashboardPage() {
                 </div>
             </div>
             <AnimatePresence>
-                {fullscreenMedia && <MediaFullscreenModal key="fullscreen-modal" media={fullscreenMedia} onClose={() => setFullscreenMedia(null)} />}
+                {fullscreenMedia && <AdminMediaViewer key="fullscreen-modal" media={fullscreenMedia} onClose={() => setFullscreenMedia(null)} />}
                 {rejectionTarget && <RejectionModal key="rejection-modal" issue={rejectionTarget} onCancel={() => setRejectionTarget(null)} onConfirm={handleConfirmRejection} onSuggestReason={handleSuggestReason} isSuggesting={isSuggestingReason} suggestedReason={suggestedReason}/>}
                 {approvalTarget && <ApprovalModal key="approval-modal" issue={approvalTarget} onCancel={() => setApprovalTarget(null)} onConfirm={handleConfirmApproval} />}
             </AnimatePresence>

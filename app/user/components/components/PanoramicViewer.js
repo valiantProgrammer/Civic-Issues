@@ -8,8 +8,16 @@ import { compressImage } from '@/utils/image-processing'
 // ==================================================================
 // UPDATED COMPONENT: PanoramicViewer3D
 // ==================================================================
-function PanoramicViewer3D({ imageSrc, containerRef, setIsViewerReady }) {
+function PanoramicViewer3D({ imageSrc, containerRef, setIsViewerReady, cursorSpeed = 1, zoomSpeed = 1 }) {
   const viewerRef = useRef(null);
+  const cursorSpeedRef = useRef(cursorSpeed);
+  const zoomSpeedRef = useRef(zoomSpeed);
+
+  // Update speed refs when props change
+  useEffect(() => {
+    cursorSpeedRef.current = cursorSpeed;
+    zoomSpeedRef.current = zoomSpeed;
+  }, [cursorSpeed, zoomSpeed]);
 
   useEffect(() => {
     if (!containerRef.current || !imageSrc) return;
@@ -42,7 +50,8 @@ function PanoramicViewer3D({ imageSrc, containerRef, setIsViewerReady }) {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
     controls.enablePan = false;
-    controls.rotateSpeed = -1.5;
+    controls.rotateSpeed = -1.5 * cursorSpeedRef.current;
+    controls.zoomSpeed = 1 * zoomSpeedRef.current;
 
     const onResize = () => {
       if (!container) return;
@@ -223,6 +232,20 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
 
   // --- NEW STATE: To control the 3D viewer modal visibility ---
   const [showViewerModal, setShowViewerModal] = useState(false);
+  const [viewerMode, setViewerMode] = useState("pano"); // "pano" or "image"
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [imageZoom, setImageZoom] = useState(100);
+  // Use refs for smooth dragging without state updates on every mousemove
+  const imageRefView = useRef(null);
+  const imageRefModal = useRef(null);
+  const imageOffsetRef = useRef({ x: 0, y: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const dragStartOffsetRef = useRef({ x: 0, y: 0 });
+  // Settings states
+  const [showSettings, setShowSettings] = useState(false);
+  const [cursorSpeed, setCursorSpeed] = useState(1);
+  const [zoomSpeed, setZoomSpeed] = useState(1);
+  const [gearRotation, setGearRotation] = useState(0);
 
   // Detect if we're in view-only mode (imageSrc provided, no onImageCaptured callback)
   const isViewOnly = imageSrc && !onImageCaptured;
@@ -255,6 +278,54 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
     setActionType(type);
     setIsChoosing(true);
   };
+
+  const handleImageMouseDown = (e) => {
+    if (viewerMode !== "image") return;
+    setIsDraggingImage(true);
+    // Store raw cursor position and current offset at drag start
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    dragStartOffsetRef.current = { x: imageOffsetRef.current.x, y: imageOffsetRef.current.y };
+  };
+
+  const handleImageMouseMove = (e) => {
+    if (!isDraggingImage || viewerMode !== "image") return;
+    const currentContainer = imageRefView.current?.parentElement || imageRefModal.current?.parentElement;
+    if (!currentContainer) return;
+    // Calculate how far cursor moved since drag started
+    const deltaX = e.clientX - dragStartRef.current.x;
+    const deltaY = e.clientY - dragStartRef.current.y;
+    // Apply delta to the starting offset to get new offset
+    const newX = dragStartOffsetRef.current.x + deltaX;
+    const newY = dragStartOffsetRef.current.y + deltaY;
+    imageOffsetRef.current = { x: newX, y: newY };
+    // Pan with natural direction: drag right = pan right
+    currentContainer.style.transform = `translate(${newX}px, ${newY}px)`;
+  };
+
+  const handleImageMouseUp = () => {
+    setIsDraggingImage(false);
+  };
+
+  const handleImageModeChange = () => {
+    // Reset image position and offset when switching modes
+    imageOffsetRef.current = { x: 0, y: 0 };
+    setImageZoom(100);
+  };
+
+  const handleImageWheel = (e) => {
+    if (viewerMode !== "image") return;
+    e.preventDefault();
+    const zoomChange = e.deltaY < 0 ? 10 : -10;
+    setImageZoom((prev) => Math.max(50, Math.min(prev + zoomChange, 300)));
+  };
+
+  // Update container transform when zoom changes to maintain panning
+  useEffect(() => {
+    const currentContainer = imageRefView.current?.parentElement || imageRefModal.current?.parentElement;
+    if (currentContainer && viewerMode === "image") {
+      currentContainer.style.transform = `translate(${imageOffsetRef.current.x}px, ${imageOffsetRef.current.y}px)`;
+    }
+  }, [imageZoom, viewerMode]);
 
   const handleOptionClick = (mediaType) => {
     const input = fileInputRef.current;
@@ -325,18 +396,258 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
     <div className="w-full h-full">
       {/* View-only mode: display viewer directly without any UI */}
       {isViewOnly ? (
-        <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden">
-          {!isViewerReady && (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
-                <p className="text-gray-600">Loading panorama...</p>
+        <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden relative">
+          {/* View Mode Toggle Buttons */}
+          <div className="absolute top-4 left-4 z-10 flex gap-2">
+            <button
+              onClick={() => {
+                setViewerMode("image");
+                handleImageModeChange();
+              }}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                viewerMode === "image"
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "bg-gray-600 hover:bg-gray-700 text-white"
+              }`}
+            >
+              📷 Image
+            </button>
+            <button
+              onClick={() => {
+                setViewerMode("pano");
+                handleImageModeChange();
+              }}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                viewerMode === "pano"
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "bg-gray-600 hover:bg-gray-700 text-white"
+              }`}
+            >
+              360° Pano
+            </button>
+          </div>
+
+          {/* Settings Button - Bottom Right with SVG Icon */}
+          <button
+            onClick={() => {
+              setShowSettings(!showSettings);
+              setGearRotation(gearRotation + (showSettings ? -35 : 35));
+            }}
+            className="absolute bottom-4 right-4 z-[200] bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full font-medium transition-all shadow-lg flex items-center justify-center w-12 h-12"
+            title="Toggle Settings"
+            style={{
+              transform: `rotate(${gearRotation}deg)`,
+              transition: "transform 0.4s ease-in-out",
+            }}
+          >
+            <img
+              src="/settings_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"
+              alt="Settings"
+              className="w-6 h-6"
+            />
+          </button>
+
+          {/* Settings Panel with Animation */}
+          <div
+            className={`absolute bottom-20 right-4 z-[200] bg-slate-900/95 backdrop-blur-sm text-white p-6 rounded-lg shadow-2xl w-72 border border-slate-700 transition-all duration-300 ${
+              showSettings
+                ? "opacity-100 transform translate-y-0"
+                : "opacity-0 transform translate-y-[500px] pointer-events-none"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-5 text-white">Viewer Settings</h3>
+
+            {/* View Mode Section */}
+            <div className="mb-6 pb-5 border-b border-slate-700">
+              <h4 className="text-sm font-semibold text-slate-300 mb-3">View Mode</h4>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setViewerMode("image");
+                    handleImageModeChange();
+                    setShowSettings(false);
+                    setGearRotation(gearRotation - 35);
+                  }}
+                  className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-all ${
+                    viewerMode === "image"
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-slate-700 hover:bg-slate-600 text-slate-200"
+                  }`}
+                >
+                  📷 Image
+                </button>
+                <button
+                  onClick={() => {
+                    setViewerMode("pano");
+                    handleImageModeChange();
+                    setShowSettings(false);
+                    setGearRotation(gearRotation - 35);
+                  }}
+                  className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-all ${
+                    viewerMode === "pano"
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-slate-700 hover:bg-slate-600 text-slate-200"
+                  }`}
+                >
+                  360° Pano
+                </button>
               </div>
             </div>
-          )}
-          <div ref={containerRef} className="w-full h-full rounded-lg overflow-hidden">
-            <PanoramicViewer3D imageSrc={imageSrc} containerRef={containerRef} setIsViewerReady={setIsViewerReady} />
+
+            {/* Cursor Speed Section - Only show for Pano mode */}
+            {viewerMode === "pano" && (
+              <div className="mb-6 pb-5 border-b border-slate-700">
+                <h4 className="text-sm font-semibold text-slate-300 mb-3">
+                  🖱️ Cursor Speed
+                </h4>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="3"
+                    step="0.1"
+                    value={cursorSpeed}
+                    onChange={(e) => setCursorSpeed(parseFloat(e.target.value))}
+                    className="flex-1 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                  <span className="text-sm font-medium bg-slate-800 px-2 py-1 rounded min-w-12 text-center">
+                    {cursorSpeed.toFixed(1)}x
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-2">Adjust drag sensitivity for panorama rotation</p>
+              </div>
+            )}
+
+            {/* Zoom Speed Section - Only show for Pano mode */}
+            {viewerMode === "pano" && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-slate-300 mb-3">
+                  🔍 Zoom Speed
+                </h4>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="3"
+                    step="0.1"
+                    value={zoomSpeed}
+                    onChange={(e) => setZoomSpeed(parseFloat(e.target.value))}
+                    className="flex-1 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                  <span className="text-sm font-medium bg-slate-800 px-2 py-1 rounded min-w-12 text-center">
+                    {zoomSpeed.toFixed(1)}x
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-2">Adjust scroll wheel zoom sensitivity</p>
+              </div>
+            )}
+
+            {/* Image Zoom Section - Only show for Image mode */}
+            {viewerMode === "image" && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-slate-300 mb-3">
+                  🔍 Image Zoom
+                </h4>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="50"
+                    max="300"
+                    step="10"
+                    value={imageZoom}
+                    onChange={(e) => {
+                      const newZoom = parseFloat(e.target.value);
+                      setImageZoom(newZoom);
+                      if (imageRefView.current) {
+                        imageRefView.current.parentElement.style.transform = `translate(${imageOffsetRef.current.x}px, ${imageOffsetRef.current.y}px)`;
+                      }
+                    }}
+                    className="flex-1 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                  <span className="text-sm font-medium bg-slate-800 px-2 py-1 rounded min-w-16 text-center">
+                    {imageZoom}%
+                  </span>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => setImageZoom((prev) => Math.max(prev - 10, 50))}
+                    className="flex-1 px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm rounded transition-all"
+                  >
+                    🔍 Zoom Out
+                  </button>
+                  <button
+                    onClick={() => setImageZoom(100)}
+                    className="flex-1 px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm rounded transition-all"
+                  >
+                    ↺ Reset
+                  </button>
+                  <button
+                    onClick={() => setImageZoom((prev) => Math.min(prev + 10, 300))}
+                    className="flex-1 px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm rounded transition-all"
+                  >
+                    🔍 Zoom In
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Overlay to close settings on click outside */}
+          {showSettings && (
+            <div
+              className="absolute inset-0 z-[190]"
+              onClick={() => {
+                setShowSettings(false);
+                setGearRotation(gearRotation - 35);
+              }}
+            />
+          )}
+
+          {/* Image View */}
+          {viewerMode === "image" && (
+            <div className={`w-full h-full flex items-center justify-center bg-black overflow-hidden ${
+              isDraggingImage ? "cursor-grabbing" : "cursor-grab"
+            }`}
+              onMouseDown={handleImageMouseDown}
+              onMouseMove={handleImageMouseMove}
+              onMouseUp={handleImageMouseUp}
+              onMouseLeave={handleImageMouseUp}
+              onWheel={handleImageWheel}
+              style={{
+                transformOrigin: "center center",
+              }}
+            >
+              <img
+                ref={imageRefView}
+                src={imageSrc}
+                alt="Full view"
+                className="max-w-full max-h-full object-contain select-none pointer-events-none"
+                style={{
+                  transform: `scale(${imageZoom / 100})`,
+                }}
+                onError={() => setViewerMode("pano")}
+                draggable="false"
+              />
+            </div>
+          )}
+
+          {/* Panorama View */}
+          {viewerMode === "pano" && (
+            <>
+              {!isViewerReady && (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
+                    <p className="text-gray-600">Loading panorama...</p>
+                  </div>
+                </div>
+              )}
+              <div ref={containerRef} className="w-full h-full rounded-lg overflow-hidden">
+                <PanoramicViewer3D imageSrc={imageSrc} containerRef={containerRef} setIsViewerReady={setIsViewerReady} cursorSpeed={cursorSpeed} zoomSpeed={zoomSpeed} />
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -449,24 +760,87 @@ export default function PanoramicViewer({ imageSrc, onImageCaptured, hideInfoBox
           </div>
         </div>
       )}
-      {/* --- NEW: 3D Viewer Modal --- */}
+      {/* --- NEW: 3D Viewer Modal with Toggle --- */}
       {showViewerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 bg-opacity-50 backdrop-blur-sm">
           <div className="relative w-full h-full max-w-4xl max-h-[80vh] bg-gray-100 rounded-lg shadow-xl m-4">
             <button onClick={() => setShowViewerModal(false)} className="absolute -top-3 -right-3 z-10 p-1.5 bg-white rounded-full shadow-lg hover:bg-gray-200 transition-colors" title="Close viewer">
               <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <div ref={containerRef} className="w-full h-full rounded-lg overflow-hidden">
-              {!isViewerReady && (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
-                    <p className="text-gray-600">Loading panorama...</p>
-                  </div>
-                </div>
-              )}
-              <PanoramicViewer3D imageSrc={imageSrc} containerRef={containerRef} setIsViewerReady={setIsViewerReady} />
+
+            {/* View Mode Toggle Buttons */}
+            <div className="absolute top-4 left-4 z-10 flex gap-2">
+              <button
+                onClick={() => {
+                  setViewerMode("image");
+                  handleImageModeChange();
+                }}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  viewerMode === "image"
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-600 hover:bg-gray-700 text-white"
+                }`}
+              >
+                📷 Image
+              </button>
+              <button
+                onClick={() => {
+                  setViewerMode("pano");
+                  handleImageModeChange();
+                }}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  viewerMode === "pano"
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-600 hover:bg-gray-700 text-white"
+                }`}
+              >
+                360° Pano
+              </button>
             </div>
+
+            {/* Image View */}
+            {viewerMode === "image" && (
+              <div className={`w-full h-full rounded-lg overflow-hidden bg-black flex items-center justify-center ${
+                isDraggingImage ? "cursor-grabbing" : "cursor-grab"
+              }`}
+                onMouseDown={handleImageMouseDown}
+                onMouseMove={handleImageMouseMove}
+                onMouseUp={handleImageMouseUp}
+                onMouseLeave={handleImageMouseUp}
+                onWheel={handleImageWheel}
+                style={{
+                  transformOrigin: "center center",
+                }}
+              >
+                <img
+                  ref={imageRefModal}
+                  src={imageSrc}
+                  alt="Full view"
+                  className="max-w-full max-h-full object-contain select-none pointer-events-none"
+                  style={{
+                    transform: `scale(${imageZoom / 100})`,
+                  }}
+                  draggable="false"
+                />
+              </div>
+            )}
+
+            {/* Panorama View */}
+            {viewerMode === "pano" && (
+              <div className="w-full h-full rounded-lg overflow-hidden">
+                {!isViewerReady && (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-2"></div>
+                      <p className="text-gray-600">Loading panorama...</p>
+                    </div>
+                  </div>
+                )}
+                <div ref={containerRef} className="w-full h-full rounded-lg overflow-hidden">
+                  <PanoramicViewer3D imageSrc={imageSrc} containerRef={containerRef} setIsViewerReady={setIsViewerReady} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

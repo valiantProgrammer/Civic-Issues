@@ -45,6 +45,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
 /* Add a transition to the base .ball class for smooth animation */
 .ball {
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
@@ -67,14 +68,16 @@ body {
   width: 12px;
   height: 12px;
   margin: 0 4px;
-  background-color: #9ca3af; /* A slightly different gray for distinction */
+  background-color: #9ca3af;
+  /* A slightly different gray for distinction */
   opacity: 1;
   border-radius: 9999px;
   transition: all 0.3s ease;
 }
 
 .how-to-use-custom-pagination .swiper-pagination-bullet-active {
-  background-color: #a78bfa; /* A lighter purple for active dot */
+  background-color: #a78bfa;
+  /* A lighter purple for active dot */
   transform: scale(1.1);
 }
 
@@ -86,7 +89,7 @@ body {
   }
 }
 
-select{
+select {
   font: black;
 }
 
@@ -112,11 +115,30 @@ select{
   border: 2px solid transparent;
   background-clip: padding-box;
   transition: all 0.3s ease;
-  padding : -55px;
+  padding: -55px;
 }
 
 .explorer-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #9333ea 0%, #db2777 100%);
   background-clip: padding-box;
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+.report-detail-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.report-detail-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.report-detail-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #475569 0%, #334155 100%);
+  border-radius: 10px;
+  border: 2px solid #f1f5f9;
+}
+
+.report-detail-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
 }

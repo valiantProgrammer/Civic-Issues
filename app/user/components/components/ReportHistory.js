@@ -6,7 +6,7 @@ const ReportHistory = ({ history }) => {
   if (!history || history.length === 0) {
     return (
       <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-        <h3 style={{ marginTop: 0 }}>📋 Report History</h3>
+        <h3 style={{ marginTop: 0 }} className="text-slate-700"> Report History</h3>
         <p style={{ color: '#666', marginBottom: 0 }}>No history available for this report yet.</p>
       </div>
     );
@@ -33,13 +33,13 @@ const ReportHistory = ({ history }) => {
 
   const getActionLabel = (action) => {
     const labels = {
-      created: '📝 Created',
-      verified: '✅ Verified',
-      approved: '🎉 Approved',
-      rejected: '❌ Rejected',
-      pending: '⏳ Pending',
-      transferred: '➡️ Transferred',
-      forwarded: '📤 Forwarded',
+      created: ' Created',
+      verified: 'Verified',
+      approved: 'Approved',
+      rejected: 'Rejected',
+      pending: 'Pending',
+      transferred: 'Transferred',
+      forwarded: 'Forwarded',
     };
     return labels[action] || action;
   };
@@ -57,7 +57,7 @@ const ReportHistory = ({ history }) => {
 
   return (
     <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-      <h3 style={{ marginTop: 0, marginBottom: '20px' }} className='text-slate-800'>📋 Report History & Audit Trail</h3>
+      <h3 style={{ marginTop: 0, marginBottom: '20px' }} className='text-slate-800 font-bold'>Report History & Audit Trail</h3>
       
       <div style={{ position: 'relative', paddingLeft: '40px' }}>
         {history.map((entry, index) => (

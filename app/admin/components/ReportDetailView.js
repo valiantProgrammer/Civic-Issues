@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
 import toast from 'react-hot-toast'
-import PanoramicViewer from '@/app/user/components/components/PanoramicViewer'
+import PanoramaModal from '@/app/user/components/components/PanoramaModal'
 import ReportHistory from '@/app/user/components/components/ReportHistory'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -211,9 +211,9 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
   return (
     <>
       <style>{rejectButtonStyles}</style>
-      <div className="bg-white shadow-lg overflow-y-auto flex flex-col max-h-[95vh]">
+      <div className="bg-white shadow-lg overflow-y-auto flex rounded-lg flex-col max-h-[95vh]">
         {/* Header */}
-        <div className={`sticky top-0 bg-slate-800 text-white px-6 py-6 flex justify-between items-start border-b-2 z-50 border-slate-700 shadow-sm transition-all`}>
+        <div className={`sticky rounded-t-lg top-0 bg-slate-800 text-white px-6 py-6 flex justify-between items-start border-b-2 z-50 border-slate-700 shadow-sm transition-all`}>
           <div className="flex-1">
             <h2 className="text-2xl font-semibold text-white mb-1 tracking-tight">{report.Title}</h2>
             <p className="text-slate-300 text-sm font-normal">{report.category}</p>
@@ -231,7 +231,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
 
         {/* Content */}
         <div 
-          className="overflow-y-auto flex-1 pl-3"
+          className="overflow-y-auto flex-1 pl-3 report-detail-scrollbar"
           ref={contentRef}
           onScroll={handleScroll}
         >
@@ -453,7 +453,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
         </div>
 
         {/* Footer */}
-        <div className={`bg-gray-50 border-t border-gray-200 p-6 flex justify-end gap-3 transition-all ${!isScrolled ? 'rounded-b-3xl' : ''}`}>
+        <div className={`bg-gray-50 border-t border-gray-200 p-6 flex justify-end gap-3 transition-all rounded-b-3xl}`}>
           {/* Admin Role - Pending Reports */}
           {userRole === 'admin' && report.status === 'pending' && (
             <>
@@ -648,25 +648,7 @@ const ReportDetailView = ({ report, onClose, userRole = 'admin', onApprove, onRe
 
       {/* Fullscreen Panoramic Viewer */}
       {fullscreenImage && (
-        <div 
-          className="fixed inset-0 bg-black z-[60]"
-          onClick={() => setFullscreenImage(null)}
-        >
-          <div className="w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <div className="w-full h-full">
-              <PanoramicViewer imageSrc={fullscreenImage} hideInfoBox={true} />
-            </div>
-          </div>
-          <button
-            onClick={() => setFullscreenImage(null)}
-            className="fixed top-4 right-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all text-white z-20"
-            aria-label="Close panoramic viewer"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+        <PanoramaModal imageUrl={fullscreenImage} onClose={() => setFullscreenImage(null)} />
       )}
     </>
   )
