@@ -2,147 +2,228 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // 1. Imported the Link component for the modal
+import Link from 'next/link';
 
-// SVG Menu Icon component
-const MenuIcon = () => (
-  <svg className="w-[7vw] h-[7vw] md:w-[2.5vw] md:h-[2.5vw] text-gray-800" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-  </svg>
-);
+export default function Header({ onOpenLogin, onOpenReport, currentLang, onToggleLang }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-// Close Icon component
-const CloseIcon = () => (
-  <svg className="w-[7vw] h-[7vw] md:w-[2.5vw] md:h-[2.5vw] text-gray-800" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-);
-
-const Header = () => {
-  // State to manage the menu's open/closed status
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // Function to handle smooth scrolling for other nav links
-  const handleSmoothScroll = (e) => {
+  const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
+    setIsMobileMenuOpen(false);
 
-    const href = e.currentTarget.getAttribute('href');
-    if (!href) return;
-
-    const targetId = href.substring(href.indexOf('#') + 1);
-
-    // Close the menu after clicking a link
-    setIsOpen(false);
-
-    if (!targetId || href === '#') {
+    if (!targetId || targetId === '#') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     const elem = document.getElementById(targetId);
-    const header = document.getElementById('main-header');
-
-    if (elem && header) {
-      const headerOffset = header.offsetHeight;
+    if (elem) {
+      const header = document.getElementById('main-header');
+      const headerOffset = header ? header.offsetHeight : 70;
       const elementPosition = elem.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: 'smooth',
       });
-    } else if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-
-  const navLinks = [
-    { name: 'About', href: '/about' },
-    { name: 'Interactive Features', href: '/features' },
-    { name: 'How to Use', href: '/how-to-use' },
-    { name: 'Contact Us', href: '/contact-us' },
-  ];
-
   return (
-    <>
-      <header id="main-header" className="flex items-center justify-between p-[4vw] md:p-[2vw] bg-white sticky top-0 z-50 shadow-sm">
-        <a href="#" onClick={handleSmoothScroll} className="flex items-center">
-          <div className="flex items-center gap-[3vw] md:gap-[1vw]">
+    <header
+      id="main-header"
+      className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)]"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        {/* Brand / Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden shadow-sm ring-1 ring-slate-100 flex items-center justify-center bg-white">
             <Image
               src="/images/logo.png"
               alt="Civic Saathi Logo"
-              width={100}
-              height={100}
-              className="w-[12vw] h-[12vw] md:w-[3.5vw] md:h-[3.5vw]"
+              width={48}
+              height={48}
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform"
+              priority
             />
-            <span className="text-[6vw] md:text-[2vw] font-extrabold text-gray-800">Civic साथी</span>
           </div>
-        </a>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
+              Civic
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-slate-800">
+              साथी
+            </span>
+          </div>
+        </Link>
 
-        <button onClick={toggleMenu} aria-label="Toggle menu" className="z-[60] relative h-8 w-8">
-          <span className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${isOpen ? 'opacity-0 rotate-90' : 'opacity-100 rotate-0'}`}>
-            <MenuIcon />
-          </span>
-          <span className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${isOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-90'}`}>
-            <CloseIcon />
-          </span>
-        </button>
-      </header>
+        {/* Center Navigation Links (Desktop) */}
+        <nav className="hidden md:flex items-center gap-7 lg:gap-9">
+          <button
+            onClick={() => onOpenReport ? onOpenReport() : null}
+            className="text-sm lg:text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'समस्या रिपोर्ट करें' : 'Report Issue'}
+          </button>
+          <a
+            href="#explore"
+            onClick={(e) => handleSmoothScroll(e, 'explore')}
+            className="text-sm lg:text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'अन्वेषण' : 'Explore'}
+          </a>
+          <a
+            href="#how-it-works"
+            onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
+            className="text-sm lg:text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'यह कैसे काम करता है' : 'How It Works'}
+          </a>
+          <a
+            href="#civic-pulse"
+            onClick={(e) => handleSmoothScroll(e, 'civic-pulse')}
+            className="text-sm lg:text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'सिविक पल्स' : 'Civic Pulse'}
+          </a>
+          <a
+            href="#about"
+            onClick={(e) => handleSmoothScroll(e, 'about')}
+            className="text-sm lg:text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'परिचय' : 'About'}
+          </a>
+        </nav>
 
-      {/* Menu Overlay */}
-      <div
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-500 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={toggleMenu}
-      ></div>
+        {/* Right CTA Actions (Desktop) */}
+        <div className="hidden md:flex items-center gap-3.5 lg:gap-4">
+          {/* Language Toggle */}
+          <button
+            type="button"
+            onClick={() => onToggleLang ? onToggleLang() : null}
+            className="px-2.5 py-1 text-xs lg:text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 rounded-md hover:bg-slate-50"
+            title="Switch Language"
+          >
+            <span className={currentLang === 'en' ? 'text-blue-600 font-bold' : 'text-slate-500'}>EN</span>
+            <span className="text-slate-300">|</span>
+            <span className={currentLang === 'hi' ? 'text-blue-600 font-bold' : 'text-slate-500'}>हिंदी</span>
+          </button>
 
-      {/* Menu Panel */}
-      <div
-        className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800">Menu</h2>
-          <button onClick={toggleMenu} aria-label="Close menu" className="text-gray-500 hover:text-gray-900 transition-colors">
-            <CloseIcon />
+          {/* Log In Button */}
+          <button
+            type="button"
+            onClick={() => onOpenLogin ? onOpenLogin() : null}
+            className="px-5 py-2 rounded-full border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 hover:bg-slate-50/80 text-sm font-semibold transition-all shadow-sm cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'लॉग इन' : 'Log In'}
+          </button>
+
+          {/* Primary Report Issue Button */}
+          <button
+            type="button"
+            onClick={() => onOpenReport ? onOpenReport() : null}
+            className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold transition-all shadow-md shadow-blue-500/20 cursor-pointer"
+          >
+            {currentLang === 'hi' ? 'समस्या रिपोर्ट करें' : 'Report Issue'}
           </button>
         </div>
-        <div className="flex-grow p-6 flex flex-col">
-          <nav className="flex flex-col gap-2">
-            {navLinks.map((link, index) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-purple-600 text-lg font-semibold transition-all duration-300 transform ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}
-                style={{ transitionDelay: `${150 + index * 75}ms `}}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
 
-          {/* Login Button */}
-          <div className="mt-auto">
-            <Link
-              href="/login"
-              onClick={() => setIsOpen(false)}
-              className={`w-full text-center py-4 px-4 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-300 transform flex items-center justify-center gap-2 shadow-lg hover:shadow-xl ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
-            >
-              <span>Login</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        {/* Mobile Menu Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={() => onToggleLang ? onToggleLang() : null}
+            className="px-2 py-1 text-xs font-semibold text-slate-600 hover:text-blue-600 border border-slate-200 rounded-lg mr-1"
+          >
+            {currentLang === 'en' ? 'हिंदी' : 'EN'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </Link>
-          </div>
+            ) : (
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
 
+      {/* Mobile Dropdown Panel */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col gap-2.5">
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                if (onOpenReport) onOpenReport();
+              }}
+              className="text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium text-base transition-colors"
+            >
+              Report Issue
+            </button>
+            <a
+              href="#explore"
+              onClick={(e) => handleSmoothScroll(e, 'explore')}
+              className="py-2.5 px-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium text-base transition-colors"
+            >
+              Explore
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
+              className="py-2.5 px-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium text-base transition-colors"
+            >
+              How It Works
+            </a>
+            <a
+              href="#civic-pulse"
+              onClick={(e) => handleSmoothScroll(e, 'civic-pulse')}
+              className="py-2.5 px-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium text-base transition-colors"
+            >
+              Civic Pulse
+            </a>
+            <a
+              href="#about"
+              onClick={(e) => handleSmoothScroll(e, 'about')}
+              className="py-2.5 px-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 font-medium text-base transition-colors"
+            >
+              About
+            </a>
 
-    </>);
-};
-
-export default Header;
+            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (onOpenLogin) onOpenLogin();
+                }}
+                className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-center hover:bg-slate-50"
+              >
+                Log In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (onOpenReport) onOpenReport();
+                }}
+                className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-center hover:bg-blue-700 shadow-md shadow-blue-500/25"
+              >
+                Report Issue
+              </button>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}

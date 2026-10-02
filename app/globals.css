@@ -24,26 +24,26 @@
 
 :root {
   --background: #ffffff;
-  color: #2b52c6e0;
+  --foreground: #0f172a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta, var(--font-nunito, system-ui, sans-serif));
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: #ededed;
+    --foreground: #0f172a;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta), var(--font-nunito), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Add a transition to the base .ball class for smooth animation */
