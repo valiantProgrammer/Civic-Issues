@@ -9,6 +9,7 @@ import ReportDetailCard from './components/components/ReportDetailCard';
 import ProfileCard from './components/components/ProfileCard';
 import ReportIssueFlow from './components/components/ReportIssueFlow';
 import UserReportHistory from './components/components/UserReportHistory';
+import UserNotificationsView from './components/components/UserNotificationsView';
 import authApi from '@/lib/api';
 
 export default function UserPortalPage() {
@@ -40,6 +41,17 @@ export default function UserPortalPage() {
     setSelectedReport(null);
     setActiveTab(tabId);
   };
+
+  // Support ?tab= parameter in URL
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam && ['dashboard', 'reports', 'add-report', 'notifications', 'profile'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans flex">
@@ -121,27 +133,10 @@ export default function UserPortalPage() {
 
           {/* Notifications View */}
           {activeTab === 'notifications' && (
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm max-w-2xl">
-              <h2 className="text-xl font-black text-slate-900 mb-4">Notifications</h2>
-              <div className="space-y-3">
-                <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-100 flex items-start gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600 mt-1.5 shrink-0" />
-                  <div>
-                    <div className="font-bold text-slate-900 text-sm">Issue Verified by Ward Officer</div>
-                    <p className="text-xs text-slate-500 mt-0.5">Street Light Failure (CIVIC-20260928-A72F) has been verified and assigned to electrical maintenance.</p>
-                    <span className="text-[10px] text-slate-400 mt-1 block">2 hours ago</span>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                  <div>
-                    <div className="font-bold text-slate-900 text-sm">Issue Resolved</div>
-                    <p className="text-xs text-slate-500 mt-0.5">Garbage Not Collected (CIVIC-20260920-P91K) has been resolved by sanitation department.</p>
-                    <span className="text-[10px] text-slate-400 mt-1 block">Yesterday</span>
-                  </div>
-                </div>
-              </div>
+            <div className="w-full">
+              <UserNotificationsView
+                onSelectReport={(report) => setSelectedReport(report)}
+              />
             </div>
           )}
 

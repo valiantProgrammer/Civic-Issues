@@ -8,7 +8,7 @@ export default function Footer({ currentLang }) {
   return (
     <footer className="bg-white border-t border-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        
+
         {/* Brand */}
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-50 border border-slate-100 flex items-center justify-center">
@@ -40,7 +40,7 @@ export default function Footer({ currentLang }) {
           <a href="#civic-pulse" className="hover:text-blue-600 transition-colors">
             {currentLang === 'hi' ? 'सिविक पल्स' : 'Civic Pulse'}
           </a>
-          <a href="#about" className="hover:text-blue-600 transition-colors">
+          <a href="/about" className="hover:text-blue-600 transition-colors">
             {currentLang === 'hi' ? 'परिचय' : 'About'}
           </a>
         </div>
