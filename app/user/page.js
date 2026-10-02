@@ -7,6 +7,8 @@ import UserDashboard from './components/components/UserDashboard';
 import ReportedIssuesSection from './components/components/ReportedIssuesSection';
 import ReportDetailCard from './components/components/ReportDetailCard';
 import ProfileCard from './components/components/ProfileCard';
+import ReportIssueFlow from './components/components/ReportIssueFlow';
+import UserReportHistory from './components/components/UserReportHistory';
 import authApi from '@/lib/api';
 
 export default function UserPortalPage() {
@@ -36,10 +38,6 @@ export default function UserPortalPage() {
   // Handle tab switching
   const handleTabChange = (tabId) => {
     setSelectedReport(null);
-    if (tabId === 'add-report') {
-      router.push('/user/add-report');
-      return;
-    }
     setActiveTab(tabId);
   };
 
@@ -78,7 +76,7 @@ export default function UserPortalPage() {
 
           <button
             type="button"
-            onClick={() => router.push('/user/add-report')}
+            onClick={() => setActiveTab('add-report')}
             className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm flex items-center gap-1"
           >
             <span>+ Report</span>
@@ -86,77 +84,39 @@ export default function UserPortalPage() {
         </header>
 
         {/* Dynamic Main View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
           
           {/* Dashboard View matching the reference picture */}
           {activeTab === 'dashboard' && !selectedReport && (
             <UserDashboard
               userName={userName}
-              onReportIssue={() => router.push('/user/add-report')}
+              onReportIssue={() => setActiveTab('add-report')}
               onViewAllReports={() => setActiveTab('reports')}
               onSelectReport={(report) => setSelectedReport(report)}
             />
           )}
 
-          {/* Selected Report Detail View */}
-          {selectedReport && (
-            <div>
-              <button
-                type="button"
-                onClick={() => setSelectedReport(null)}
-                className="mb-4 text-xs font-bold text-blue-600 hover:underline inline-flex items-center gap-1.5"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span>Back to Dashboard</span>
-              </button>
-              <ReportDetailCard
-                report={selectedReport}
-                onClose={() => setSelectedReport(null)}
-              />
-            </div>
+          {/* Add Report Flow matching the reference picture */}
+          {activeTab === 'add-report' && !selectedReport && (
+            <ReportIssueFlow
+              onCancel={() => setActiveTab('dashboard')}
+              onComplete={() => setActiveTab('reports')}
+            />
           )}
 
-          {/* My Reports View */}
+          {/* Selected Report Detail View matching the exact reference picture */}
+          {selectedReport && (
+            <ReportDetailCard
+              report={selectedReport}
+              onClose={() => setSelectedReport(null)}
+            />
+          )}
+
+          {/* My Report History View matching the exact reference picture */}
           {activeTab === 'reports' && !selectedReport && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-black text-slate-900">My Reports</h1>
-                  <p className="text-xs text-slate-500 mt-0.5">Filter and manage all your reported civic issues</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => router.push('/user/add-report')}
-                  className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold shadow-sm hover:bg-blue-700"
-                >
-                  + New Report
-                </button>
-              </div>
-
-              {/* Filter Tabs */}
-              <div className="flex gap-2 border-b border-slate-200 pb-2">
-                {['pending', 'approved', 'rejected'].map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setReportFilter(f)}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
-                      reportFilter === f
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    {f}
-                  </button>
-                ))}
-              </div>
-
-              <ReportedIssuesSection
-                filter={reportFilter}
-                onReportSelect={setSelectedReport}
-              />
-            </div>
+            <UserReportHistory
+              onReportSelect={(report) => setSelectedReport(report)}
+            />
           )}
 
           {/* Notifications View */}
@@ -187,7 +147,7 @@ export default function UserPortalPage() {
 
           {/* Profile View */}
           {activeTab === 'profile' && (
-            <div className="max-w-2xl">
+            <div className="w-full">
               <ProfileCard />
             </div>
           )}

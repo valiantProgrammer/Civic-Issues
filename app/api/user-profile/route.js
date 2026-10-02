@@ -314,14 +314,17 @@ export async function PUT(request) {
         }
 
         // Handle regular user updates
-        const { phone, address } = updateData;
+        const { phone, address, userName, age, email } = updateData;
 
         const User = await getUserModel();
         
         // Build update object with only provided fields
         const userUpdateData = {};
-        if (phone) userUpdateData.phone = phone;
-        if (address) userUpdateData.Address = address;
+        if (phone !== undefined && phone !== "") userUpdateData.phone = Number(phone.toString().replace(/[^0-9]/g, '')) || phone;
+        if (address !== undefined) userUpdateData.Address = address;
+        if (userName !== undefined) userUpdateData.userName = userName;
+        if (age !== undefined && age !== "") userUpdateData.age = Number(age);
+        if (email !== undefined) userUpdateData.email = email;
         if (updateData.profilePicture) userUpdateData.profilePicture = updateData.profilePicture;
 
         // Validate that at least one field is being updated
