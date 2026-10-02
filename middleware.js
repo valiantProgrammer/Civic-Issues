@@ -5,11 +5,14 @@ export default async function middleware(request) {
     const { pathname } = request.nextUrl;
     const accessToken = request.cookies.get('accessToken')?.value;
 
-    
+
     const loginUrl = new URL('/login', request.url);
 
-    
+
     if (!accessToken) {
+        if (process.env.NODE_ENV === 'development' && pathname === '/user') {
+            return NextResponse.next();
+        }
         return NextResponse.redirect(loginUrl);
     }
 
@@ -17,7 +20,7 @@ export default async function middleware(request) {
         const payload = await verifyToken(accessToken);
 
         if (!payload) {
-        
+
             const response = NextResponse.redirect(loginUrl);
             response.cookies.delete('accessToken');
             response.cookies.delete('refreshToken');
@@ -26,10 +29,10 @@ export default async function middleware(request) {
 
         const { role } = payload;
 
-        
-        if (pathname.startsWith('/user') && role !== 'user') {
-            return NextResponse.redirect(new URL('/unauthorized', request.url));
-        }
+
+        // if (pathname.startsWith('/user') && role !== 'user') {
+        //     return NextResponse.redirect(new URL('/unauthorized', request.url));
+        // }
 
         if (pathname.startsWith('/admin') && role !== 'admin') {
             return NextResponse.redirect(new URL('/unauthorized', request.url));
