@@ -30,13 +30,13 @@ export default async function middleware(request) {
         const { role } = payload;
 
 
-        // if (pathname.startsWith('/user') && role !== 'user') {
-        //     return NextResponse.redirect(new URL('/unauthorized', request.url));
-        // }
-
-        if (pathname.startsWith('/admin') && role !== 'admin') {
+        if (pathname.startsWith('/user') && role !== 'user') {
             return NextResponse.redirect(new URL('/unauthorized', request.url));
         }
+
+        // if (pathname.startsWith('/admin') && role !== 'admin') {
+        //     return NextResponse.redirect(new URL('/unauthorized', request.url));
+        // }
 
         else if (pathname.startsWith('/administration') && role !== 'adminHead') {
             return NextResponse.redirect(new URL('/unauthorized', request.url));
