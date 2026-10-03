@@ -292,30 +292,51 @@ export default function CivicPulseSection({ currentLang }) {
                 />
 
                 {/* Points */}
-                {linePoints.map((pt, i) => (
-                  <g key={i}>
-                    <circle
-                      cx={pt.x}
-                      cy={pt.y}
-                      r="5.5"
-                      className="fill-white dark:fill-slate-900 stroke-[#2563EB] stroke-[3px] hover:scale-125 transition-transform cursor-pointer"
-                      onMouseEnter={() => setHoveredPoint(pt)}
-                      onMouseLeave={() => setHoveredPoint(null)}
-                    />
-                  </g>
-                ))}
+                {linePoints.map((pt, i) => {
+                  const isHovered = hoveredPoint?.month === pt.month;
+                  return (
+                    <g key={i}>
+                      {/* Invisible larger hit target (r=22) so mouse never slips off */}
+                      <circle
+                        cx={pt.x}
+                        cy={pt.y}
+                        r="22"
+                        fill="transparent"
+                        className="cursor-pointer"
+                        onMouseEnter={() => setHoveredPoint(pt)}
+                        onMouseLeave={() => setHoveredPoint(null)}
+                      />
+
+                      {/* Visible interactive dot with smooth radius expansion (no transform displacement) */}
+                      <circle
+                        cx={pt.x}
+                        cy={pt.y}
+                        r={isHovered ? 7.5 : 5}
+                        className={`pointer-events-none transition-all duration-150 ${
+                          isHovered
+                            ? 'fill-blue-600 stroke-white dark:stroke-slate-900 stroke-[3px]'
+                            : 'fill-white dark:fill-slate-900 stroke-[#2563EB] stroke-[2.5px]'
+                        }`}
+                      />
+                    </g>
+                  );
+                })}
               </svg>
 
               {/* Point Tooltip */}
               {hoveredPoint && (
                 <div
-                  className="absolute bg-slate-900 text-white text-[11px] font-bold px-2 py-1 rounded-md shadow-md pointer-events-none transform -translate-x-1/2 -translate-y-full transition-all"
+                  className="absolute bg-slate-900 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-lg pointer-events-none transform -translate-x-1/2 -translate-y-full transition-opacity duration-150 z-30 whitespace-nowrap"
                   style={{
                     left: `${(hoveredPoint.x / 500) * 100}%`,
-                    top: `${(hoveredPoint.y / 200) * 100 - 10}%`,
+                    top: `${(hoveredPoint.y / 200) * 100 - 12}%`,
                   }}
                 >
-                  {hoveredPoint.month}: {hoveredPoint.val} reports
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                    <span>{hoveredPoint.month}:</span>
+                    <span className="text-blue-300 font-black">{hoveredPoint.val} reports</span>
+                  </div>
                 </div>
               )}
 
