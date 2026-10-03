@@ -5,7 +5,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
+import { FaLightbulb } from "react-icons/fa";
 import ReportSubmissionSuccessCard from './ReportSubmissionSuccessCard';
 
 // Dynamically import interactive map location picker
@@ -55,7 +55,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
   // Civic Categories
   const categories = [
     { id: 'road', name: 'Road Damage & Potholes', icon: '🛣️', color: 'from-amber-500/10 to-amber-500/5' },
-    { id: 'light', name: 'Street Light Failure', icon: '💡', color: 'from-yellow-500/10 to-yellow-500/5' },
+    { id: 'light', name: 'Street Light Failure', icon: '<FaLightbulb />', color: 'from-yellow-500/10 to-yellow-500/5' },
     { id: 'garbage', name: 'Garbage & Sanitation', icon: '🗑️', color: 'from-emerald-500/10 to-emerald-500/5' },
     { id: 'water', name: 'Water Leakage & Drainage', icon: '🚰', color: 'from-blue-500/10 to-blue-500/5' },
     { id: 'health', name: 'Public Health & Stray Animals', icon: '🐾', color: 'from-rose-500/10 to-rose-500/5' },
@@ -168,22 +168,20 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
               key={step.id}
               type="button"
               onClick={() => setCurrentStep(step.id)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                isActive
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${isActive
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-600/20'
                   : isPassed
-                  ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60'
-                  : 'bg-white dark:bg-[#111A2E] text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80'
-              }`}
+                    ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60'
+                    : 'bg-white dark:bg-[#111A2E] text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80'
+                }`}
             >
               <span
-                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full text-[11px] font-bold flex items-center justify-center ${
-                  isActive
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full text-[11px] font-bold flex items-center justify-center ${isActive
                     ? 'bg-white text-blue-600'
                     : isPassed
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                }`}
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  }`}
               >
                 {step.id}
               </span>
@@ -195,7 +193,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
 
       {/* 2. Main Card matching reference picture */}
       <div className="bg-white dark:bg-[#111A2E] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xs border border-slate-200/90 dark:border-slate-800 transition-colors w-full">
-        
+
         {/* Step 1: Evidence (Exact Reference Screenshot Layout) */}
         {currentStep === 1 && (
           <div>
@@ -210,7 +208,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
 
             {/* Layout: Upload Zone on Left, Preview Card on Right */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
-              
+
               {/* Left Dropzone */}
               <div
                 onDragOver={(e) => {
@@ -220,11 +218,10 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                 onDragLeave={() => setIsDragOver(false)}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`md:col-span-8 border-2 border-dashed rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[220px] ${
-                  isDragOver
+                className={`md:col-span-8 border-2 border-dashed rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[220px] ${isDragOver
                     ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/60'
                     : 'border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20 hover:bg-blue-50/40 dark:hover:bg-blue-950/40'
-                }`}
+                  }`}
               >
                 <input
                   ref={fileInputRef}
@@ -330,11 +327,10 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                   <div
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.name)}
-                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
-                      isSelected
+                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${isSelected
                         ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 shadow-sm ring-1 ring-blue-600/30'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/40 bg-white dark:bg-[#0B132B]'
-                    }`}
+                      }`}
                   >
                     <div className="text-2xl w-10 h-10 rounded-xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center">
                       {cat.icon}
@@ -464,11 +460,10 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                       key={s.level}
                       type="button"
                       onClick={() => setDetails({ ...details, severity: s.level })}
-                      className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
-                        details.severity === s.level
+                      className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${details.severity === s.level
                           ? `${s.color} ring-2 ring-blue-500/20 shadow-sm`
                           : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
+                        }`}
                     >
                       {s.level} Priority
                     </button>

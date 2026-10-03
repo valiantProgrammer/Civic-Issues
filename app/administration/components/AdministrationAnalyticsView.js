@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-
+import { FaLightbulb } from "react-icons/fa";
 export default function AdministrationAnalyticsView() {
   const [timeRange, setTimeRange] = useState('30days');
 
@@ -23,7 +23,7 @@ export default function AdministrationAnalyticsView() {
 
   return (
     <div className="w-full space-y-6">
-      
+
       {/* 1. Analytics Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -42,11 +42,10 @@ export default function AdministrationAnalyticsView() {
               key={range}
               type="button"
               onClick={() => setTimeRange(range)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                timeRange === range
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${timeRange === range
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               {range === '7days' ? 'Last 7 Days' : range === '30days' ? 'Last 30 Days' : 'Last Quarter'}
             </button>
@@ -56,7 +55,7 @@ export default function AdministrationAnalyticsView() {
 
       {/* 2. Key KPI Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        
+
         {/* Metric 1 */}
         <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <div className="flex items-center justify-between">
@@ -117,7 +116,7 @@ export default function AdministrationAnalyticsView() {
 
       {/* 3. Category Breakdown & Department SLA Meters */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
+
         {/* Category Breakdown (7 cols) */}
         <div className="lg:col-span-7 bg-white dark:bg-[#111A2E] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
@@ -169,7 +168,7 @@ export default function AdministrationAnalyticsView() {
           </div>
 
           <div className="mt-5 p-3.5 rounded-xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 flex items-start gap-2.5">
-            <span className="text-blue-600 dark:text-blue-400 text-sm">💡</span>
+            <span className="text-blue-600 dark:text-blue-400 text-sm"><FaLightbulb /></span>
             <p className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
               Recommendation: Dispatch 2 additional road maintenance crews to Ward 3 & 12 to bring overall municipal compliance above 90%.
             </p>
@@ -211,13 +210,12 @@ export default function AdministrationAnalyticsView() {
                   <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{w.score}</td>
                   <td className="py-3.5 px-4">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                        w.status === 'Top Performer'
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${w.status === 'Top Performer'
                           ? 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
                           : w.status === 'Excellent' || w.status === 'Good'
-                          ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20'
-                          : 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'
-                      }`}
+                            ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20'
+                            : 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'
+                        }`}
                     >
                       {w.status}
                     </span>

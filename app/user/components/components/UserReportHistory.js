@@ -23,7 +23,7 @@ export default function UserReportHistory({ onReportSelect }) {
       ward: 'Ward 8',
       status: 'Verified',
       statusCode: 'open',
-      statusStyle: 'bg-emerald-50 text-emerald-600 border-emerald-200/70',
+      statusStyle: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/60',
       image: '/images/street_light_thumb.jpg',
       category: 'Street Light',
       description: 'Street light lamp not turning on during evening hours on main avenue.',
@@ -38,7 +38,7 @@ export default function UserReportHistory({ onReportSelect }) {
       ward: 'Ward 5',
       status: 'Resolved',
       statusCode: 'resolved',
-      statusStyle: 'bg-emerald-50 text-emerald-600 border-emerald-200/70',
+      statusStyle: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/60',
       image: '/images/street_issue_thumb.jpg',
       category: 'Water Supply',
       description: 'Underground pipeline leakage waterlogged the street corner.',
@@ -53,7 +53,7 @@ export default function UserReportHistory({ onReportSelect }) {
       ward: 'Ward 11',
       status: 'In Progress',
       statusCode: 'in_progress',
-      statusStyle: 'bg-amber-50 text-amber-600 border-amber-200/70',
+      statusStyle: 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200/70 dark:border-amber-800/60',
       image: '/images/street_issue_thumb.jpg',
       category: 'Road & Transport',
       description: 'Large asphalt potholes causing vehicle damage and traffic slowdown.',
@@ -68,7 +68,7 @@ export default function UserReportHistory({ onReportSelect }) {
       ward: 'Ward 3',
       status: 'Rejected',
       statusCode: 'rejected',
-      statusStyle: 'bg-rose-50 text-rose-600 border-rose-200/70',
+      statusStyle: 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200/70 dark:border-rose-800/60',
       image: '/images/garbage_thumb.jpg',
       category: 'Waste Management',
       description: 'Community waste bins overflowing for 4 consecutive days.',
@@ -83,7 +83,7 @@ export default function UserReportHistory({ onReportSelect }) {
       ward: 'Ward 7',
       status: 'Verified',
       statusCode: 'open',
-      statusStyle: 'bg-emerald-50 text-emerald-600 border-emerald-200/70',
+      statusStyle: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/60',
       image: '/images/street_issue_thumb.jpg',
       category: 'Sanitation',
       description: 'Broken slab over stormwater canal creating danger for pedestrians.',
@@ -104,10 +104,10 @@ export default function UserReportHistory({ onReportSelect }) {
             const d = String(created.getDate()).padStart(2, '0');
             const statusStr = r.status === 'approved' ? 'Resolved' : r.status === 'reviewed' ? 'In Progress' : r.status === 'rejected' ? 'Rejected' : 'Verified';
             const statusClass = statusStr === 'Resolved' || statusStr === 'Verified'
-              ? 'bg-emerald-50 text-emerald-600 border-emerald-200/70'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/60'
               : statusStr === 'In Progress'
-              ? 'bg-amber-50 text-amber-600 border-amber-200/70'
-              : 'bg-rose-50 text-rose-600 border-rose-200/70';
+              ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200/70 dark:border-amber-800/60'
+              : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200/70 dark:border-rose-800/60';
 
             return {
               id: r._id || `REP-${i}`,
@@ -320,7 +320,15 @@ export default function UserReportHistory({ onReportSelect }) {
 
               {/* Status Badge */}
               <div
-                className={`text-[11px] sm:text-xs font-bold px-3 py-1 rounded-full border shadow-xs ${report.statusStyle}`}
+                className={`text-[11px] sm:text-xs font-bold px-3 py-1 rounded-full border shadow-xs ${
+                  report.statusStyle && report.statusStyle.includes('dark:')
+                    ? report.statusStyle
+                    : (report.status === 'Resolved' || report.status === 'Verified')
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/60'
+                    : report.status === 'In Progress'
+                    ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200/70 dark:border-amber-800/60'
+                    : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border-rose-200/70 dark:border-rose-800/60'
+                }`}
               >
                 {report.status}
               </div>

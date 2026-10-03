@@ -3,7 +3,9 @@
 import React, { useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { FaLightbulb } from "react-icons/fa";
+import { RiAlarmWarningFill } from "react-icons/ri";
+import { BsFillTelephoneFill } from "react-icons/bs";
 export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedId, setExpandedId] = useState(null);
@@ -159,7 +161,7 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
     <div className="w-full font-sans antialiased">
       {/* Main Card matching the screenshot */}
       <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-5">
-        
+
         {/* 1. Header Title */}
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -222,11 +224,10 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
               return (
                 <div
                   key={article.id}
-                  className={`rounded-xl border transition-all ${
-                    isExpanded
-                      ? 'border-blue-300 dark:border-blue-600 bg-blue-50/20 dark:bg-blue-950/20 ring-2 ring-blue-500/10'
-                      : 'border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0B132B] hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/40'
-                  }`}
+                  className={`rounded-xl border transition-all ${isExpanded
+                    ? 'border-blue-300 dark:border-blue-600 bg-blue-50/20 dark:bg-blue-950/20 ring-2 ring-blue-500/10'
+                    : 'border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0B132B] hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/40'
+                    }`}
                 >
                   {/* Clickable Header Row matching screenshot */}
                   <button
@@ -249,9 +250,8 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                     {/* Right Chevron > matching screenshot */}
                     <div className="text-slate-400 group-hover:text-blue-600 shrink-0 transition-transform duration-200">
                       <svg
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          isExpanded ? 'rotate-90 text-blue-600' : ''
-                        }`}
+                        className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-90 text-blue-600' : ''
+                          }`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -312,7 +312,7 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                           {/* Pro Tip */}
                           {article.tip && (
                             <div className="flex items-start gap-2 bg-blue-50/80 dark:bg-blue-950/40 p-3 rounded-xl border border-blue-100 dark:border-blue-800/60 text-blue-900 dark:text-blue-300 text-xs">
-                              <span className="font-bold text-blue-600 dark:text-blue-400 shrink-0">💡 Tip:</span>
+                              <span className="font-bold flex items-center gap-1 text-blue-600 dark:text-blue-400 shrink-0"><FaLightbulb /> Tip:</span>
                               <p className="leading-relaxed">{article.tip}</p>
                             </div>
                           )}
@@ -424,11 +424,11 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
               <div className="mb-4 p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl text-xs space-y-1">
                 <p className="font-bold text-blue-900">Emergency & Direct Helplines:</p>
                 <div className="flex items-center gap-4 text-blue-800 flex-wrap">
-                  <span>
-                    📞 Civic Helpline: <strong>1916</strong>
+                  <span className='flex items-center gap-2'>
+                    <BsFillTelephoneFill /> Civic Helpline: <strong>1916</strong>
                   </span>
-                  <span>
-                    🚨 Police / Fire / Medical: <strong>112</strong>
+                  <span className='flex items-center gap-2'>
+                    <RiAlarmWarningFill /> Police / Fire / Medical: <strong>112</strong>
                   </span>
                 </div>
               </div>
