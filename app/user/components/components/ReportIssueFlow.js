@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
+import ReportSubmissionSuccessCard from './ReportSubmissionSuccessCard';
+
 // Dynamically import interactive map location picker
 const ReportLocationPicker = dynamic(() => import('./ReportLocationPicker'), {
   ssr: false,
@@ -22,6 +24,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
 
   // Stepper state: 1: Evidence, 2: Category, 3: Location, 4: Details, 5: Review
   const [currentStep, setCurrentStep] = useState(1);
+  const [submittedTicket, setSubmittedTicket] = useState(null);
 
   // Form data matching Civic Saathi reporting schema
   const [uploadedImage, setUploadedImage] = useState('/images/street_issue_thumb.jpg');
@@ -122,16 +125,35 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
     setIsSubmitting(true);
     try {
       // Simulate submission or call API
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      toast.success('Civic Issue Reported Successfully! Ticket: CIVIC-20261002-R88K');
-      if (onComplete) onComplete();
-      else router.push('/user');
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      const generatedTicket = 'CIVIC-20261002-A72Q';
+      setSubmittedTicket(generatedTicket);
+      toast.success('Civic Issue Reported Successfully!');
     } catch {
       toast.error('Failed to submit report. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Render success screen matching reference image when submitted
+  if (submittedTicket) {
+    return (
+      <div className="w-full py-8 flex items-center justify-center">
+        <ReportSubmissionSuccessCard
+          ticketId={submittedTicket}
+          onTrackReport={(tid) => {
+            if (onComplete) onComplete(tid);
+            else router.push('/user?tab=reports');
+          }}
+          onBackHome={() => {
+            if (onCancel) onCancel();
+            else router.push('/user');
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto py-6 px-4 font-sans">
