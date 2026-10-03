@@ -85,9 +85,9 @@ export default function ReportDetailCard({ report, onClose }) {
   ];
 
   return (
-    <div className="w-full space-y-5 font-sans antialiased">
+    <div className="w-full space-y-4 sm:space-y-5 font-sans antialiased pb-10">
       {/* 1. Top Navigation Bar */}
-      <div>
+      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-2xs">
         <button
           type="button"
           onClick={onClose}

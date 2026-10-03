@@ -156,9 +156,9 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-6 px-4 font-sans">
+    <div className="w-full font-sans space-y-6 pb-10">
       {/* 1. Top Stepper matching the design */}
-      <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap mb-8">
+      <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap mb-4 sm:mb-6">
         {steps.map((step) => {
           const isActive = currentStep === step.id;
           const isPassed = currentStep > step.id;
@@ -194,7 +194,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
       </div>
 
       {/* 2. Main Card matching reference picture */}
-      <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-200/60 border border-slate-100/90 transition-all">
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xs border border-slate-200/90 transition-all w-full">
         
         {/* Step 1: Evidence (Exact Reference Screenshot Layout) */}
         {currentStep === 1 && (
@@ -268,7 +268,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
               {/* Right Preview Card (as in screenshot) */}
               <div className="md:col-span-4 flex items-center justify-center">
                 {uploadedImage ? (
-                  <div className="relative w-36 h-48 sm:w-44 sm:h-56 rounded-2xl overflow-hidden border border-slate-200 shadow-md group">
+                  <div className="relative w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border border-slate-200 shadow-md group">
                     <Image
                       src={uploadedImage}
                       alt="Uploaded civic evidence"
@@ -299,7 +299,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-36 h-48 sm:w-44 sm:h-56 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-center p-3 cursor-pointer hover:bg-slate-100 transition-colors"
+                    className="w-full max-w-[280px] aspect-[3/4] rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-center p-3 cursor-pointer hover:bg-slate-100 transition-colors"
                   >
                     <span className="text-2xl mb-1">📷</span>
                     <span className="text-xs font-semibold text-slate-500">No media yet</span>
@@ -323,7 +323,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {categories.map((cat) => {
                 const isSelected = selectedCategory === cat.name;
                 return (

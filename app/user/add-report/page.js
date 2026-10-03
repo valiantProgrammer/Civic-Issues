@@ -22,7 +22,7 @@ export default function AddReportPage() {
 
       {/* Main Content Area */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full flex items-center justify-center">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
           <ReportIssueFlow
             onCancel={() => router.push('/user')}
             onComplete={() => router.push('/user')}

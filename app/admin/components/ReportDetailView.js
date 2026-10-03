@@ -478,9 +478,9 @@ export default function ReportDetailView({
     <>
       <style>{rejectButtonStyles}</style>
 
-      <div className="w-full space-y-6 font-sans antialiased text-slate-800 pb-16">
+      <div className="w-full space-y-5 font-sans antialiased text-slate-800 pb-10">
         {/* 1. Top Navigation & Action Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <button
               type="button"
