@@ -158,11 +158,11 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
   return (
     <div className="w-full font-sans antialiased">
       {/* Main Card matching the screenshot */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-5">
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-5">
         
         {/* 1. Header Title */}
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             How Can We Help?
           </h1>
         </div>
@@ -189,13 +189,13 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search help articles..."
-            className="w-full pl-10 pr-9 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
+            className="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
             >
               ✕
             </button>
@@ -210,7 +210,7 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="mt-2 text-blue-600 font-semibold hover:underline"
+                className="mt-2 text-blue-600 dark:text-blue-400 font-semibold hover:underline"
               >
                 Clear search
               </button>
@@ -224,8 +224,8 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                   key={article.id}
                   className={`rounded-xl border transition-all ${
                     isExpanded
-                      ? 'border-blue-300 bg-blue-50/20 ring-2 ring-blue-500/10'
-                      : 'border-slate-200/80 bg-white hover:border-slate-300 hover:bg-slate-50/60'
+                      ? 'border-blue-300 dark:border-blue-600 bg-blue-50/20 dark:bg-blue-950/20 ring-2 ring-blue-500/10'
+                      : 'border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0B132B] hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/40'
                   }`}
                 >
                   {/* Clickable Header Row matching screenshot */}
@@ -236,12 +236,12 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Left circular icon matching screenshot */}
-                      <div className="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center shrink-0 group-hover:border-blue-500 transition-colors">
+                      <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center shrink-0 group-hover:border-blue-500 transition-colors">
                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-blue-600 transition-colors" />
                       </div>
 
                       {/* Title */}
-                      <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
+                      <span className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                         {article.title}
                       </span>
                     </div>
@@ -272,14 +272,14 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 space-y-3.5 border-t border-slate-100">
-                          <p className="text-slate-500 leading-relaxed font-medium">
+                        <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-3.5 border-t border-slate-100 dark:border-slate-800">
+                          <p className="text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                             {article.summary}
                           </p>
 
                           {/* Steps if present */}
                           {article.steps && (
-                            <ol className="list-decimal list-inside space-y-1.5 text-slate-700 bg-white p-3.5 rounded-xl border border-slate-100 shadow-2xs">
+                            <ol className="list-decimal list-inside space-y-1.5 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900/80 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-2xs">
                               {article.steps.map((st, idx) => (
                                 <li key={idx} className="leading-relaxed pl-1">
                                   {st}
@@ -294,14 +294,14 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                               {article.statuses.map((st, idx) => (
                                 <div
                                   key={idx}
-                                  className="p-3 bg-white rounded-xl border border-slate-100 shadow-2xs space-y-1"
+                                  className="p-3 bg-white dark:bg-slate-900/80 rounded-xl border border-slate-100 dark:border-slate-800 shadow-2xs space-y-1"
                                 >
                                   <span
                                     className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${st.badge}`}
                                   >
                                     {st.name}
                                   </span>
-                                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                                     {st.desc}
                                   </p>
                                 </div>
@@ -311,8 +311,8 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
 
                           {/* Pro Tip */}
                           {article.tip && (
-                            <div className="flex items-start gap-2 bg-blue-50/80 p-3 rounded-xl border border-blue-100 text-blue-900 text-xs">
-                              <span className="font-bold text-blue-600 shrink-0">💡 Tip:</span>
+                            <div className="flex items-start gap-2 bg-blue-50/80 dark:bg-blue-950/40 p-3 rounded-xl border border-blue-100 dark:border-blue-800/60 text-blue-900 dark:text-blue-300 text-xs">
+                              <span className="font-bold text-blue-600 dark:text-blue-400 shrink-0">💡 Tip:</span>
                               <p className="leading-relaxed">{article.tip}</p>
                             </div>
                           )}
@@ -332,7 +332,7 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
                                     onNavigateToReports();
                                   }
                                 }}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors shadow-2xs"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
                               >
                                 <span>{article.actionLabel}</span>
                                 <span>→</span>
@@ -350,10 +350,10 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
         </div>
 
         {/* 4. Bottom Section matching screenshot: Info box + "Contact Support" button */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-4 flex-wrap">
+        <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-[#0B132B] border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4 flex-wrap">
           {/* Left: Info icon + Need more help text */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-200/70 text-slate-600 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center shrink-0">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -369,10 +369,10 @@ export default function HelpCard({ onNavigateToReport, onNavigateToReports }) {
               </svg>
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 leading-none">
+              <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-none">
                 Need more help?
               </p>
-              <p className="text-[11px] sm:text-xs text-slate-500 mt-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Contact our support team.
               </p>
             </div>

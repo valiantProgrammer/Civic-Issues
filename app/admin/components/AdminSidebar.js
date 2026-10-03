@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import ThemeToggle from '@/app/components/ThemeToggle';
 
 export default function AdminSidebar({
   activeTab,
@@ -157,8 +158,10 @@ export default function AdminSidebar({
           })}
         </nav>
 
-        {/* Bottom Section: Admin User & Logout */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40">
+        {/* Bottom Section: Theme Toggle & Logout */}
+        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 space-y-2">
+          <ThemeToggle variant="sidebar-item" />
+
           <button
             type="button"
             onClick={onLogout}

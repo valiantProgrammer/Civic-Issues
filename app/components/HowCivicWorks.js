@@ -119,15 +119,15 @@ export default function HowCivicWorks({ currentLang }) {
   const t = content[currentLang] || content.en;
 
   return (
-    <section id="how-it-works" className="py-12 lg:py-16 bg-white relative">
+    <section id="how-it-works" className="py-12 lg:py-16 bg-white dark:bg-[#080D1A] relative transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading */}
         <div className="text-left mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900">
+          <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900 dark:text-white">
             {t.title}
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-slate-500 font-normal">
+          <p className="mt-2 text-sm sm:text-base text-slate-500 dark:text-slate-400 font-normal">
             {t.subtitle}
           </p>
         </div>
@@ -137,24 +137,24 @@ export default function HowCivicWorks({ currentLang }) {
           {t.steps.map((step, idx) => (
             <React.Fragment key={idx}>
               {/* Process Card */}
-              <div className="relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-lg transition-all duration-300 flex flex-col justify-between group">
+              <div className="relative bg-white dark:bg-[#111A2E] rounded-2xl p-6 sm:p-7 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:shadow-lg dark:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between group">
                 
                 {/* Card Top: Number & Icon Badge */}
                 <div className="flex items-center justify-between">
-                  <span className={`text-xl sm:text-2xl font-black ${step.numColor}`}>
+                  <span className={`text-xl sm:text-2xl font-black ${step.numColor} dark:text-blue-400`}>
                     {step.number}
                   </span>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${step.badgeBg}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${step.badgeBg} dark:bg-slate-800 dark:text-blue-400`}>
                     {step.icon}
                   </div>
                 </div>
 
                 {/* Card Bottom: Title & Description */}
                 <div className="mt-6">
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+                  <p className="mt-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
                     {step.desc}
                   </p>
                 </div>
@@ -166,7 +166,7 @@ export default function HowCivicWorks({ currentLang }) {
                 <div className="hidden lg:flex items-center justify-center absolute z-10 pointer-events-none -translate-y-1/2 top-1/2"
                   style={{ left: `calc(${(idx + 1) * 25}% - 14px)` }}
                 >
-                  <div className="w-7 h-7 rounded-full bg-white shadow-xs border border-slate-100 flex items-center justify-center text-blue-500">
+                  <div className="w-7 h-7 rounded-full bg-white dark:bg-[#0B132B] shadow-xs border border-slate-100 dark:border-slate-800 flex items-center justify-center text-blue-500 dark:text-blue-400">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>

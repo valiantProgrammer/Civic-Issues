@@ -24,8 +24,8 @@ export default function ReportCard({
   return (
     <>
       <div
-        className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 flex items-center space-x-3 sm:space-x-4 w-full transition-all hover:shadow-md ${
-          onClick ? "cursor-pointer hover:border-purple-300" : ""
+        className={`bg-white dark:bg-[#111A2E] rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 p-3 sm:p-4 flex items-center space-x-3 sm:space-x-4 w-full transition-all hover:shadow-md ${
+          onClick ? "cursor-pointer hover:border-purple-300 dark:hover:border-blue-500/40" : ""
         }`}
         onClick={onClick}
         role={onClick ? "button" : undefined}
@@ -43,7 +43,7 @@ export default function ReportCard({
       >
         {/* Left: Image or Video Thumbnail */}
         <div className="w-16 h-16 sm:w-18 sm:h-18 flex-shrink-0">
-          <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden relative">
+          <div className="w-full h-full bg-gray-200 dark:bg-slate-800 rounded-lg flex items-center justify-center overflow-hidden relative">
             {isVideo ? (
               <>
                 {/* Video Thumbnail */}
@@ -80,7 +80,7 @@ export default function ReportCard({
                     target.style.display = "none";
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<div class="w-full h-full bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 font-medium text-sm">${category.charAt(0)}</div>`;
+                      parent.innerHTML = `<div class="w-full h-full bg-gray-300 dark:bg-slate-700 rounded-lg flex items-center justify-center text-gray-600 dark:text-slate-300 font-medium text-sm">${category.charAt(0)}</div>`;
                     }
                   }}
                 />
@@ -100,15 +100,15 @@ export default function ReportCard({
 
         {/* Middle: Content */}
         <div className="flex-1 min-w-0 pr-2">
-          <h3 className="text-sm font-medium text-gray-900 truncate leading-tight">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate leading-tight">
             {title}
           </h3>
           {/* Description with time since submission */}
-          <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-snug">
-            {description ? description.substring(0, 80) + (description.length > 80 ? '...' : '') : 'No description'} <span className="text-gray-500">report submitted {report && time ? getDaysAgo(time) : 'recently'}</span>
+          <p className="text-xs text-gray-600 dark:text-slate-400 mt-1 line-clamp-2 leading-snug">
+            {description ? description.substring(0, 80) + (description.length > 80 ? '...' : '') : 'No description'} <span className="text-gray-500 dark:text-slate-500">report submitted {report && time ? getDaysAgo(time) : 'recently'}</span>
           </p>
           {/* Date, time, and location */}
-          <p className="text-xs text-gray-500 mt-1 leading-tight">
+          <p className="text-xs text-gray-500 dark:text-slate-500 mt-1 leading-tight">
             {report && time ? formatDetailedDate(time) : ''} {report ? `at ${getLocationString(report)}` : ''}
           </p>
         </div>
@@ -117,10 +117,10 @@ export default function ReportCard({
         <div className="flex flex-col items-end space-y-1 flex-shrink-0">
           <div
             className={`w-3 h-3 sm:w-4 sm:h-4 mr-3 rounded-full ${statusConfig.bgColor} ${
-              status === "pending" ? "border-2 border-gray-400 bg-transparent" : ""
+              status === "pending" ? "border-2 border-gray-400 dark:border-slate-500 bg-transparent" : ""
             }`}
           ></div>
-          <span className="text-xs text-right text-gray-600 font-medium leading-tight max-w-16 sm:max-w-20">
+          <span className="text-xs text-right text-gray-600 dark:text-slate-400 font-medium leading-tight max-w-16 sm:max-w-20">
             {statusConfig.text}
           </span>
         </div>

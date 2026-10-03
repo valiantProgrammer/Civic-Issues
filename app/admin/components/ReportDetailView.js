@@ -379,16 +379,16 @@ export default function ReportDetailView({
       const details =
         forwardType === 'municipality'
           ? {
-              type: 'municipality',
-              municipality: forwardData.targetMunicipality,
-              ward: forwardData.targetWard,
-              reason: forwardData.reason,
-            }
+            type: 'municipality',
+            municipality: forwardData.targetMunicipality,
+            ward: forwardData.targetWard,
+            reason: forwardData.reason,
+          }
           : {
-              type: 'authority',
-              authority: forwardData.targetAuthority,
-              reason: forwardData.reason,
-            };
+            type: 'authority',
+            authority: forwardData.targetAuthority,
+            reason: forwardData.reason,
+          };
       onSend(
         forwardData.targetMunicipality || forwardData.targetAuthority,
         forwardData.reason,
@@ -478,21 +478,21 @@ export default function ReportDetailView({
     <>
       <style>{rejectButtonStyles}</style>
 
-      <div className="w-full space-y-5 font-sans antialiased text-slate-800 pb-10">
+      <div className="w-full space-y-5 font-sans antialiased text-slate-800 dark:text-slate-100 pb-10 transition-colors">
         {/* 1. Top Navigation & Action Header */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors">
           <div>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors mb-2 cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-2 cursor-pointer"
             >
               <span className="text-sm">←</span>
               <span>Back to Reports</span>
             </button>
 
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
                 {ticketId}
               </h1>
 
@@ -611,7 +611,7 @@ export default function ReportDetailView({
             <div className="md:col-span-6 space-y-2">
               {/* Big Main Image */}
               <div
-                className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-sm cursor-pointer group"
+                className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer group"
                 onClick={() => setFullscreenImage(activeImage)}
                 role="button"
                 tabIndex={0}
@@ -644,11 +644,10 @@ export default function ReportDetailView({
                     key={idx}
                     type="button"
                     onClick={() => setActiveImage(imgSrc)}
-                    className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition-all cursor-pointer ${
-                      activeImage === imgSrc
-                        ? 'border-blue-600 ring-2 ring-blue-500/30'
-                        : 'border-slate-200 opacity-75 hover:opacity-100 hover:border-slate-300'
-                    }`}
+                    className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition-all cursor-pointer ${activeImage === imgSrc
+                      ? 'border-blue-600 ring-2 ring-blue-500/30'
+                      : 'border-slate-200 dark:border-slate-800 opacity-75 hover:opacity-100 hover:border-slate-300 dark:hover:border-slate-700'
+                      }`}
                   >
                     <img
                       src={imgSrc}
@@ -661,24 +660,24 @@ export default function ReportDetailView({
             </div>
 
             {/* Details & Map Card (6 cols) */}
-            <div className="md:col-span-6 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs flex flex-col justify-between space-y-4">
+            <div className="md:col-span-6 bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between space-y-4 transition-colors">
               <div>
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-snug">
                   {title}
                 </h2>
-                <div className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
+                <div className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 mt-1">
                   {ward}{municipality && `, ${municipality}`}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] text-slate-400 dark:text-slate-400 mt-0.5">
                   Submitted {formatReportDate(report)} • {formatReportTime(report)}
                 </div>
 
                 {/* Description */}
                 <div className="mt-4">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-800">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
                     Description
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
                     {description}
                   </p>
                 </div>
@@ -686,11 +685,11 @@ export default function ReportDetailView({
 
               {/* Location & Mini Map Card */}
               <div>
-                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-800 mb-1.5">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 mb-1.5">
                   Location
                 </div>
 
-                <div className="relative w-full h-32 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner group">
+                <div className="relative w-full h-32 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-inner group">
                   {/* Visual Map Backdrop */}
                   <img
                     src="/images/city_map_bg.jpg"
@@ -719,7 +718,7 @@ export default function ReportDetailView({
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/95 hover:bg-white text-blue-600 text-[11px] font-bold rounded-lg shadow-sm border border-slate-200/80 transition-all hover:shadow"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/95 dark:bg-[#0B132B]/95 hover:bg-white dark:hover:bg-[#0B132B] text-blue-600 dark:text-blue-400 text-[11px] font-bold rounded-lg shadow-sm border border-slate-200/80 dark:border-slate-700 transition-all hover:shadow"
                     >
                       <span>View Map</span>
                       <span className="text-xs">→</span>
@@ -733,37 +732,34 @@ export default function ReportDetailView({
           {/* Right Column (4 cols): Full Right Side containing Activity History & Help/Support */}
           <div className="lg:col-span-4 space-y-4">
             {/* Segmented Tab Switcher */}
-            <div className="bg-white rounded-2xl p-1.5 border border-slate-200 shadow-2xs flex items-center gap-1">
+            <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-1.5 border border-slate-200 dark:border-slate-800 shadow-2xs flex items-center gap-1 transition-colors">
               <button
                 type="button"
                 onClick={() => setRightSideTab('history')}
-                className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                  rightSideTab === 'history'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
+                className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${rightSideTab === 'history'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
               >
                 Activity History
               </button>
               <button
                 type="button"
                 onClick={() => setRightSideTab('help')}
-                className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center flex items-center justify-center gap-1 ${
-                  rightSideTab === 'help'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
+                className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center flex items-center justify-center gap-1 ${rightSideTab === 'help'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
               >
                 <span>Help & Support</span>
               </button>
               <button
                 type="button"
                 onClick={() => setRightSideTab('both')}
-                className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                  rightSideTab === 'both'
-                    ? 'bg-slate-800 text-white shadow-xs'
-                    : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'
-                }`}
+                className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${rightSideTab === 'both'
+                  ? 'bg-slate-800 dark:bg-slate-700 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
                 title="Show Both Stacked on Right Side"
               >
                 Both
@@ -772,9 +768,9 @@ export default function ReportDetailView({
 
             {/* 1. Activity History (Current Thing) */}
             {(rightSideTab === 'history' || rightSideTab === 'both') && (
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs">
+              <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                  <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                     Activity History
                   </h2>
                   <span className="text-[11px] font-semibold text-slate-400">
@@ -783,30 +779,29 @@ export default function ReportDetailView({
                 </div>
 
                 {/* Vertical Stepper Timeline matching user reference */}
-                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
                   {timelineNodes.map((node) => (
                     <div key={node.id} className="relative flex items-start gap-3">
                       {/* Node Indicator Icon */}
                       <div className="absolute -left-6 top-0.5">
                         {node.completed ? (
                           <div
-                            className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-xs ${
-                              node.color === 'blue'
-                                ? 'bg-blue-600 ring-4 ring-blue-100'
-                                : node.color === 'rose'
-                                ? 'bg-rose-600 ring-4 ring-rose-100'
-                                : 'bg-emerald-500 ring-4 ring-emerald-100'
-                            }`}
+                            className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-xs ${node.color === 'blue'
+                              ? 'bg-blue-600 ring-4 ring-blue-100 dark:ring-blue-900/40'
+                              : node.color === 'rose'
+                                ? 'bg-rose-600 ring-4 ring-rose-100 dark:ring-rose-900/40'
+                                : 'bg-emerald-500 ring-4 ring-emerald-100 dark:ring-emerald-900/40'
+                              }`}
                           >
                             {node.isRejectedNode ? '✕' : '✓'}
                           </div>
                         ) : node.inProgress ? (
-                          <div className="w-5 h-5 rounded-full border-2 border-emerald-500 bg-white flex items-center justify-center ring-4 ring-emerald-50">
+                          <div className="w-5 h-5 rounded-full border-2 border-emerald-500 bg-white dark:bg-[#111A2E] flex items-center justify-center ring-4 ring-emerald-50 dark:ring-emerald-950/50">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                           </div>
                         ) : (
-                          <div className="w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                          <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#111A2E] flex items-center justify-center">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700" />
                           </div>
                         )}
                       </div>
@@ -814,13 +809,12 @@ export default function ReportDetailView({
                       {/* Node Details */}
                       <div className="flex-1">
                         <p
-                          className={`text-xs sm:text-sm font-bold ${
-                            node.completed
-                              ? 'text-slate-900'
-                              : node.inProgress
-                              ? 'text-emerald-700'
-                              : 'text-slate-400'
-                          }`}
+                          className={`text-xs sm:text-sm font-bold ${node.completed
+                            ? 'text-slate-900 dark:text-white'
+                            : node.inProgress
+                              ? 'text-emerald-700 dark:text-emerald-400'
+                              : 'text-slate-400 dark:text-slate-500'
+                            }`}
                         >
                           {node.title}
                         </p>
@@ -832,18 +826,18 @@ export default function ReportDetailView({
 
                 {/* Audit Log Entries if present in database */}
                 {Array.isArray(report?.history) && report.history.length > 0 && (
-                  <div className="mt-8 pt-5 border-t border-slate-100">
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-3">
+                  <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
                       Audit Records ({report.history.length})
                     </p>
                     <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1 text-xs">
                       {report.history.map((entry, idx) => (
                         <div
                           key={idx}
-                          className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/70"
+                          className="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/70 dark:border-slate-700/60"
                         >
                           <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="font-semibold text-slate-800 capitalize">
+                            <span className="font-semibold text-slate-800 dark:text-white capitalize">
                               {entry.action || 'Updated'}
                             </span>
                             <span className="text-[10px] text-slate-400">
@@ -851,10 +845,10 @@ export default function ReportDetailView({
                             </span>
                           </div>
                           {entry.changedBy && (
-                            <p className="text-[11px] text-slate-500">By: {entry.changedBy}</p>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400">By: {entry.changedBy}</p>
                           )}
                           {entry.note && (
-                            <p className="text-[11px] text-slate-600 mt-0.5 italic">&quot;{entry.note}&quot;</p>
+                            <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 italic">&quot;{entry.note}&quot;</p>
                           )}
                         </div>
                       ))}
@@ -876,41 +870,40 @@ export default function ReportDetailView({
         {/* 3. Detailed Administration Sections requested by User */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Card 1: Issue Information */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Issue Information
             </h3>
             <div className="space-y-3 text-xs sm:text-sm">
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Category</span>
-                <span className="font-bold text-slate-800">{category}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Category</span>
+                <span className="font-bold text-slate-800 dark:text-white">{category}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Severity</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Severity</span>
                 <span
-                  className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                    severity.toLowerCase() === 'high'
-                      ? 'bg-rose-100 text-rose-800'
-                      : severity.toLowerCase() === 'medium'
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-emerald-100 text-emerald-800'
-                  }`}
+                  className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold ${severity.toLowerCase() === 'high'
+                    ? 'bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300'
+                    : severity.toLowerCase() === 'medium'
+                      ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300'
+                      : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
+                    }`}
                 >
                   {severity}
                 </span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Reported Date</span>
-                <span className="font-semibold text-slate-800">
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Reported Date</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">
                   {formatReportDate(report)}
                 </span>
               </div>
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-500 font-medium">Reported Time</span>
-                <span className="font-semibold text-slate-800">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Reported Time</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">
                   {formatReportTime(report)}
                 </span>
               </div>
@@ -918,42 +911,42 @@ export default function ReportDetailView({
           </div>
 
           {/* Card 2: Location Information */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <svg className="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               Location Information
             </h3>
             <div className="space-y-2.5 text-xs sm:text-sm">
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Ward Number</span>
-                <span className="font-bold text-slate-800">{ward}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Ward Number</span>
+                <span className="font-bold text-slate-800 dark:text-white">{ward}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Municipality</span>
-                <span className="font-bold text-slate-800">{municipality}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Municipality</span>
+                <span className="font-bold text-slate-800 dark:text-white">{municipality}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Building</span>
-                <span className="text-slate-700">{report?.building || 'Not specified'}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Building</span>
+                <span className="text-slate-700 dark:text-slate-300">{report?.building || 'Not specified'}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Street</span>
-                <span className="text-slate-700">{report?.street || 'Not specified'}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Street</span>
+                <span className="text-slate-700 dark:text-slate-300">{report?.street || 'Not specified'}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Locality</span>
-                <span className="text-slate-700">{report?.locality || 'Not specified'}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Locality</span>
+                <span className="text-slate-700 dark:text-slate-300">{report?.locality || 'Not specified'}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Property Type</span>
-                <span className="text-slate-700">{report?.propertyType || 'Not specified'}</span>
+              <div className="flex justify-between items-center py-1 border-b border-slate-50 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Property Type</span>
+                <span className="text-slate-700 dark:text-slate-300">{report?.propertyType || 'Not specified'}</span>
               </div>
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-500 font-medium">Coordinates</span>
-                <span className="font-mono text-[11px] text-slate-700">
+                <span className="text-slate-500 dark:text-slate-400 font-medium">Coordinates</span>
+                <span className="font-mono text-[11px] text-slate-700 dark:text-slate-300">
                   {report?.locationCoordinates?.coordinates
                     ? `${report.locationCoordinates.coordinates[1].toFixed(4)}, ${report.locationCoordinates.coordinates[0].toFixed(4)}`
                     : report?.coordinates || 'Not available'}
@@ -963,58 +956,56 @@ export default function ReportDetailView({
           </div>
 
           {/* Card 3: Report Processing Information */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-              <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
               Report Processing
             </h3>
             <div className="space-y-4 text-xs sm:text-sm">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-slate-500 font-medium">Reported By</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Reported By</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300">
                     Submitted
                   </span>
                 </div>
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-white">
                   {report?.ReporterName || report?.reporterName || 'Anonymous'}
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-slate-500 font-medium">Verified By</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Verified By</span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      report?.verified || report?.verifiedBy
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-amber-100 text-amber-800'
-                    }`}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${report?.verified || report?.verifiedBy
+                      ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300'
+                      }`}
                   >
                     {report?.verified || report?.verifiedBy ? '✓ Verified' : 'Pending'}
                   </span>
                 </div>
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-white">
                   {report?.verifiedBy || report?.verifiedByName || (report?.verified ? 'Automated AI Verification' : 'Pending')}
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-slate-500 font-medium">Processed By</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Processed By</span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      report?.processedBy || report?.processedByName
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-slate-200 text-slate-700'
-                    }`}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${report?.processedBy || report?.processedByName
+                      ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                      }`}
                   >
                     {report?.processedBy || report?.processedByName ? '✓ Processed' : 'Pending'}
                   </span>
                 </div>
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-white">
                   {report?.processedBy || report?.processedByName || 'Not Yet Processed'}
                 </p>
               </div>
@@ -1023,11 +1014,11 @@ export default function ReportDetailView({
         </div>
 
         {/* 4. Similar Reports in Area Statistics */}
-        <div className="bg-gradient-to-br from-blue-50/70 to-indigo-50/50 border border-blue-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+        <div className="bg-gradient-to-br from-blue-50/70 to-indigo-50/50 dark:from-[#0B1528] dark:to-[#111A2E] border border-blue-200/80 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs transition-colors">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Similar Reports in Area</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Similar Reports in Area</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Duplicate detection and concentration analysis for Ward {ward}
               </p>
             </div>
@@ -1037,218 +1028,224 @@ export default function ReportDetailView({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white border border-blue-100 rounded-xl p-4 shadow-2xs">
-              <p className="text-xs font-semibold text-slate-500 mb-1">Same Area (Ward)</p>
-              <p className="text-2xl sm:text-3xl font-black text-blue-600">
+            <div className="bg-white dark:bg-[#0B132B] border border-blue-100 dark:border-slate-800 rounded-xl p-4 shadow-2xs">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Same Area (Ward)</p>
+              <p className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">
                 {similarReports.areaCount}
               </p>
-              <p className="text-[11px] text-slate-500 mt-1">Reports in {ward}</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Reports in {ward}</p>
             </div>
 
-            <div className="bg-white border border-purple-100 rounded-xl p-4 shadow-2xs">
-              <p className="text-xs font-semibold text-slate-500 mb-1">Same Category</p>
-              <p className="text-2xl sm:text-3xl font-black text-purple-600">
+            <div className="bg-white dark:bg-[#0B132B] border border-purple-100 dark:border-slate-800 rounded-xl p-4 shadow-2xs">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Same Category</p>
+              <p className="text-2xl sm:text-3xl font-black text-purple-600 dark:text-purple-400">
                 {similarReports.categoryCount}
               </p>
-              <p className="text-[11px] text-slate-500 mt-1">{category}</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">{category}</p>
             </div>
+            <p>
+              {similarReports.categoryCount}
+            </p>
+            <p className="text-[11px] text-slate-500 mt-1">{category}</p>
+          </div>
 
-            <div className="bg-white border border-amber-100 rounded-xl p-4 shadow-2xs">
-              <p className="text-xs font-semibold text-slate-500 mb-1">Total Similar</p>
-              <p className="text-2xl sm:text-3xl font-black text-amber-600">
-                {similarReports.totalSimilar}
-              </p>
-              <p className="text-[11px] text-slate-500 mt-1">Area + Category overlap</p>
-            </div>
+          <div className="bg-white border border-amber-100 rounded-xl p-4 shadow-2xs">
+            <p className="text-xs font-semibold text-slate-500 mb-1">Total Similar</p>
+            <p className="text-2xl sm:text-3xl font-black text-amber-600">
+              {similarReports.totalSimilar}
+            </p>
+            <p className="text-[11px] text-slate-500 mt-1">Area + Category overlap</p>
           </div>
         </div>
-
-        {/* 5. Rejection Reason Banner if applicable */}
-        {report?.rejectionReason && (
-          <div className="border border-rose-200 bg-rose-50 rounded-2xl p-5 shadow-xs">
-            <div className="flex items-center gap-2 mb-2 text-rose-800 font-bold text-sm">
-              <svg className="w-5 h-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span>Rejection Reason</span>
-            </div>
-            <p className="text-xs sm:text-sm text-rose-900 leading-relaxed pl-7">
-              {report.rejectionReason}
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Forward Form Modal */}
-      {showSendModal && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setShowSendModal(false);
-          }}
-        >
-          <div
-            className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl border border-slate-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">Forward Civic Case</h3>
-                <p className="text-xs text-slate-500">
-                  Routing Ticket {ticketId} to field authorities
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowSendModal(false)}
-                className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="flex border-b border-slate-200 mb-4">
-              <button
-                type="button"
-                onClick={() => setForwardType('municipality')}
-                className={`flex-1 py-2 text-xs sm:text-sm font-semibold text-center transition-all ${
-                  forwardType === 'municipality'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                To Municipality
-              </button>
-              <button
-                type="button"
-                onClick={() => setForwardType('authority')}
-                className={`flex-1 py-2 text-xs sm:text-sm font-semibold text-center transition-all ${
-                  forwardType === 'authority'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                To Higher Authority
-              </button>
-            </div>
-
-            <form onSubmit={handleSendToMunicipality} className="space-y-4">
-              {forwardType === 'municipality' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Target Municipality
-                    </label>
-                    <select
-                      className="w-full border text-slate-800 border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                      value={forwardData.targetMunicipality}
-                      onChange={(e) =>
-                        setForwardData({
-                          ...forwardData,
-                          targetMunicipality: e.target.value,
-                          targetWard: '',
-                        })
-                      }
-                      required={forwardType === 'municipality'}
-                    >
-                      <option value="" disabled>
-                        Select municipality...
-                      </option>
-                      {MUNICIPALITIES.map((m) => (
-                        <option key={m.name} value={m.name}>
-                          {m.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Target Ward
-                    </label>
-                    <select
-                      className="w-full border text-slate-800 border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                      value={forwardData.targetWard}
-                      onChange={(e) =>
-                        setForwardData({ ...forwardData, targetWard: e.target.value })
-                      }
-                      disabled={!forwardData.targetMunicipality}
-                      required={forwardType === 'municipality'}
-                    >
-                      <option value="" disabled>
-                        Select ward...
-                      </option>
-                      {MUNICIPALITIES.find(
-                        (m) => m.name === forwardData.targetMunicipality
-                      )?.wards.map((w) => (
-                        <option key={w} value={w}>
-                          {w}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
-
-              {forwardType === 'authority' && (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Select Higher Authority
-                  </label>
-                  <select
-                    className="w-full border text-slate-800 border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    value={forwardData.targetAuthority}
-                    onChange={(e) =>
-                      setForwardData({ ...forwardData, targetAuthority: e.target.value })
-                    }
-                    required={forwardType === 'authority'}
-                  >
-                    <option value="" disabled>
-                      Select authority...
-                    </option>
-                    {HIGHER_AUTHORITIES.map((auth) => (
-                      <option key={auth} value={auth}>
-                        {auth}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Reason for Forwarding
-                </label>
-                <textarea
-                  className="w-full border text-slate-800 border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                  rows="3"
-                  placeholder="e.g., Ward boundary realignment or engineering intervention required..."
-                  value={forwardData.reason}
-                  onChange={(e) =>
-                    setForwardData({ ...forwardData, reason: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="flex space-x-3 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setShowSendModal(false)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-slate-700 text-xs sm:text-sm font-semibold hover:bg-slate-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 transition-colors shadow-xs"
-                >
-                  Forward Case
-                </button>
-              </div>
-            </form>
+      {/* 5. Rejection Reason Banner if applicable */}
+      {report?.rejectionReason && (
+        <div className="border border-rose-200 bg-rose-50 rounded-2xl p-5 shadow-xs">
+          <div className="flex items-center gap-2 mb-2 text-rose-800 font-bold text-sm">
+            <svg className="w-5 h-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Rejection Reason</span>
           </div>
+          <p className="text-xs sm:text-sm text-rose-900 leading-relaxed pl-7">
+            {report.rejectionReason}
+          </p>
         </div>
       )}
+      <div>
+
+        {/* Forward Form Modal */}
+        {
+          showSendModal && (
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setShowSendModal(false);
+              }}
+            >
+              <div
+                className="bg-white dark:bg-[#111A2E] rounded-2xl p-6 w-full max-w-lg shadow-2xl border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Forward Civic Case</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Routing Ticket {ticketId} to field authorities
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowSendModal(false)}
+                    className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-lg cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="flex border-b border-slate-200 dark:border-slate-800 mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setForwardType('municipality')}
+                    className={`flex-1 py-2 text-xs sm:text-sm font-semibold text-center transition-all cursor-pointer ${forwardType === 'municipality'
+                      ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold'
+                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                  >
+                    To Municipality
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForwardType('authority')}
+                    className={`flex-1 py-2 text-xs sm:text-sm font-semibold text-center transition-all cursor-pointer ${forwardType === 'authority'
+                      ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold'
+                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                      }`}
+                  >
+                    To Higher Authority
+                  </button>
+                </div>
+
+                <form onSubmit={handleSendToMunicipality} className="space-y-4">
+                  {forwardType === 'municipality' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                          Target Municipality
+                        </label>
+                        <select
+                          className="w-full border text-slate-800 dark:text-white border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm bg-white dark:bg-[#0B132B] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                          value={forwardData.targetMunicipality}
+                          onChange={(e) =>
+                            setForwardData({
+                              ...forwardData,
+                              targetMunicipality: e.target.value,
+                              targetWard: '',
+                            })
+                          }
+                          required={forwardType === 'municipality'}
+                        >
+                          <option value="" disabled>
+                            Select municipality...
+                          </option>
+                          {MUNICIPALITIES.map((m) => (
+                            <option key={m.name} value={m.name}>
+                              {m.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                          Target Ward
+                        </label>
+                        <select
+                          className="w-full border text-slate-800 dark:text-white border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm bg-white dark:bg-[#0B132B] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                          value={forwardData.targetWard}
+                          onChange={(e) =>
+                            setForwardData({ ...forwardData, targetWard: e.target.value })
+                          }
+                          disabled={!forwardData.targetMunicipality}
+                          required={forwardType === 'municipality'}
+                        >
+                          <option value="" disabled>
+                            Select ward...
+                          </option>
+                          {MUNICIPALITIES.find(
+                            (m) => m.name === forwardData.targetMunicipality
+                          )?.wards.map((w) => (
+                            <option key={w} value={w}>
+                              {w}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {forwardType === 'authority' && (
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Select Higher Authority
+                      </label>
+                      <select
+                        className="w-full border text-slate-800 dark:text-white border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm bg-white dark:bg-[#0B132B] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        value={forwardData.targetAuthority}
+                        onChange={(e) =>
+                          setForwardData({ ...forwardData, targetAuthority: e.target.value })
+                        }
+                        required={forwardType === 'authority'}
+                      >
+                        <option value="" disabled>
+                          Select authority...
+                        </option>
+                        {HIGHER_AUTHORITIES.map((auth) => (
+                          <option key={auth} value={auth}>
+                            {auth}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Reason for Forwarding
+                    </label>
+                    <textarea
+                      className="w-full border text-slate-800 dark:text-white border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B132B] rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      rows="3"
+                      placeholder="e.g., Ward boundary realignment or engineering intervention required..."
+                      value={forwardData.reason}
+                      onChange={(e) =>
+                        setForwardData({ ...forwardData, reason: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="flex space-x-3 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowSendModal(false)}
+                      className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 text-xs sm:text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 transition-colors shadow-xs cursor-pointer"
+                    >
+                      Forward Case
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )
+        }
+      </div>
 
       {/* Approval Confirmation Modal */}
       <AnimatePresence>
@@ -1265,35 +1262,35 @@ export default function ReportDetailView({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6 border border-slate-100"
+              className="bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6 border border-slate-100 dark:border-slate-800 transition-colors"
             >
-              <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-slate-900">Confirm Report Approval</h3>
-              <p className="text-xs sm:text-sm text-slate-600 mb-4">
+              <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Confirm Report Approval</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-4">
                 Are you sure you want to approve this civic report? It will progress to departmental dispatch and assignment.
               </p>
-              <div className="bg-slate-50 p-4 rounded-xl mb-5 border border-slate-200/70">
-                <p className="text-xs font-semibold text-slate-800 line-clamp-2">{description}</p>
-                <p className="text-[11px] text-slate-500 mt-1.5">
-                  Reported by: <span className="font-semibold text-slate-700">{report?.ReporterName || 'Anonymous'}</span> • {ward}
+              <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl mb-5 border border-slate-200/70 dark:border-slate-700/60">
+                <p className="text-xs font-semibold text-slate-800 dark:text-white line-clamp-2">{description}</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+                  Reported by: <span className="font-semibold text-slate-700 dark:text-slate-300">{report?.ReporterName || 'Anonymous'}</span> • {ward}
                 </p>
               </div>
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => setShowApprovalModal(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs sm:text-sm font-semibold transition-colors"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirmApproval}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-xs sm:text-sm hover:bg-emerald-700 transition-colors shadow-xs"
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-xs sm:text-sm hover:bg-emerald-700 transition-colors shadow-xs cursor-pointer"
                 >
                   Confirm Approval
                 </button>
@@ -1318,31 +1315,31 @@ export default function ReportDetailView({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6 border border-slate-100"
+              className="bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl w-full max-w-md mx-auto p-6 border border-slate-100 dark:border-slate-800 transition-colors"
             >
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xl font-bold text-slate-900">Reason for Rejection</h3>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Reason for Rejection</h3>
                 <button
                   type="button"
                   onClick={handleSuggestReason}
                   disabled={isSuggestingReason}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/30 transition-colors disabled:opacity-50 cursor-pointer"
                   title="Generate suggested rejection reason"
                 >
-                  <SparklesIcon className="w-3.5 h-3.5 text-blue-600" />
+                  <SparklesIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                   <span>{isSuggestingReason ? 'Thinking...' : 'AI Suggest'}</span>
                 </button>
               </div>
 
-              <p className="text-xs text-slate-500 mb-3">
-                Please specify the justification for rejecting Ticket <span className="font-semibold text-slate-700">{ticketId}</span>.
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
+                Please specify the justification for rejecting Ticket <span className="font-semibold text-slate-700 dark:text-slate-200">{ticketId}</span>.
               </p>
 
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
                 placeholder="e.g., Duplicate report, insufficient photographic evidence, or issue already addressed..."
-                className="w-full text-slate-800 text-xs sm:text-sm h-28 p-3 rounded-xl bg-slate-50 border border-slate-300 focus:bg-white focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                className="w-full text-slate-800 dark:text-white text-xs sm:text-sm h-28 p-3 rounded-xl bg-slate-50 dark:bg-[#0B132B] border border-slate-300 dark:border-slate-700 focus:bg-white dark:focus:bg-[#0B132B] focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
               />
 
               <div className="mt-5 flex justify-end space-x-3">
@@ -1353,7 +1350,7 @@ export default function ReportDetailView({
                     setRejectionReason('');
                     setSuggestedReason('');
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs sm:text-sm font-semibold transition-colors"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -1361,7 +1358,7 @@ export default function ReportDetailView({
                   type="button"
                   onClick={handleConfirmRejection}
                   disabled={!rejectionReason.trim()}
-                  className="px-5 py-2.5 rounded-xl bg-rose-600 text-white font-semibold text-xs sm:text-sm hover:bg-rose-700 disabled:bg-rose-300 transition-colors shadow-xs"
+                  className="px-5 py-2.5 rounded-xl bg-rose-600 text-white font-semibold text-xs sm:text-sm hover:bg-rose-700 disabled:bg-rose-300 transition-colors shadow-xs cursor-pointer"
                 >
                   Confirm Rejection
                 </button>
@@ -1372,12 +1369,14 @@ export default function ReportDetailView({
       </AnimatePresence>
 
       {/* Fullscreen / Panoramic 360 Viewer */}
-      {fullscreenImage && (
-        <PanoramaModal
-          imageUrl={fullscreenImage}
-          onClose={() => setFullscreenImage(null)}
-        />
-      )}
+      {
+        fullscreenImage && (
+          <PanoramaModal
+            imageUrl={fullscreenImage}
+            onClose={() => setFullscreenImage(null)}
+          />
+        )
+      }
     </>
   );
 }

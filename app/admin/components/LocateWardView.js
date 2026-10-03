@@ -113,23 +113,23 @@ export default function LocateWardView() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Locate Ward
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Explore municipal ward jurisdictions, 3D building density, and active civic issues.
           </p>
         </div>
 
         {/* Ward Selector Dropdown */}
         <div className="flex items-center gap-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Select Ward:
           </label>
           <select
             value={selectedWard}
             onChange={(e) => handleSelectWard(e.target.value)}
-            className="px-4 py-2 rounded-xl border border-slate-200 bg-white font-bold text-sm text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] font-bold text-sm text-slate-800 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
           >
             {Object.keys(wardCoordinates).map((wKey) => (
               <option key={wKey} value={wKey}>
@@ -144,7 +144,7 @@ export default function LocateWardView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* 3D Map Viewport (8 cols) */}
-        <div className="lg:col-span-8 bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative aspect-[16/10] sm:aspect-[16/9]">
+        <div className="lg:col-span-8 bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm relative aspect-[16/10] sm:aspect-[16/9]">
           <Map
             ref={mapRef}
             mapLib={maplibregl}
@@ -177,51 +177,51 @@ export default function LocateWardView() {
         </div>
 
         {/* Ward Details Card (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-5">
+        <div className="lg:col-span-4 bg-white dark:bg-[#111A2E] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm space-y-5 transition-colors">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-100 dark:border-blue-500/20">
               {wardInfo.zone}
             </span>
-            <h2 className="text-xl font-bold text-slate-900 mt-2">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mt-2">
               {wardInfo.name}
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Lat: {wardInfo.lat.toFixed(4)}, Lng: {wardInfo.lng.toFixed(4)}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-100 text-center">
-              <div className="text-2xl font-black text-amber-600">
+            <div className="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 text-center">
+              <div className="text-2xl font-black text-amber-600 dark:text-amber-400">
                 {wardInfo.activeIssues}
               </div>
-              <div className="text-[11px] font-semibold text-slate-500 mt-0.5">
+              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                 Active Reports
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100 text-center">
-              <div className="text-2xl font-black text-emerald-600">
+            <div className="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 text-center">
+              <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
                 {wardInfo.resolvedRate}
               </div>
-              <div className="text-[11px] font-semibold text-slate-500 mt-0.5">
+              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                 Resolution Rate
               </div>
             </div>
           </div>
 
-          <div className="space-y-3 pt-2 border-t border-slate-100 text-xs">
-            <div className="flex items-center justify-between text-slate-600">
+          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
               <span className="font-semibold text-slate-400">Officer in Charge:</span>
-              <span className="font-bold text-slate-800">{wardInfo.officer}</span>
+              <span className="font-bold text-slate-800 dark:text-white">{wardInfo.officer}</span>
             </div>
-            <div className="flex items-center justify-between text-slate-600">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
               <span className="font-semibold text-slate-400">Jurisdiction:</span>
-              <span className="font-bold text-slate-800">KMC Central</span>
+              <span className="font-bold text-slate-800 dark:text-white">KMC Central</span>
             </div>
-            <div className="flex items-center justify-between text-slate-600">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
               <span className="font-semibold text-slate-400">Emergency Contact:</span>
-              <span className="font-bold text-blue-600">1800-345-5555</span>
+              <span className="font-bold text-blue-600 dark:text-blue-400">1800-345-5555</span>
             </div>
           </div>
         </div>

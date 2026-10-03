@@ -89,20 +89,20 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
     : issues.filter((item) => item.category === selectedCategory);
 
   return (
-    <section id="explore" className="py-14 lg:py-20 bg-slate-50/60 border-t border-slate-100">
+    <section id="explore" className="py-14 lg:py-20 bg-slate-50/60 dark:bg-[#080D1A] border-t border-slate-100 dark:border-slate-800 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-700 text-xs font-semibold mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-2">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
               {currentLang === 'hi' ? 'लाइव रिपोर्ट' : 'Live Community Feed'}
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900 dark:text-white">
               {currentLang === 'hi' ? 'नागरिक समस्याओं का अन्वेषण करें' : 'Explore Civic Issues'}
             </h2>
-            <p className="mt-1 text-sm sm:text-base text-slate-500 font-normal">
+            <p className="mt-1 text-sm sm:text-base text-slate-500 dark:text-slate-400 font-normal">
               {currentLang === 'hi'
                 ? 'अपने क्षेत्र में दर्ज समस्याओं की स्थिति और समाधान प्रगति देखें।'
                 : 'Browse reported civic problems and real-time status updates across active wards.'}
@@ -111,7 +111,7 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
 
           <button
             onClick={onOpenReport}
-            className="self-start md:self-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all cursor-pointer inline-flex items-center gap-2"
+            className="self-start md:self-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all cursor-pointer inline-flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -130,8 +130,8 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 border ${
                   isSelected
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    ? 'bg-slate-900 dark:bg-blue-600 text-white border-slate-900 dark:border-blue-600 shadow-sm'
+                    : 'bg-white dark:bg-[#111A2E] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 {cat.color && (
@@ -151,20 +151,20 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
           {filteredIssues.map((issue) => (
             <div
               key={issue.id}
-              className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-xl transition-all duration-300 flex flex-col group"
+              className="bg-white dark:bg-[#111A2E] rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:shadow-xl dark:hover:border-slate-700 transition-all duration-300 flex flex-col group"
             >
               {/* Image & Badges */}
-              <div className="relative w-full h-48 bg-slate-100 overflow-hidden">
+              <div className="relative w-full h-48 bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 <Image
                   src={issue.image}
                   alt={issue.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
 
                 <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/90 backdrop-blur-md text-[11px] font-bold text-slate-800 shadow-xs">
+                  <span className="px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-[11px] font-bold text-slate-800 dark:text-slate-200 shadow-xs border border-white/20 dark:border-slate-700">
                     {issue.id}
                   </span>
                 </div>
@@ -183,13 +183,13 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
               {/* Body */}
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-blue-600 mb-1">
+                  <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">
                     {issue.category}
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
                     {issue.title}
                   </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-2">
                     <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -199,8 +199,8 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
                 </div>
 
                 {/* Card Footer */}
-                <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5 text-slate-500 font-medium">
+                <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 font-medium">
                     <svg className="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                     </svg>
@@ -209,7 +209,7 @@ export default function ExploreSection({ onOpenReport, currentLang }) {
 
                   <button
                     onClick={onOpenReport}
-                    className="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"
+                    className="text-blue-600 dark:text-blue-400 font-bold hover:underline inline-flex items-center gap-1"
                   >
                     View details
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

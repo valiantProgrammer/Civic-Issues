@@ -92,10 +92,10 @@ export default function RegisterWardView() {
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Register Ward
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           Add new administrative wards and associate them with municipal corporations.
         </p>
       </div>
@@ -103,15 +103,15 @@ export default function RegisterWardView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Ward Registration Form */}
-        <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">
+        <div className="lg:col-span-7 bg-white dark:bg-[#111A2E] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
             Ward Information
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Ward Number *
                 </label>
                 <input
@@ -120,18 +120,18 @@ export default function RegisterWardView() {
                   value={formData.wardNumber}
                   onChange={(e) => setFormData({ ...formData, wardNumber: e.target.value })}
                   placeholder="e.g. Ward 8 or 14"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Select Municipality *
                 </label>
                 <select
                   value={formData.municipality}
                   onChange={(e) => setFormData({ ...formData, municipality: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
                 >
                   <option value="Kolkata Municipal Corporation">Kolkata Municipal Corporation</option>
                   <option value="Howrah Municipal Corporation">Howrah Municipal Corporation</option>
@@ -141,7 +141,7 @@ export default function RegisterWardView() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Key Localities / Neighborhoods *
               </label>
               <input
@@ -150,13 +150,13 @@ export default function RegisterWardView() {
                 value={formData.locality}
                 onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
                 placeholder="e.g. Park Street, Camac Street, Shakespeare Sarani"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Ward Officer / Inspector Name
                 </label>
                 <input
@@ -164,12 +164,12 @@ export default function RegisterWardView() {
                   value={formData.inspectorName}
                   onChange={(e) => setFormData({ ...formData, inspectorName: e.target.value })}
                   placeholder="e.g. S. Chatterjee"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Officer Contact Phone
                 </label>
                 <input
@@ -177,13 +177,13 @@ export default function RegisterWardView() {
                   value={formData.inspectorPhone}
                   onChange={(e) => setFormData({ ...formData, inspectorPhone: e.target.value })}
                   placeholder="e.g. +91 98765 43210"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Estimated Population
               </label>
               <input
@@ -191,7 +191,7 @@ export default function RegisterWardView() {
                 value={formData.population}
                 onChange={(e) => setFormData({ ...formData, population: e.target.value })}
                 placeholder="e.g. 45000"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-white transition-all font-medium"
               />
             </div>
 
@@ -208,12 +208,12 @@ export default function RegisterWardView() {
         </div>
 
         {/* Existing Wards List */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+        <div className="lg:col-span-5 bg-white dark:bg-[#111A2E] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Registered Wards
             </h2>
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20">
               {wards.length} Active
             </span>
           </div>
@@ -222,21 +222,21 @@ export default function RegisterWardView() {
             {wards.map((w) => (
               <div
                 key={w.id}
-                className="p-4 rounded-xl border border-slate-100 hover:border-blue-200 transition-colors bg-slate-50/50"
+                className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700 transition-colors bg-slate-50/50 dark:bg-slate-800/40"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                       {w.wardNumber}
                     </h3>
-                    <p className="text-xs text-slate-600 mt-0.5 font-medium">
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                       {w.locality}
                     </p>
-                    <p className="text-[11px] text-slate-400 mt-1">
+                    <p className="text-[11px] text-slate-400 dark:text-slate-400 mt-1">
                       {w.municipality} • Officer: {w.inspector}
                     </p>
                   </div>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200 shrink-0">
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 shrink-0">
                     {w.activeIssues} Issues
                   </span>
                 </div>

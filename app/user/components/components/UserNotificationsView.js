@@ -95,14 +95,14 @@ export default function UserNotificationsView({ onSelectReport }) {
       
       {/* 1. Header with Title and optional Mark All as Read */}
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-2xl sm:text-[28px] font-black text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-[28px] font-black text-slate-900 dark:text-white tracking-tight">
           Notifications
         </h1>
 
         <button
           type="button"
           onClick={handleMarkAllRead}
-          className="text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100 px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer"
+          className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50/80 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/40 px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer"
         >
           Mark all as read
         </button>
@@ -120,7 +120,7 @@ export default function UserNotificationsView({ onSelectReport }) {
               className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                 isActive
                   ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-blue-50/80 text-blue-600 hover:bg-blue-100/90'
+                  : 'bg-blue-50/80 dark:bg-slate-800/80 text-blue-600 dark:text-blue-400 hover:bg-blue-100/90 dark:hover:bg-slate-700/80'
               }`}
             >
               {tab.label}
@@ -130,7 +130,7 @@ export default function UserNotificationsView({ onSelectReport }) {
       </div>
 
       {/* 3. Notification List with clean dividers matching the screenshot */}
-      <div className="w-full divide-y divide-slate-100">
+      <div className="w-full divide-y divide-slate-100 dark:divide-slate-800/80">
         {filteredNotifications.length > 0 ? (
           filteredNotifications.map((notif) => (
             <div
@@ -141,7 +141,7 @@ export default function UserNotificationsView({ onSelectReport }) {
                   onSelectReport({ id: notif.ticketId, ticketId: notif.ticketId });
                 }
               }}
-              className="py-4.5 sm:py-5 flex items-center justify-between gap-4 transition-colors cursor-pointer hover:bg-slate-50/50 rounded-xl px-2 -mx-2 group"
+              className="py-4.5 sm:py-5 flex items-center justify-between gap-4 transition-colors cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-xl px-2 -mx-2 group"
             >
               {/* Left: Colored rounded icon & Details */}
               <div className="flex items-center gap-4 min-w-0">
@@ -152,10 +152,10 @@ export default function UserNotificationsView({ onSelectReport }) {
                 </div>
 
                 <div className="min-w-0">
-                  <h3 className="text-[15px] sm:text-base font-bold text-slate-900 leading-snug">
+                  <h3 className="text-[15px] sm:text-base font-bold text-slate-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {notif.title}
                   </h3>
-                  <p className="text-xs text-slate-400 font-normal mt-0.5">
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-normal mt-0.5">
                     {notif.time}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ export default function UserNotificationsView({ onSelectReport }) {
             </div>
           ))
         ) : (
-          <div className="py-12 text-center text-slate-400 text-sm font-medium">
+          <div className="py-12 text-center text-slate-400 dark:text-slate-500 text-sm font-medium">
             No notifications in this category.
           </div>
         )}

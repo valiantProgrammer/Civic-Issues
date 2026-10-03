@@ -14,6 +14,7 @@ import AdministrationEscalationsView from './components/AdministrationEscalation
 import AdministrationAnalyticsView from './components/AdministrationAnalyticsView';
 import AdminProfile from '@/app/admin/components/AdminProfile';
 import ReportDetailView from '@/app/admin/components/ReportDetailView';
+import ThemeToggle from '@/app/components/ThemeToggle';
 
 export default function AdministrationPage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function AdministrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans flex antialiased">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#080D1A] text-slate-800 dark:text-slate-100 font-sans flex antialiased transition-colors duration-200">
       
       {/* 1. Left Sidebar Navigation */}
       <AdministrationSidebar
@@ -82,6 +83,21 @@ export default function AdministrationPage() {
       {/* 2. Main Content Area */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
         
+        {/* Desktop Top Header Bar with Theme Toggler */}
+        <header className="hidden lg:flex sticky top-0 z-20 bg-white/80 dark:bg-[#0B132B]/80 backdrop-blur-md px-8 py-3.5 items-center justify-between border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Administration Console</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 capitalize">
+              {activeTab.replace(/([A-Z])/g, ' $1')}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle size="sm" showLabel={true} />
+          </div>
+        </header>
+
         {/* Mobile Top Header */}
         <header className="lg:hidden sticky top-0 z-30 bg-[#0B1528] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-2">
@@ -102,6 +118,10 @@ export default function AdministrationPage() {
                 Administration
               </span>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle size="sm" />
           </div>
         </header>
 

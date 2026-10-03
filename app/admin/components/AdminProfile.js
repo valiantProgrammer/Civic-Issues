@@ -26,18 +26,18 @@ const PhoneIcon = () => (
 
 const InfoField = ({ icon, label, value, isEditing, onEdit, isReadOnly = false }) => (
   <div className="mb-6">
-    <label className="block text-sm font-semibold text-gray-700 mb-2">{label}</label>
+    <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">{label}</label>
     <div className="flex items-center gap-3">
-      <span className="text-gray-500">{icon}</span>
+      <span className="text-gray-500 dark:text-slate-400">{icon}</span>
       {isEditing && !isReadOnly ? (
         <input
           type="text"
           value={value}
           onChange={(e) => onEdit(e.target.value)}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-900"
+          className="flex-1 px-3.5 py-2.5 border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#0B132B] rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-900 dark:text-white"
         />
       ) : (
-        <p className="flex-1 text-gray-900 font-medium">{value || 'N/A'}</p>
+        <p className="flex-1 text-gray-900 dark:text-white font-medium">{value || 'N/A'}</p>
       )}
     </div>
   </div>
@@ -200,22 +200,22 @@ export default function AdminProfile() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-8 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-orange-500"></div>
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-200 dark:border-slate-700 border-t-orange-500"></div>
       </div>
     );
   }
 
   if (!profile) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <p className="text-red-600 text-center">Failed to load profile</p>
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-8">
+        <p className="text-red-500 dark:text-red-400 text-center">Failed to load profile</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
       {/* Header */}
       <div className="h-32 bg-gradient-to-r from-orange-500 to-orange-400"></div>
 
@@ -223,7 +223,7 @@ export default function AdminProfile() {
         {/* Profile Picture Section */}
         <div className="flex flex-col items-center -mt-20 mb-8">
           <div className="relative">
-            <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-orange-500 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+            <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-orange-500 rounded-full border-4 border-white dark:border-[#111A2E] shadow-lg flex items-center justify-center overflow-hidden">
               {profilePicturePreview ? (
                 <img src={profilePicturePreview} alt="Profile" className="w-full h-full object-cover" />
               ) : (
@@ -245,8 +245,8 @@ export default function AdminProfile() {
               </label>
             )}
           </div>
-          <h2 className="mt-4 text-2xl font-bold text-gray-900 text-center">{profile.fullName}</h2>
-          <p className="text-gray-500">Admin Account</p>
+          <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-white text-center">{profile.fullName}</h2>
+          <p className="text-gray-500 dark:text-slate-400">Admin Account</p>
         </div>
 
         {/* Form Fields */}

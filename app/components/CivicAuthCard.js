@@ -143,15 +143,15 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Login Card */}
-      <div className="w-full max-w-[940px] bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-800/20 grid grid-cols-1 md:grid-cols-2 relative z-10">
+      <div className="w-full max-w-[940px] bg-white dark:bg-[#0B132B] rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-800/20 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 relative z-10">
         
         {/* Left Column: Form Section */}
-        <div className="p-8 sm:p-10 lg:p-12 flex flex-col justify-between bg-white">
+        <div className="p-8 sm:p-10 lg:p-12 flex flex-col justify-between bg-white dark:bg-[#0B132B]">
           <div>
             {/* Logo & Role Tabs */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
               <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-sm ring-1 ring-slate-100 flex items-center justify-center bg-white">
+                <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-sm ring-1 ring-slate-100 dark:ring-slate-800 flex items-center justify-center bg-white dark:bg-slate-900">
                   <Image
                     src="/images/logo.png"
                     alt="Civic Saathi Logo"
@@ -162,24 +162,24 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
                   />
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-lg font-extrabold tracking-tight text-slate-900">
+                  <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
                     Civic
                   </span>
-                  <span className="text-lg font-bold text-slate-800">
+                  <span className="text-lg font-bold text-slate-800 dark:text-blue-400">
                     साथी
                   </span>
                 </div>
               </Link>
 
               {/* 3-Role Switcher Tabs */}
-              <div className="inline-flex items-center bg-slate-100 p-0.5 rounded-lg text-[11px] font-semibold text-slate-600">
+              <div className="inline-flex items-center bg-slate-100 dark:bg-slate-900/90 p-0.5 rounded-lg text-[11px] font-semibold text-slate-600 dark:text-slate-400 border border-transparent dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => handleRoleChange('user')}
                   className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
                     role === 'user'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'hover:text-slate-900'
+                      ? 'bg-white dark:bg-[#111A2E] text-blue-600 dark:text-blue-400 shadow-sm'
+                      : 'hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Citizen
@@ -189,8 +189,8 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
                   onClick={() => handleRoleChange('admin')}
                   className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
                     role === 'admin'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'hover:text-slate-900'
+                      ? 'bg-white dark:bg-[#111A2E] text-blue-600 dark:text-blue-400 shadow-sm'
+                      : 'hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Admin
@@ -200,8 +200,8 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
                   onClick={() => handleRoleChange('administration')}
                   className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
                     role === 'administration'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'hover:text-slate-900'
+                      ? 'bg-white dark:bg-[#111A2E] text-blue-600 dark:text-blue-400 shadow-sm'
+                      : 'hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Official
@@ -211,14 +211,14 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
 
             {/* Title & Subtitle */}
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {role === 'admin'
                   ? 'Admin Portal'
                   : role === 'administration'
                   ? 'Administrative Portal'
                   : 'Welcome Back'}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1.5 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
                 {role === 'admin'
                   ? 'Log in to manage civic reports, teams, and assignments.'
                   : role === 'administration'
@@ -233,7 +233,7 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
               <div>
                 <label
                   htmlFor="identifier"
-                  className="block text-xs font-semibold text-slate-700 mb-1.5"
+                  className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                 >
                   {role === 'user'
                     ? 'Email'
@@ -254,10 +254,10 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
                       : 'OFF-WB-XXXXX'
                   }
                   disabled={isLoading}
-                  className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:ring-2 ${
+                  className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:ring-2 ${
                     errors.identifier
-                      ? 'border-red-400 ring-red-200'
-                      : 'border-slate-200 focus:border-blue-600 focus:ring-blue-100'
+                      ? 'border-red-400 ring-red-200 dark:ring-red-950/40'
+                      : 'border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-500 focus:ring-blue-100 dark:focus:ring-blue-950/40'
                   }`}
                 />
                 {errors.identifier && (
@@ -269,7 +269,7 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-slate-700 mb-1.5"
+                  className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                 >
                   Password
                 </label>
@@ -281,16 +281,16 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     disabled={isLoading}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 pr-10 rounded-xl border text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:ring-2 ${
+                    className={`w-full px-3.5 py-2.5 sm:py-3 pr-10 rounded-xl border text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:ring-2 ${
                       errors.password
-                        ? 'border-red-400 ring-red-200'
-                        : 'border-slate-200 focus:border-blue-600 focus:ring-blue-100'
+                        ? 'border-red-400 ring-red-200 dark:ring-red-950/40'
+                        : 'border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-500 focus:ring-blue-100 dark:focus:ring-blue-950/40'
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1"
                     tabIndex={-1}
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
@@ -327,7 +327,7 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
               <div className="pt-0.5">
                 <Link
                   href="/forgot-password"
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                  className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -335,7 +335,7 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
 
               {/* API Error Alert */}
               {apiError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-600 font-medium">
+                <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl text-xs text-red-600 dark:text-red-400 font-medium">
                   {apiError}
                 </div>
               )}
@@ -386,23 +386,23 @@ export default function CivicAuthCard({ initialRole = 'user' }) {
           {/* Footer: Sign up / Support info */}
           <div className="mt-8 text-center">
             {role === 'user' ? (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Don't have an account?{' '}
-                <Link href="/signup/user" className="text-blue-600 font-semibold hover:underline">
+                <Link href="/signup/user" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                   Sign up
                 </Link>
               </p>
             ) : role === 'admin' ? (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Authorized municipal administrators only.{' '}
-                <Link href="/contact" className="text-blue-600 font-semibold hover:underline">
+                <Link href="/contact" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                   IT Support
                 </Link>
               </p>
             ) : (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Departmental officers & field supervisors.{' '}
-                <Link href="/contact" className="text-blue-600 font-semibold hover:underline">
+                <Link href="/contact" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                   Helpdesk
                 </Link>
               </p>

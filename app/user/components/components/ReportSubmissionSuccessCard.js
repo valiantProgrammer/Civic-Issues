@@ -36,7 +36,7 @@ export default function ReportSubmissionSuccessCard({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-100/90 shadow-xl shadow-slate-200/50 text-center font-sans">
+    <div className="w-full max-w-md mx-auto bg-white dark:bg-[#111A2E] rounded-3xl p-6 sm:p-8 border border-slate-100/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none text-center font-sans transition-colors">
       
       {/* 1. Green Circle Checkmark Badge with Confetti Sparkles matching reference screenshot */}
       <div className="relative w-24 h-24 mx-auto flex items-center justify-center mb-2">
@@ -65,16 +65,16 @@ export default function ReportSubmissionSuccessCard({
       </div>
 
       {/* 2. Heading & Subtitle */}
-      <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-2">
+      <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
         Report Submitted Successfully!
       </h2>
-      <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1.5 max-w-xs mx-auto">
+      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal mt-1.5 max-w-xs mx-auto">
         Your issue has been recorded and will be reviewed soon.
       </p>
 
       {/* 3. Ticket ID Display with Copy Button matching reference screenshot */}
-      <div className="bg-[#EFF6FF] rounded-2xl py-3.5 px-5 my-6 flex items-center justify-between border border-blue-100/80">
-        <span className="text-lg sm:text-2xl font-black text-[#2563EB] tracking-wide font-sans">
+      <div className="bg-[#EFF6FF] dark:bg-[#0B132B] rounded-2xl py-3.5 px-5 my-6 flex items-center justify-between border border-blue-100/80 dark:border-blue-900/40 transition-colors">
+        <span className="text-lg sm:text-2xl font-black text-[#2563EB] dark:text-blue-400 tracking-wide font-sans">
           {ticketId}
         </span>
 
@@ -82,14 +82,14 @@ export default function ReportSubmissionSuccessCard({
           type="button"
           onClick={handleCopyTicket}
           title="Copy Ticket ID"
-          className="text-slate-600 hover:text-blue-600 p-1.5 rounded-lg hover:bg-blue-100/60 transition-colors cursor-pointer"
+          className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 p-1.5 rounded-lg hover:bg-blue-100/60 dark:hover:bg-blue-900/30 transition-colors cursor-pointer"
         >
           {copied ? (
             <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           ) : (
-            <svg className="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -114,7 +114,7 @@ export default function ReportSubmissionSuccessCard({
         <button
           type="button"
           onClick={handleHome}
-          className="w-full bg-white border border-slate-200 hover:bg-slate-50 active:scale-[0.99] text-slate-800 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-all cursor-pointer shadow-2xs"
+          className="w-full bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.99] text-slate-800 dark:text-slate-200 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-all cursor-pointer shadow-2xs"
         >
           Back to Home
         </button>

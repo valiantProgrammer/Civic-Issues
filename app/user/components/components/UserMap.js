@@ -225,13 +225,13 @@ export default function UserMap({ onMarkerClick }) {
             anchor="top"
             closeButton={false}
             offset={14}
-            className="rounded-xl overflow-hidden text-slate-900"
+            className="rounded-xl overflow-hidden"
           >
-            <div className="p-2 text-left bg-white rounded-lg min-w-[140px]">
-              <div className="font-bold text-xs text-slate-900 leading-tight">
+            <div className="p-2 text-left bg-white dark:bg-[#111A2E] rounded-lg min-w-[140px] border border-slate-100 dark:border-slate-800 shadow-lg">
+              <div className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
                 {activePopupPin.title}
               </div>
-              <div className="text-[10px] text-slate-500 font-medium mt-1">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1">
                 {activePopupPin.ward} • {activePopupPin.id}
               </div>
               <div

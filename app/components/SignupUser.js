@@ -284,15 +284,15 @@ export default function SignupUser() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Signup Card */}
-      <div className="w-full max-w-[960px] bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-800/20 grid grid-cols-1 md:grid-cols-2 relative z-10">
+      <div className="w-full max-w-[960px] bg-white dark:bg-[#0B132B] rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-800/20 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 relative z-10">
         
         {/* Left Column: Form Section */}
-        <div className="p-7 sm:p-10 lg:p-11 flex flex-col justify-between bg-white min-h-[580px]">
+        <div className="p-7 sm:p-10 lg:p-11 flex flex-col justify-between bg-white dark:bg-[#0B132B] min-h-[580px]">
           <div>
             {/* Logo and Brand Header */}
             <div className="flex items-center justify-between gap-3 mb-6">
               <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-sm ring-1 ring-slate-100 flex items-center justify-center bg-white">
+                <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-sm ring-1 ring-slate-100 dark:ring-slate-800 flex items-center justify-center bg-white dark:bg-slate-900">
                   <Image
                     src="/images/logo.png"
                     alt="Civic Saathi Logo"
@@ -303,7 +303,7 @@ export default function SignupUser() {
                   />
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-lg font-extrabold tracking-tight text-slate-900">
+                  <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
                     Civic
                   </span>
                   <span className="text-lg font-bold text-blue-600 font-hindi">
@@ -313,7 +313,7 @@ export default function SignupUser() {
               </Link>
 
               {/* Citizen Badge */}
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-200/60">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 text-[11px] font-semibold border border-blue-200/60 dark:border-blue-800/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
                 Citizen Sign Up
               </span>
@@ -328,8 +328,8 @@ export default function SignupUser() {
                     step > 1
                       ? 'bg-blue-600 text-white'
                       : step === 1
-                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
-                      : 'border border-slate-200 text-slate-400'
+                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100 dark:ring-blue-950/40'
+                      : 'border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   {step > 1 ? (
@@ -343,10 +343,10 @@ export default function SignupUser() {
                 <span
                   className={`text-xs ${
                     step === 1
-                      ? 'font-bold text-slate-900'
+                      ? 'font-bold text-slate-900 dark:text-white'
                       : step > 1
-                      ? 'font-medium text-blue-600'
-                      : 'font-medium text-slate-400'
+                      ? 'font-medium text-blue-600 dark:text-blue-400'
+                      : 'font-medium text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   Account
@@ -356,7 +356,7 @@ export default function SignupUser() {
               {/* Connector line 1-2 */}
               <div
                 className={`flex-1 h-[2px] mx-2 transition-colors ${
-                  step > 1 ? 'bg-blue-600' : 'bg-slate-200'
+                  step > 1 ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-800'
                 }`}
               />
 
@@ -367,8 +367,8 @@ export default function SignupUser() {
                     step > 2
                       ? 'bg-blue-600 text-white'
                       : step === 2
-                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
-                      : 'border border-slate-200 text-slate-400'
+                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100 dark:ring-blue-950/40'
+                      : 'border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   {step > 2 ? (
@@ -382,10 +382,10 @@ export default function SignupUser() {
                 <span
                   className={`text-xs ${
                     step === 2
-                      ? 'font-bold text-slate-900'
+                      ? 'font-bold text-slate-900 dark:text-white'
                       : step > 2
-                      ? 'font-medium text-blue-600'
-                      : 'font-medium text-slate-400'
+                      ? 'font-medium text-blue-600 dark:text-blue-400'
+                      : 'font-medium text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   Verify
@@ -395,7 +395,7 @@ export default function SignupUser() {
               {/* Connector line 2-3 */}
               <div
                 className={`flex-1 h-[2px] mx-2 transition-colors ${
-                  step > 2 ? 'bg-blue-600' : 'bg-slate-200'
+                  step > 2 ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-800'
                 }`}
               />
 
@@ -404,15 +404,15 @@ export default function SignupUser() {
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                     step === 3
-                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
-                      : 'border border-slate-200 text-slate-400'
+                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100 dark:ring-blue-950/40'
+                      : 'border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   3
                 </div>
                 <span
                   className={`text-xs ${
-                    step === 3 ? 'font-bold text-slate-900' : 'font-medium text-slate-400'
+                    step === 3 ? 'font-bold text-slate-900 dark:text-white' : 'font-medium text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   Profile
@@ -444,10 +444,10 @@ export default function SignupUser() {
             {step === 1 && (
               <div className="animate-in fade-in duration-300">
                 <div className="mb-5">
-                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 tracking-tight">
+                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 dark:text-white tracking-tight">
                     Create Account
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                     Join thousands of citizens building a better community.
                   </p>
                 </div>
@@ -457,7 +457,7 @@ export default function SignupUser() {
                   <div>
                     <label
                       htmlFor="fullName"
-                      className="block text-xs font-semibold text-slate-700 mb-1.5"
+                      className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                     >
                       Full Name
                     </label>
@@ -469,10 +469,10 @@ export default function SignupUser() {
                       onChange={handleChange}
                       placeholder="Rupayan Dey"
                       disabled={isLoading}
-                      className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:ring-2 ${
+                      className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:ring-2 ${
                         errors.fullName
-                          ? 'border-red-400 ring-red-200'
-                          : 'border-slate-200 focus:border-blue-600 focus:ring-blue-100'
+                          ? 'border-red-400 ring-red-200 dark:ring-red-950/40'
+                          : 'border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-500 focus:ring-blue-100 dark:focus:ring-blue-950/40'
                       }`}
                     />
                     {errors.fullName && (
@@ -484,7 +484,7 @@ export default function SignupUser() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs font-semibold text-slate-700 mb-1.5"
+                      className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                     >
                       Email
                     </label>
@@ -496,10 +496,10 @@ export default function SignupUser() {
                       onChange={handleChange}
                       placeholder="you@example.com"
                       disabled={isLoading}
-                      className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:ring-2 ${
+                      className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:ring-2 ${
                         errors.email
-                          ? 'border-red-400 ring-red-200'
-                          : 'border-slate-200 focus:border-blue-600 focus:ring-blue-100'
+                          ? 'border-red-400 ring-red-200 dark:ring-red-950/40'
+                          : 'border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-500 focus:ring-blue-100 dark:focus:ring-blue-950/40'
                       }`}
                     />
                     {errors.email && (
@@ -511,7 +511,7 @@ export default function SignupUser() {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block text-xs font-semibold text-slate-700 mb-1.5"
+                      className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                     >
                       Password
                     </label>
@@ -524,16 +524,16 @@ export default function SignupUser() {
                         onChange={handleChange}
                         placeholder="••••••••"
                         disabled={isLoading}
-                        className={`w-full px-3.5 py-2.5 pr-10 rounded-xl border text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:ring-2 ${
+                        className={`w-full px-3.5 py-2.5 pr-10 rounded-xl border text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:ring-2 ${
                           errors.password
-                            ? 'border-red-400 ring-red-200'
-                            : 'border-slate-200 focus:border-blue-600 focus:ring-blue-100'
+                            ? 'border-red-400 ring-red-200 dark:ring-red-950/40'
+                            : 'border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-500 focus:ring-blue-100 dark:focus:ring-blue-950/40'
                         }`}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1 cursor-pointer"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none p-1 cursor-pointer"
                         aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
                         {showPassword ? (
@@ -586,12 +586,12 @@ export default function SignupUser() {
             {step === 2 && (
               <div className="animate-in fade-in duration-300">
                 <div className="mb-6">
-                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 tracking-tight">
+                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 dark:text-white tracking-tight">
                     Verify Your Email
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                     Enter the 6-digit code sent to{' '}
-                    <span className="font-semibold text-slate-800">{formData.email}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{formData.email}</span>
                   </p>
                 </div>
 
@@ -610,7 +610,7 @@ export default function SignupUser() {
                         onKeyDown={(e) => handleOtpKeyDown(index, e)}
                         onPaste={handleOtpPaste}
                         disabled={isLoading}
-                        className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition-all shadow-sm"
+                        className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111A2E] text-slate-900 dark:text-white focus:border-blue-600 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950/40 outline-none transition-all shadow-sm"
                       />
                     ))}
                   </div>
@@ -618,20 +618,20 @@ export default function SignupUser() {
                   {/* Resend Countdown / Trigger */}
                   <div className="text-center text-xs sm:text-sm">
                     {countdown > 0 ? (
-                      <p className="text-slate-500 font-medium">
+                      <p className="text-slate-500 dark:text-slate-400 font-medium">
                         Resend code in{' '}
-                        <span className="text-blue-600 font-bold">
+                        <span className="text-blue-600 dark:text-blue-400 font-bold">
                           00:{countdown.toString().padStart(2, '0')}
                         </span>
                       </p>
                     ) : (
-                      <p className="text-slate-500 font-medium">
+                      <p className="text-slate-500 dark:text-slate-400 font-medium">
                         Didn't receive the code?{' '}
                         <button
                           type="button"
                           onClick={handleResendOtp}
                           disabled={isLoading}
-                          className="text-blue-600 font-bold hover:underline cursor-pointer disabled:opacity-50"
+                          className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer disabled:opacity-50"
                         >
                           Resend code
                         </button>
@@ -683,10 +683,10 @@ export default function SignupUser() {
             {step === 3 && (
               <div className="animate-in fade-in duration-300">
                 <div className="mb-5">
-                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 tracking-tight">
+                  <h1 className="text-2xl sm:text-[28px] font-extrabold text-slate-900 dark:text-white tracking-tight">
                     Complete Your Profile
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                     Add your area & contact details to get localized community updates.
                   </p>
                 </div>
@@ -696,12 +696,12 @@ export default function SignupUser() {
                   <div>
                     <label
                       htmlFor="phone"
-                      className="block text-xs font-semibold text-slate-700 mb-1.5"
+                      className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                     >
                       Phone Number
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">
+                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 dark:text-slate-500">
                         +91
                       </span>
                       <input
@@ -713,7 +713,7 @@ export default function SignupUser() {
                         onChange={handleChange}
                         placeholder="9876543210"
                         disabled={isLoading}
-                        className="w-full pl-12 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                        className="w-full pl-12 pr-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:border-blue-600 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950/40"
                       />
                     </div>
                   </div>
@@ -723,7 +723,7 @@ export default function SignupUser() {
                     <div>
                       <label
                         htmlFor="ward"
-                        className="block text-xs font-semibold text-slate-700 mb-1.5"
+                        className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                       >
                         Ward / Zone
                       </label>
@@ -735,14 +735,14 @@ export default function SignupUser() {
                         onChange={handleChange}
                         placeholder="e.g. Ward 7"
                         disabled={isLoading}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:border-blue-600 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950/40"
                       />
                     </div>
 
                     <div>
                       <label
                         htmlFor="age"
-                        className="block text-xs font-semibold text-slate-700 mb-1.5"
+                        className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                       >
                         Age (Optional)
                       </label>
@@ -756,7 +756,7 @@ export default function SignupUser() {
                         onChange={handleChange}
                         placeholder="e.g. 26"
                         disabled={isLoading}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:border-blue-600 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950/40"
                       />
                     </div>
                   </div>
@@ -765,7 +765,7 @@ export default function SignupUser() {
                   <div>
                     <label
                       htmlFor="address"
-                      className="block text-xs font-semibold text-slate-700 mb-1.5"
+                      className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
                     >
                       Residential Locality / Address
                     </label>
@@ -777,7 +777,7 @@ export default function SignupUser() {
                       onChange={handleChange}
                       placeholder="Street, Landmark or Locality"
                       disabled={isLoading}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 bg-white transition-all outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#111A2E] transition-all outline-none focus:border-blue-600 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950/40"
                     />
                   </div>
 
@@ -810,7 +810,7 @@ export default function SignupUser() {
                       type="button"
                       onClick={handleSkipProfile}
                       disabled={isLoading}
-                      className="w-full py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                      className="w-full py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
                     >
                       Skip for now →
                     </button>
@@ -823,9 +823,9 @@ export default function SignupUser() {
           {/* Footer: Log in info (only on Step 1) */}
           {step === 1 && (
             <div className="mt-6 text-center">
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Already have an account?{' '}
-                <Link href="/login/user" className="text-blue-600 font-semibold hover:underline">
+                <Link href="/login/user" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                   Log in
                 </Link>
               </p>

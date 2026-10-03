@@ -167,10 +167,10 @@ export default function UserReportHistory({ onReportSelect }) {
     <div className="w-full space-y-6 font-sans">
       {/* 1. Header matching the screenshot */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           My Report History
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           View and track all your submitted reports.
         </p>
       </div>
@@ -185,7 +185,7 @@ export default function UserReportHistory({ onReportSelect }) {
             className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === 'all'
                 ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 ring-2 ring-blue-600/20'
-                : 'bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50'
+                : 'bg-white dark:bg-[#111A2E] text-slate-600 dark:text-slate-400 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60'
             }`}
           >
             All ({counts.all})
@@ -197,7 +197,7 @@ export default function UserReportHistory({ onReportSelect }) {
             className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === 'open'
                 ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 ring-2 ring-blue-600/20'
-                : 'bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50'
+                : 'bg-white dark:bg-[#111A2E] text-slate-600 dark:text-slate-400 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60'
             }`}
           >
             Open ({counts.open})
@@ -209,7 +209,7 @@ export default function UserReportHistory({ onReportSelect }) {
             className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === 'in_progress'
                 ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 ring-2 ring-blue-600/20'
-                : 'bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50'
+                : 'bg-white dark:bg-[#111A2E] text-slate-600 dark:text-slate-400 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60'
             }`}
           >
             In Progress ({counts.in_progress})
@@ -221,7 +221,7 @@ export default function UserReportHistory({ onReportSelect }) {
             className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === 'resolved'
                 ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 ring-2 ring-blue-600/20'
-                : 'bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50'
+                : 'bg-white dark:bg-[#111A2E] text-slate-600 dark:text-slate-400 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60'
             }`}
           >
             Resolved ({counts.resolved})
@@ -230,13 +230,13 @@ export default function UserReportHistory({ onReportSelect }) {
 
         {/* Date Filter Button */}
         <div className="relative">
-          <div className="flex items-center gap-1 bg-white border border-slate-200/90 px-3 py-1.5 rounded-xl shadow-xs text-xs font-medium text-slate-700">
+          <div className="flex items-center gap-1 bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-xs text-xs font-medium text-slate-700 dark:text-slate-300">
             <button
               type="button"
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="flex items-center gap-1.5 hover:text-blue-600 cursor-pointer"
+              className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>{selectedDate ? selectedDate : 'Select Date'}</span>
@@ -246,7 +246,7 @@ export default function UserReportHistory({ onReportSelect }) {
               <button
                 type="button"
                 onClick={() => setSelectedDate('')}
-                className="text-slate-400 hover:text-slate-600 ml-1 p-0.5"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 ml-1 p-0.5"
                 title="Clear date filter"
               >
                 ✕
@@ -255,7 +255,7 @@ export default function UserReportHistory({ onReportSelect }) {
           </div>
 
           {showDatePicker && (
-            <div className="absolute right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 z-30">
+            <div className="absolute right-0 top-full mt-2 bg-white dark:bg-[#111A2E] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-3 z-30">
               <input
                 type="date"
                 value={selectedDate}
@@ -263,7 +263,7 @@ export default function UserReportHistory({ onReportSelect }) {
                   setSelectedDate(e.target.value);
                   setShowDatePicker(false);
                 }}
-                className="text-xs p-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
+                className="text-xs p-2 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900 text-slate-800 dark:text-white"
               />
             </div>
           )}
@@ -276,7 +276,7 @@ export default function UserReportHistory({ onReportSelect }) {
           <div
             key={report.id}
             onClick={() => onReportSelect?.(report)}
-            className="group bg-white rounded-2xl border border-slate-100/90 shadow-sm hover:shadow-md hover:border-slate-200 transition-all p-3.5 sm:p-4 flex items-center justify-between gap-3 sm:gap-4 cursor-pointer"
+            className="group bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100/90 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all p-3.5 sm:p-4 flex items-center justify-between gap-3 sm:gap-4 cursor-pointer"
           >
             {/* Left Section: Date Badge + Thumbnail + Details */}
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -285,13 +285,13 @@ export default function UserReportHistory({ onReportSelect }) {
                 <div className="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                   {report.month}
                 </div>
-                <div className="text-base sm:text-lg font-black text-slate-800 leading-tight">
+                <div className="text-base sm:text-lg font-black text-slate-800 dark:text-white leading-tight">
                   {report.day}
                 </div>
               </div>
 
               {/* Thumbnail Photo */}
-              <div className="relative w-14 h-12 sm:w-16 sm:h-14 rounded-xl overflow-hidden border border-slate-100 shrink-0 bg-slate-100">
+              <div className="relative w-14 h-12 sm:w-16 sm:h-14 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shrink-0 bg-slate-100 dark:bg-slate-800">
                 <Image
                   src={report.image}
                   alt={report.title}
@@ -302,7 +302,7 @@ export default function UserReportHistory({ onReportSelect }) {
 
               {/* Title & Ticket ID */}
               <div className="min-w-0">
-                <h3 className="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {report.title}
                 </h3>
                 <div className="text-[11px] text-slate-400 font-mono tracking-wide mt-0.5 truncate">
@@ -314,7 +314,7 @@ export default function UserReportHistory({ onReportSelect }) {
             {/* Right Section: Ward Tag + Status Pill */}
             <div className="flex items-center gap-4 sm:gap-8 shrink-0">
               {/* Ward */}
-              <div className="text-xs sm:text-sm font-semibold text-slate-600 hidden md:block">
+              <div className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hidden md:block">
                 {report.ward}
               </div>
 
@@ -329,9 +329,9 @@ export default function UserReportHistory({ onReportSelect }) {
         ))}
 
         {filteredReports.length === 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center text-slate-500">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-12 text-center text-slate-500 dark:text-slate-400">
             <span className="text-3xl mb-2 block">📋</span>
-            <div className="font-bold text-sm text-slate-700">No reports found</div>
+            <div className="font-bold text-sm text-slate-700 dark:text-slate-200">No reports found</div>
             <div className="text-xs text-slate-400 mt-1">There are no civic reports matching the selected filters.</div>
           </div>
         )}

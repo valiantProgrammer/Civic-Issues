@@ -93,10 +93,10 @@ export default function AdministrationDashboardView({
       
       {/* 1. Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Municipal Control Center
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           Manage and resolve civic issues efficiently.
         </p>
       </div>
@@ -105,41 +105,41 @@ export default function AdministrationDashboardView({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         
         {/* Card 1: Open Cases */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
-          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {openCount}
           </div>
-          <div className="text-xs font-semibold text-slate-400 mt-1">
+          <div className="text-xs font-semibold text-slate-400 dark:text-slate-400 mt-1">
             Open Cases
           </div>
         </div>
 
         {/* Card 2: Assigned */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
-          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {assignedCount}
           </div>
-          <div className="text-xs font-semibold text-slate-400 mt-1">
+          <div className="text-xs font-semibold text-slate-400 dark:text-slate-400 mt-1">
             Assigned
           </div>
         </div>
 
         {/* Card 3: In Progress (Blue) */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
-          <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 tracking-tight">
+        <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             {inProgressCount}
           </div>
-          <div className="text-xs font-semibold text-slate-400 mt-1">
+          <div className="text-xs font-semibold text-slate-400 dark:text-slate-400 mt-1">
             In Progress
           </div>
         </div>
 
         {/* Card 4: Completed */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
-          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {completedCount}
           </div>
-          <div className="text-xs font-semibold text-slate-400 mt-1">
+          <div className="text-xs font-semibold text-slate-400 dark:text-slate-400 mt-1">
             Completed
           </div>
         </div>
@@ -147,17 +147,17 @@ export default function AdministrationDashboardView({
       </div>
 
       {/* 3. Today's Priorities Section matching the reference screenshot */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
         
         {/* Section Header */}
-        <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">
+        <div className="p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
             Today&apos;s Priorities
           </h2>
           <button
             type="button"
             onClick={onViewAllIssues}
-            className="text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1 cursor-pointer"
+            className="text-xs font-bold text-slate-400 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1 cursor-pointer"
           >
             <span>All (14)</span>
             <span>→</span>
@@ -165,11 +165,11 @@ export default function AdministrationDashboardView({
         </div>
 
         {/* Priority Items List with connected timeline dots */}
-        <div className="divide-y divide-slate-100">
-          {priorities.map((item, index) => (
+        <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
+          {priorities.map((item) => (
             <div
               key={item.id}
-              className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors"
+              className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
             >
               {/* Left: Icon node & Details */}
               <div className="flex items-center gap-4 min-w-0">
@@ -180,15 +180,15 @@ export default function AdministrationDashboardView({
 
                 {/* Content */}
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm sm:text-base truncate">
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base truncate">
                     {item.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mt-0.5">
+                  <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-400 font-medium mt-0.5">
                     <span>{item.sla}</span>
                     {item.assigned && (
                       <>
                         <span>•</span>
-                        <span className="text-emerald-600 font-semibold">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
                           Assigned to {item.assigneeName}
                         </span>
                       </>
@@ -200,7 +200,11 @@ export default function AdministrationDashboardView({
               {/* Right: Priority Badge & Assign Action Button */}
               <div className="flex items-center gap-3 shrink-0">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold border ${item.priorityStyle}`}
+                  className={`px-3 py-1 rounded-full text-xs font-bold border ${
+                    item.priority === 'High'
+                      ? 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+                      : 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'
+                  }`}
                 >
                   {item.priority}
                 </span>
@@ -210,8 +214,8 @@ export default function AdministrationDashboardView({
                   onClick={() => handleOpenAssignModal(item)}
                   className={`px-5 py-2 rounded-xl font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer ${
                     item.assigned
-                      ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800'
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-blue-500/20'
                   }`}
                 >
                   {item.assigned ? 'Reassign' : 'Assign'}
@@ -225,22 +229,22 @@ export default function AdministrationDashboardView({
 
       {/* Assignment Modal */}
       {selectedTask && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-lg overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 w-full max-w-lg overflow-hidden transition-colors">
             
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   Assign Task & Dispatch Crew
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   {selectedTask.title} • {selectedTask.sla}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedTask(null)}
-                className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
               >
                 ✕
               </button>
@@ -248,13 +252,13 @@ export default function AdministrationDashboardView({
 
             <form onSubmit={handleConfirmAssignment} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Assigned Department
                 </label>
                 <select
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-slate-100 transition-all font-medium bg-white dark:bg-[#0B132B]"
                 >
                   <option value="Water Works Division">Water Works Division</option>
                   <option value="Roads & Infrastructure">Roads & Infrastructure</option>
@@ -265,13 +269,13 @@ export default function AdministrationDashboardView({
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Select Crew Lead / Contractor
                 </label>
                 <select
                   value={assignee}
                   onChange={(e) => setAssignee(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-slate-100 transition-all font-medium bg-white dark:bg-[#0B132B]"
                 >
                   <option value="Rapid Response Crew Alpha">Rapid Response Crew Alpha (Lead: R. Roy)</option>
                   <option value="Zonal Maintenance Squad 3">Zonal Maintenance Squad 3 (Lead: D. Ghosh)</option>
@@ -281,7 +285,7 @@ export default function AdministrationDashboardView({
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                   Dispatcher Instructions
                 </label>
                 <textarea
@@ -289,22 +293,22 @@ export default function AdministrationDashboardView({
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Provide urgent dispatch notes or site contact info..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 transition-all font-medium resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-slate-800 dark:text-slate-100 transition-all font-medium resize-none bg-white dark:bg-[#0B132B] placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setSelectedTask(null)}
-                  className="px-4 py-2 rounded-xl text-slate-600 font-semibold text-sm hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isAssigning}
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm transition-all disabled:opacity-50 cursor-pointer shadow-blue-500/20"
                 >
                   {isAssigning ? 'Dispatching...' : 'Confirm Assignment'}
                 </button>

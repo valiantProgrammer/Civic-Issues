@@ -55,11 +55,11 @@ export default function RoleModal({ isOpen, onClose, title = "Select Portal", cu
         onClick={onClose} 
       />
 
-      <div className="relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border border-slate-100 z-10 animate-in zoom-in-95 duration-200">
+      <div className="relative bg-white dark:bg-[#0B132B] rounded-3xl shadow-2xl p-6 sm:p-8 w-full max-w-md border border-slate-100 dark:border-slate-800 z-10 animate-in zoom-in-95 duration-200">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors"
+          className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,13 +69,13 @@ export default function RoleModal({ isOpen, onClose, title = "Select Portal", cu
 
         {/* Modal Header */}
         <div className="text-left mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 text-xs font-semibold mb-3 border border-blue-200/50 dark:border-blue-800/50">
             Civic साथी
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             {title}
           </h2>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
             {currentLang === 'hi' ? 'जारी रखने के लिए अपनी भूमिका चुनें' : 'Choose your role to continue'}
           </p>
         </div>
@@ -83,21 +83,21 @@ export default function RoleModal({ isOpen, onClose, title = "Select Portal", cu
         {/* Roles List */}
         <div className="space-y-3">
           {roles.map((role, idx) => (
-            <div key={idx} className="group border border-slate-200/80 hover:border-blue-400 rounded-2xl p-4 transition-all duration-200 hover:shadow-md bg-white hover:bg-slate-50/50">
+            <div key={idx} className="group border border-slate-200/80 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 rounded-2xl p-4 transition-all duration-200 hover:shadow-md bg-white dark:bg-[#111A2E] hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
               <Link href={role.href} className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-xl bg-slate-50 group-hover:bg-white flex items-center justify-center shrink-0 border border-slate-100 shadow-xs transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:bg-white dark:group-hover:bg-slate-700 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700 shadow-xs transition-colors">
                   {role.icon}
                 </div>
                 <div className="flex-1 min-w-0 text-left">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
+                    <span className="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {role.title}
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${role.badgeColor}`}>
                       {role.badge}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 truncate mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {role.subtitle}
                   </p>
                 </div>
@@ -107,10 +107,10 @@ export default function RoleModal({ isOpen, onClose, title = "Select Portal", cu
         </div>
 
         {/* Footer info */}
-        <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-          <p className="text-xs text-slate-500">
+        <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {currentLang === 'hi' ? 'नया नागरिक खाता बनाएं?' : "Don't have an account?"}{' '}
-            <Link href="/signup/user" className="text-blue-600 font-semibold hover:underline">
+            <Link href="/signup/user" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
               {currentLang === 'hi' ? 'साइन अप करें' : 'Sign up'}
             </Link>
           </p>

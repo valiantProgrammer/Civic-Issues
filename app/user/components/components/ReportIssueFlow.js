@@ -172,8 +172,8 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                 isActive
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-600/20'
                   : isPassed
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'bg-white text-slate-500 border border-slate-200/80 hover:bg-slate-50'
+                  ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60'
+                  : 'bg-white dark:bg-[#111A2E] text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80'
               }`}
             >
               <span
@@ -182,7 +182,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                     ? 'bg-white text-blue-600'
                     : isPassed
                     ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 text-slate-500'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                 }`}
               >
                 {step.id}
@@ -194,16 +194,16 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
       </div>
 
       {/* 2. Main Card matching reference picture */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xs border border-slate-200/90 transition-all w-full">
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xs border border-slate-200/90 dark:border-slate-800 transition-colors w-full">
         
         {/* Step 1: Evidence (Exact Reference Screenshot Layout) */}
         {currentStep === 1 && (
           <div>
             <div className="mb-6">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Upload Photos or Videos
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Capture the issue clearly to help faster resolution.
               </p>
             </div>
@@ -222,8 +222,8 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                 onClick={() => fileInputRef.current?.click()}
                 className={`md:col-span-8 border-2 border-dashed rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[220px] ${
                   isDragOver
-                    ? 'border-blue-500 bg-blue-50/60'
-                    : 'border-blue-200 bg-blue-50/20 hover:bg-blue-50/40'
+                    ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/60'
+                    : 'border-blue-200 dark:border-blue-900/60 bg-blue-50/20 dark:bg-blue-950/20 hover:bg-blue-50/40 dark:hover:bg-blue-950/40'
                 }`}
               >
                 <input
@@ -254,13 +254,13 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                   </svg>
                 </div>
 
-                <span className="font-bold text-slate-800 text-sm">
+                <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                   Drag & drop files here
                 </span>
-                <span className="text-xs text-slate-400 mt-0.5">
+                <span className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                   or click to upload
                 </span>
-                <span className="text-[11px] text-slate-400 mt-2 font-medium">
+                <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-medium">
                   Supports images and videos (Max 10MB)
                 </span>
               </div>
@@ -268,7 +268,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
               {/* Right Preview Card (as in screenshot) */}
               <div className="md:col-span-4 flex items-center justify-center">
                 {uploadedImage ? (
-                  <div className="relative w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border border-slate-200 shadow-md group">
+                  <div className="relative w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md group">
                     <Image
                       src={uploadedImage}
                       alt="Uploaded civic evidence"
@@ -299,11 +299,11 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full max-w-[280px] aspect-[3/4] rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-center p-3 cursor-pointer hover:bg-slate-100 transition-colors"
+                    className="w-full max-w-[280px] aspect-[3/4] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0B132B] flex flex-col items-center justify-center text-center p-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                   >
                     <span className="text-2xl mb-1">📷</span>
-                    <span className="text-xs font-semibold text-slate-500">No media yet</span>
-                    <span className="text-[10px] text-slate-400 mt-1">Click to attach photo</span>
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">No media yet</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Click to attach photo</span>
                   </div>
                 )}
               </div>
@@ -315,10 +315,10 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
         {currentStep === 2 && (
           <div>
             <div className="mb-6">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Select Category
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Choose the civic domain that best matches your issue.
               </p>
             </div>
@@ -332,16 +332,16 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                     onClick={() => setSelectedCategory(cat.name)}
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
                       isSelected
-                        ? 'border-blue-600 bg-blue-50/50 shadow-sm ring-1 ring-blue-600/30'
-                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                        ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 shadow-sm ring-1 ring-blue-600/30'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/40 bg-white dark:bg-[#0B132B]'
                     }`}
                   >
-                    <div className="text-2xl w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                    <div className="text-2xl w-10 h-10 rounded-xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center">
                       {cat.icon}
                     </div>
                     <div className="flex-1">
-                      <div className="text-sm font-bold text-slate-900">{cat.name}</div>
-                      <div className="text-[11px] text-slate-500">Verified by Municipal Dept</div>
+                      <div className="text-sm font-bold text-slate-900 dark:text-white">{cat.name}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">Verified by Municipal Dept</div>
                     </div>
                     {isSelected && (
                       <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">
@@ -359,10 +359,10 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
         {currentStep === 3 && (
           <div>
             <div className="mb-4">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Issue Location
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Pinpoint the exact civic hazard on the map or use GPS.
               </p>
             </div>
@@ -385,25 +385,25 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
               {/* Editable Street / Ward Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Street / Landmark
                   </label>
                   <input
                     type="text"
                     value={locationData.street}
                     onChange={(e) => setLocationData({ ...locationData, street: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0B132B]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Ward Number
                   </label>
                   <input
                     type="text"
                     value={locationData.ward}
                     onChange={(e) => setLocationData({ ...locationData, ward: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0B132B]"
                   />
                 </div>
               </div>
@@ -415,50 +415,50 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
         {currentStep === 4 && (
           <div>
             <div className="mb-6">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Provide Details
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Add an issue title and description.
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Issue Title
                 </label>
                 <input
                   type="text"
                   value={details.title}
                   onChange={(e) => setDetails({ ...details, title: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0B132B] placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   placeholder="e.g. Broken streetlight on main road"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Detailed Description
                 </label>
                 <textarea
                   rows={3}
                   value={details.description}
                   onChange={(e) => setDetails({ ...details, description: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0B132B] placeholder:text-slate-400 dark:placeholder:text-slate-500"
                   placeholder="Explain the problem and severity to assist field engineers..."
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Severity Level
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { level: 'Low', color: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
-                    { level: 'Medium', color: 'text-amber-700 bg-amber-50 border-amber-200' },
-                    { level: 'High', color: 'text-rose-700 bg-rose-50 border-rose-200' },
+                    { level: 'Low', color: 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20' },
+                    { level: 'Medium', color: 'text-amber-700 bg-amber-50 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20' },
+                    { level: 'High', color: 'text-rose-700 bg-rose-50 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20' },
                   ].map((s) => (
                     <button
                       key={s.level}
@@ -467,7 +467,7 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
                       className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                         details.severity === s.level
                           ? `${s.color} ring-2 ring-blue-500/20 shadow-sm`
-                          : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                          : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       {s.level} Priority
@@ -483,48 +483,48 @@ export default function ReportIssueFlow({ onCancel, onComplete }) {
         {currentStep === 5 && (
           <div>
             <div className="mb-6">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Review Report
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Verify the details before sending to the municipal resolution team.
               </p>
             </div>
 
-            <div className="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-4">
+            <div className="bg-slate-50 dark:bg-[#0B132B] rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 space-y-4 transition-colors">
               <div className="flex items-center gap-4">
                 {uploadedImage && (
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 shrink-0">
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0">
                     <Image src={uploadedImage} alt="Preview" fill className="object-cover" />
                   </div>
                 )}
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-100/70 px-2 py-0.5 rounded-md">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100/70 dark:bg-blue-900/40 px-2 py-0.5 rounded-md">
                     {selectedCategory}
                   </span>
-                  <h3 className="font-bold text-slate-900 text-sm mt-1">{details.title}</h3>
-                  <p className="text-xs text-slate-500">{locationData.ward} • {locationData.street}</p>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm mt-1">{details.title}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{locationData.ward} • {locationData.street}</p>
                 </div>
               </div>
 
-              <div className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
+              <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200 dark:border-slate-800 pt-3">
                 {details.description}
               </div>
 
-              <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-200 pt-3">
-                <span>Severity: <strong className="text-slate-800">{details.severity}</strong></span>
-                <span>Coordinates: <strong className="text-slate-800">{locationData.coordinates}</strong></span>
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-3">
+                <span>Severity: <strong className="text-slate-800 dark:text-slate-200">{details.severity}</strong></span>
+                <span>Coordinates: <strong className="text-slate-800 dark:text-slate-200">{locationData.coordinates}</strong></span>
               </div>
             </div>
           </div>
         )}
 
         {/* 3. Bottom Action Buttons matching the reference picture */}
-        <div className="flex items-center justify-between mt-8 pt-5 border-t border-slate-100">
+        <div className="flex items-center justify-between mt-8 pt-5 border-t border-slate-100 dark:border-slate-800">
           <button
             type="button"
             onClick={handleBack}
-            className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors cursor-pointer"
+            className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             {currentStep === 1 ? 'Cancel' : 'Back'}
           </button>

@@ -193,16 +193,16 @@ export default function AdministrationIssuesView({
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Civic Issues Management
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           Review, filter, inspect, and dispatch actions across all municipal reports.
         </p>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-4 sm:p-5 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 transition-colors">
         {/* Search Input */}
         <div className="relative w-full md:w-80">
           <input
@@ -210,7 +210,7 @@ export default function AdministrationIssuesView({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by ticket ID, title, keyword..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-800 font-medium"
+            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium transition-colors"
           />
           <svg className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -223,7 +223,7 @@ export default function AdministrationIssuesView({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 shadow-xs focus:outline-none cursor-pointer"
+            className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] text-xs font-bold text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none cursor-pointer transition-colors"
           >
             <option value="all">All Statuses</option>
             <option value="open">Open / Verified</option>
@@ -236,7 +236,7 @@ export default function AdministrationIssuesView({
           <select
             value={wardFilter}
             onChange={(e) => setWardFilter(e.target.value)}
-            className="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 shadow-xs focus:outline-none cursor-pointer"
+            className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] text-xs font-bold text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none cursor-pointer transition-colors"
           >
             <option value="all">All Wards</option>
             <option value="Ward 5">Ward 5</option>
@@ -249,14 +249,14 @@ export default function AdministrationIssuesView({
       </div>
 
       {/* Issues Table / Cards */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+      <div className="bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">
             Showing {filtered.length} Case{filtered.length === 1 ? '' : 's'}
           </span>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
           {filtered.map((issue) => {
             const title = issue.Title || issue.title || 'Civic Issue';
             const ticket = issue.ticketId || issue.id || 'CIVIC-ID';
@@ -268,28 +268,28 @@ export default function AdministrationIssuesView({
             return (
               <div
                 key={issue._id || issue.id}
-                className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors group cursor-pointer"
+                className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors group cursor-pointer"
                 onClick={() => onSelectReport(issue)}
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-16 h-14 rounded-xl overflow-hidden bg-slate-900 shrink-0 border border-slate-200">
+                  <div className="w-16 h-14 rounded-xl overflow-hidden bg-slate-900 shrink-0 border border-slate-200 dark:border-slate-700">
                     <img src={imgSrc} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                   </div>
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono font-bold text-slate-400">
+                      <span className="text-[11px] font-mono font-bold text-slate-400 dark:text-slate-400">
                         {ticket}
                       </span>
-                      <span className="text-xs text-slate-300">•</span>
-                      <span className="text-xs font-semibold text-slate-500">
+                      <span className="text-xs text-slate-300 dark:text-slate-600">•</span>
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                         {ward}
                       </span>
                     </div>
-                    <h3 className="font-bold text-slate-900 text-sm sm:text-base truncate group-hover:text-blue-600 transition-colors mt-0.5">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mt-0.5">
                       {title}
                     </h3>
-                    <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    <p className="text-xs text-slate-400 dark:text-slate-400 font-medium mt-0.5">
                       Reported {timeAgo}
                     </p>
                   </div>
@@ -299,12 +299,12 @@ export default function AdministrationIssuesView({
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold border ${
                       status === 'approved' || status === 'completed' || status === 'resolved'
-                        ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                        ? 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
                         : status === 'in_progress'
-                        ? 'bg-blue-50 text-blue-600 border-blue-200'
+                        ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20'
                         : status === 'escalated'
-                        ? 'bg-rose-50 text-rose-600 border-rose-200'
-                        : 'bg-amber-50 text-amber-600 border-amber-200'
+                        ? 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+                        : 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'
                     }`}
                   >
                     {status === 'approved' || status === 'completed'
@@ -322,7 +322,7 @@ export default function AdministrationIssuesView({
                       e.stopPropagation();
                       onSelectReport(issue);
                     }}
-                    className="px-4 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                    className="px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-600/20 hover:text-blue-600 dark:hover:text-blue-400 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors cursor-pointer"
                   >
                     Review →
                   </button>

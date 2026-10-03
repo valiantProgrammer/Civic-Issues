@@ -12,9 +12,12 @@ import UserReportHistory from './components/components/UserReportHistory';
 import UserNotificationsView from './components/components/UserNotificationsView';
 import HelpCard from './components/components/HelpCard';
 import authApi from '@/lib/api';
+import { useTheme } from '@/app/context/ThemeContext';
+import ThemeToggle from '@/app/components/ThemeToggle';
 
 export default function UserPortalPage() {
   const router = useRouter();
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'reports', 'add-report', 'notifications', 'profile', 'help'
   const [reportFilter, setReportFilter] = useState('pending');
   const [selectedReport, setSelectedReport] = useState(null);
@@ -55,7 +58,7 @@ export default function UserPortalPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans flex">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#080D1A] text-slate-800 dark:text-slate-100 font-sans flex transition-colors duration-200">
       
       {/* Left Navigation Sidebar */}
       <UserSidebar
@@ -68,13 +71,38 @@ export default function UserPortalPage() {
       {/* Main Content Area */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
         
+        {/* Top Desktop Bar (Theme Toggle & User Quick Actions) */}
+        <header className="hidden lg:flex sticky top-0 z-30 bg-white/80 dark:bg-[#0B132B]/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800/80 px-8 py-3.5 items-center justify-between transition-colors">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">
+              Citizen Portal
+            </span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 capitalize">
+              {activeTab.replace('-', ' ')}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle size="sm" showLabel={true} />
+            <button
+              type="button"
+              onClick={() => setActiveTab('add-report')}
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm flex items-center gap-1.5 transition-all cursor-pointer shadow-blue-500/20"
+            >
+              <span>+</span>
+              <span>Report Issue</span>
+            </button>
+          </div>
+        </header>
+
         {/* Top Mobile Bar (Visible only on mobile/tablet) */}
-        <header className="lg:hidden sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 py-3 flex items-center justify-between">
+        <header className="lg:hidden sticky top-0 z-30 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-3 flex items-center justify-between transition-colors">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setIsMobileSidebarOpen(true)}
-              className="p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
+              className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Open sidebar"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,18 +110,21 @@ export default function UserPortalPage() {
               </svg>
             </button>
             <div className="flex items-baseline gap-1">
-              <span className="font-extrabold text-slate-900 text-lg">Civic</span>
-              <span className="font-bold text-slate-800 text-lg">साथी</span>
+              <span className="font-extrabold text-slate-900 dark:text-white text-lg">Civic</span>
+              <span className="font-bold text-blue-600 text-lg">साथी</span>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('add-report')}
-            className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm flex items-center gap-1"
-          >
-            <span>+ Report</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle size="sm" />
+            <button
+              type="button"
+              onClick={() => setActiveTab('add-report')}
+              className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm flex items-center gap-1 cursor-pointer"
+            >
+              <span>+ Report</span>
+            </button>
+          </div>
         </header>
 
         {/* Dynamic Main View */}

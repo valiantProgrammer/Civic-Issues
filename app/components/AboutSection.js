@@ -33,58 +33,58 @@ export default function AboutSection({ currentLang }) {
   const t = content[currentLang] || content.en;
 
   return (
-    <section id="about" className="py-14 lg:py-20 bg-slate-50/70 border-t border-slate-100">
+    <section id="about" className="py-14 lg:py-20 bg-slate-50/70 dark:bg-[#080D1A] border-t border-slate-100 dark:border-slate-800 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="max-w-3xl mb-12 text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/70 text-blue-700 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/70 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
             {t.badge}
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900 leading-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
             {t.title}
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
             {t.p1}
           </p>
-          <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
             {t.p2}
           </p>
         </div>
 
         {/* 3 Pillars Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-7 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg mb-5">
+          <div className="bg-white dark:bg-[#111A2E] p-7 rounded-2xl border border-slate-100 dark:border-slate-800/80 shadow-sm dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:shadow-md dark:hover:border-slate-700 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg mb-5">
               👥
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               {t.pillar1Title}
             </h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
               {t.pillar1Desc}
             </p>
           </div>
 
-          <div className="bg-white p-7 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-lg mb-5">
+          <div className="bg-white dark:bg-[#111A2E] p-7 rounded-2xl border border-slate-100 dark:border-slate-800/80 shadow-sm dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:shadow-md dark:hover:border-slate-700 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg mb-5">
               🛡️
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               {t.pillar2Title}
             </h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
               {t.pillar2Desc}
             </p>
           </div>
 
-          <div className="bg-white p-7 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg mb-5">
+          <div className="bg-white dark:bg-[#111A2E] p-7 rounded-2xl border border-slate-100 dark:border-slate-800/80 shadow-sm dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:shadow-md dark:hover:border-slate-700 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg mb-5">
               🏛️
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
               {t.pillar3Title}
             </h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
               {t.pillar3Desc}
             </p>
           </div>

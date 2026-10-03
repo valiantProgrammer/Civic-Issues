@@ -127,10 +127,10 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F2F6FE] via-[#F8FAFF] to-white pt-6 pb-12 lg:pt-10 lg:pb-16">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F2F6FE] via-[#F8FAFF] to-white dark:from-[#0B132B] dark:via-[#080D1A] dark:to-[#080D1A] pt-6 pb-12 lg:pt-10 lg:pb-16 transition-colors duration-200">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 right-1/4 w-[420px] h-[420px] bg-blue-100/40 rounded-full blur-3xl pointer-events-none -z-0" />
-      <div className="absolute bottom-5 left-10 w-[380px] h-[380px] bg-purple-100/35 rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute top-0 right-1/4 w-[420px] h-[420px] bg-blue-100/40 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute bottom-5 left-10 w-[380px] h-[380px] bg-purple-100/35 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
@@ -138,14 +138,14 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
           {/* Left Column: Headline, Subtitle, CTA & Stats */}
           <div className="lg:col-span-5 flex flex-col justify-center text-left pt-2 lg:pt-0">
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] xl:text-[62px] font-black tracking-tight leading-[1.08] text-slate-900">
-              <span className="block text-slate-900">{text.title1}</span>
-              <span className="block text-[#5B4FE9]">{text.title2}</span>
-              <span className="block text-slate-900">{text.title3}</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] xl:text-[62px] font-black tracking-tight leading-[1.08] text-slate-900 dark:text-white">
+              <span className="block text-slate-900 dark:text-white">{text.title1}</span>
+              <span className="block text-[#5B4FE9] dark:text-[#38BDF8]">{text.title2}</span>
+              <span className="block text-slate-900 dark:text-white">{text.title3}</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-5 sm:mt-6 text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed font-normal">
+            <p className="mt-5 sm:mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed font-normal">
               {text.subtitle}
             </p>
 
@@ -154,43 +154,43 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
               <button
                 type="button"
                 onClick={onOpenReport}
-                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-sm sm:text-base shadow-lg shadow-blue-500/25 transition-all cursor-pointer inline-flex items-center"
+                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-semibold text-sm sm:text-base shadow-lg shadow-blue-500/25 transition-all cursor-pointer inline-flex items-center"
               >
                 {text.btnReport}
               </button>
               <a
                 href="#explore"
-                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-white hover:bg-slate-50 active:scale-95 text-slate-800 border border-slate-200/90 font-semibold text-sm sm:text-base shadow-sm hover:shadow transition-all cursor-pointer inline-flex items-center"
+                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-white dark:bg-slate-900/80 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800 font-semibold text-sm sm:text-base shadow-sm hover:shadow transition-all cursor-pointer inline-flex items-center"
               >
                 {text.btnExplore}
               </a>
             </div>
 
             {/* Statistics Row */}
-            <div className="mt-10 sm:mt-12 pt-7 border-t border-slate-200/60 grid grid-cols-3 gap-3 sm:gap-6">
+            <div className="mt-10 sm:mt-12 pt-7 border-t border-slate-200/60 dark:border-slate-800 grid grid-cols-3 gap-3 sm:gap-6">
               <div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                   {text.stat1Number}
                 </div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+                <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
                   {text.stat1Label}
                 </div>
               </div>
 
               <div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                   {text.stat2Number}
                 </div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+                <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
                   {text.stat2Label}
                 </div>
               </div>
 
               <div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                   {text.stat3Number}
                 </div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+                <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
                   {text.stat3Label}
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
           <div className="lg:col-span-7 relative w-full flex items-center justify-center">
             
             {/* Map Canvas Container */}
-            <div className="relative w-full aspect-[4/3] max-h-[580px] rounded-3xl overflow-hidden shadow-[0_12px_40px_-10px_rgba(20,40,90,0.12)] border border-blue-100/60 bg-[#EAF2FA]">
+            <div className="relative w-full aspect-[4/3] max-h-[580px] rounded-3xl overflow-hidden shadow-[0_12px_40px_-10px_rgba(20,40,90,0.12)] border border-blue-100/60 dark:border-slate-800 bg-[#EAF2FA] dark:bg-[#0B132B]">
               
               {/* Map background image */}
               <Image
@@ -269,7 +269,7 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
               ))}
 
               {/* Floating Legend Card (Top Right Overlay) */}
-              <div className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-20 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 shadow-[0_8px_25px_-5px_rgba(0,0,0,0.12)] border border-slate-100 min-w-[145px] sm:min-w-[160px] pointer-events-auto">
+              <div className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-20 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 shadow-[0_8px_25px_-5px_rgba(0,0,0,0.12)] border border-slate-100 dark:border-slate-800 min-w-[145px] sm:min-w-[160px] pointer-events-auto">
                 <div className="flex flex-col gap-2">
                   {text.categories.map((item, idx) => (
                     <div key={idx} className="flex items-center gap-2.5">
@@ -277,7 +277,7 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
                         className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-[11px] sm:text-xs font-semibold text-slate-700 whitespace-nowrap">
+                      <span className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">
                         {item.label}
                       </span>
                     </div>
@@ -286,9 +286,9 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
               </div>
 
               {/* Floating Live Issue Card (Bottom Right Overlay) */}
-              <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 z-20 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 shadow-[0_12px_32px_-5px_rgba(0,0,0,0.16)] border border-slate-100 flex items-center gap-3 sm:gap-3.5 max-w-[270px] sm:max-w-[310px] transition-all hover:scale-[1.02]">
+              <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 z-20 bg-white/95 dark:bg-[#0B132B]/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 shadow-[0_12px_32px_-5px_rgba(0,0,0,0.16)] border border-slate-100 dark:border-slate-800 flex items-center gap-3 sm:gap-3.5 max-w-[270px] sm:max-w-[310px] transition-all hover:scale-[1.02]">
                 {/* Photo Thumbnail */}
-                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-xs">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 dark:border-slate-800 shadow-xs">
                   <Image
                     src="/images/street_issue_thumb.jpg"
                     alt="Street issue photo"
@@ -299,18 +299,18 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
 
                 {/* Issue Details */}
                 <div className="flex flex-col min-w-0 pr-1">
-                  <div className="font-bold text-slate-900 text-xs sm:text-sm truncate">
+                  <div className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm truncate">
                     {text.sampleIssue.title}
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-500 font-medium truncate mt-0.5">
+                  <div className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate mt-0.5">
                     {text.sampleIssue.location}
                   </div>
                   <div className="flex items-center gap-1.5 mt-1.5">
-                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/50">
+                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200/50 dark:border-emerald-800/60">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       {text.sampleIssue.status}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] text-slate-400 font-medium">
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                       • {text.sampleIssue.time}
                     </span>
                   </div>

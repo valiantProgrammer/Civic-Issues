@@ -40,8 +40,8 @@ export default function ReportedIssuesSection({ filter, onReportSelect }) {
     if (isLoading) {
         return (
             <section className="py-4 sm:py-6 min-h-full">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 px-1">Previously Reported</h2>
-                <div className="text-center text-gray-500">Loading your reports...</div>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-1">Previously Reported</h2>
+                <div className="text-center text-gray-500 dark:text-slate-400">Loading your reports...</div>
             </section>
         );
     }
@@ -50,7 +50,7 @@ export default function ReportedIssuesSection({ filter, onReportSelect }) {
 
     return (
         <section className="py-4 sm:py-6 min-h-full">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 px-1">Previously Reported</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-1">Previously Reported</h2>
 
             {hasReports ? (
                 <div className="space-y-3 sm:space-y-4">
@@ -69,9 +69,9 @@ export default function ReportedIssuesSection({ filter, onReportSelect }) {
                     ))}
                 </div>
             ) : (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8 text-center mx-1">
-                    <p className="text-gray-600 mb-4">No reports found for the selected filter.</p>
-                    <button className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                <div className="bg-white dark:bg-[#111A2E] rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 p-6 sm:p-8 text-center mx-1 transition-colors">
+                    <p className="text-gray-600 dark:text-slate-400 mb-4">No reports found for the selected filter.</p>
+                    <button className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition-colors shadow-sm font-semibold cursor-pointer">
                         Report Your Issue
                     </button>
                 </div>

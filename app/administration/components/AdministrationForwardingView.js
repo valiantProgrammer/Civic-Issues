@@ -76,10 +76,10 @@ export default function AdministrationForwardingView() {
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Inter-Departmental & Municipal Forwarding
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           Route jurisdictional cross-border civic cases to external municipal authorities or utility boards.
         </p>
       </div>
@@ -87,14 +87,14 @@ export default function AdministrationForwardingView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Forwarding Form (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">
+        <div className="lg:col-span-5 bg-white dark:bg-[#111A2E] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
             Forward Civic Case
           </h2>
 
           <form onSubmit={handleForwardSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Case Ticket ID *
               </label>
               <input
@@ -103,18 +103,18 @@ export default function AdministrationForwardingView() {
                 value={ticketId}
                 onChange={(e) => setTicketId(e.target.value)}
                 placeholder="e.g. CIVIC-20261002-A72Q"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 font-mono font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-mono font-medium transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Target Authority / Municipality *
               </label>
               <select
                 value={targetMuni}
                 onChange={(e) => setTargetMuni(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 font-medium bg-white"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 dark:text-slate-100 font-medium bg-white dark:bg-[#0B132B] transition-colors"
               >
                 <option value="Howrah Municipal Corporation">Howrah Municipal Corporation (HMC)</option>
                 <option value="Bidhannagar Municipal Corporation">Bidhannagar Municipal Corporation (BMC)</option>
@@ -125,7 +125,7 @@ export default function AdministrationForwardingView() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Target Department / Unit
               </label>
               <input
@@ -133,12 +133,12 @@ export default function AdministrationForwardingView() {
                 value={targetDept}
                 onChange={(e) => setTargetDept(e.target.value)}
                 placeholder="e.g. Borough V - Public Works"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                 Forwarding Note / Reason
               </label>
               <textarea
@@ -146,7 +146,7 @@ export default function AdministrationForwardingView() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Explain the jurisdictional handover or reason for forwarding..."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 font-medium resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0B132B] focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium resize-none transition-colors"
               />
             </div>
 
@@ -154,7 +154,7 @@ export default function AdministrationForwardingView() {
               <button
                 type="submit"
                 disabled={isForwarding}
-                className="w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                className="w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl shadow-sm transition-all disabled:opacity-50 cursor-pointer shadow-blue-500/20"
               >
                 {isForwarding ? 'Forwarding...' : 'Dispatch Handover'}
               </button>
@@ -163,43 +163,43 @@ export default function AdministrationForwardingView() {
         </div>
 
         {/* Forwarding History Log (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-slate-900">
+        <div className="lg:col-span-7 bg-white dark:bg-[#111A2E] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+          <div className="p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Forwarding Audit Trail
             </h2>
-            <span className="text-xs font-semibold text-slate-400">
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-400">
               {forwardHistory.length} Transferred
             </span>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
             {forwardHistory.map((item) => (
-              <div key={item.id} className="p-4 sm:p-5 space-y-2 hover:bg-slate-50/70 transition-colors">
+              <div key={item.id} className="p-4 sm:p-5 space-y-2 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-700">
+                  <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
                     {item.ticketId}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20">
                     {item.status}
                   </span>
                 </div>
 
-                <div className="text-sm font-bold text-slate-900">
+                <div className="text-sm font-bold text-slate-900 dark:text-white">
                   {item.title}
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                   <span>{item.from}</span>
                   <span>→</span>
-                  <span className="font-semibold text-slate-800">{item.to}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{item.to}</span>
                 </div>
 
-                <p className="text-xs text-slate-400 italic">
+                <p className="text-xs text-slate-400 dark:text-slate-400 italic">
                   &quot;{item.notes}&quot;
                 </p>
 
-                <div className="text-[11px] text-slate-400 pt-1">
+                <div className="text-[11px] text-slate-400 dark:text-slate-400 pt-1">
                   Transferred {item.timestamp}
                 </div>
               </div>

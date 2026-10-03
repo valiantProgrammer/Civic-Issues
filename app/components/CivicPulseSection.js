@@ -138,16 +138,16 @@ export default function CivicPulseSection({ currentLang }) {
   const statusArcs = createDonutArcs(statusData);
 
   return (
-    <section id="civic-pulse" className="py-12 sm:py-16 lg:py-20 bg-[#F8FAFC] relative">
+    <section id="civic-pulse" className="py-12 sm:py-16 lg:py-20 bg-[#F8FAFC] dark:bg-[#080D1A] relative transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Header matching reference image */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {text.title}
             </h2>
-            <p className="text-sm sm:text-base text-slate-500 font-normal mt-1">
+            <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 font-normal mt-1">
               {text.subtitle}
             </p>
           </div>
@@ -157,11 +157,11 @@ export default function CivicPulseSection({ currentLang }) {
             <button
               type="button"
               onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
-              className="bg-white border border-slate-200/90 hover:border-slate-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
+              className="bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
             >
               <span>{timeFilter}</span>
               <svg
-                className={`w-4 h-4 text-slate-500 transition-transform ${
+                className={`w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform ${
                   isFilterDropdownOpen ? 'rotate-180' : ''
                 }`}
                 fill="none"
@@ -173,7 +173,7 @@ export default function CivicPulseSection({ currentLang }) {
             </button>
 
             {isFilterDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-100 py-1.5 z-20">
+              <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-[#111A2E] rounded-xl shadow-lg border border-slate-100 dark:border-slate-800 py-1.5 z-20">
                 {filterOptions.map((opt) => (
                   <button
                     key={opt}
@@ -184,8 +184,8 @@ export default function CivicPulseSection({ currentLang }) {
                     }}
                     className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors ${
                       timeFilter === opt
-                        ? 'bg-blue-50 text-blue-600 font-bold'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                     }`}
                   >
                     {opt}
@@ -201,17 +201,17 @@ export default function CivicPulseSection({ currentLang }) {
           {stats.map((s, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-2xs flex flex-col justify-between"
+              className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between"
             >
               <div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
                   {s.value}
                 </div>
-                <div className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
+                <div className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                   {s.label}
                 </div>
               </div>
-              <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-emerald-600">
+              <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                 <span>{s.change}</span>
               </div>
             </div>
@@ -222,8 +222,8 @@ export default function CivicPulseSection({ currentLang }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* Panel 1: Reports Over Time */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
               {text.reportsOverTime}
             </h3>
 
@@ -232,19 +232,19 @@ export default function CivicPulseSection({ currentLang }) {
               <div className="absolute inset-0 flex flex-col justify-between text-[11px] font-medium text-slate-400 pointer-events-none pb-7">
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">150</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">100</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">50</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">0</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
               </div>
 
@@ -277,7 +277,7 @@ export default function CivicPulseSection({ currentLang }) {
                       cx={pt.x}
                       cy={pt.y}
                       r="5.5"
-                      className="fill-white stroke-[#2563EB] stroke-[3px] hover:scale-125 transition-transform cursor-pointer"
+                      className="fill-white dark:fill-slate-900 stroke-[#2563EB] stroke-[3px] hover:scale-125 transition-transform cursor-pointer"
                       onMouseEnter={() => setHoveredPoint(pt)}
                       onMouseLeave={() => setHoveredPoint(null)}
                     />
@@ -299,7 +299,7 @@ export default function CivicPulseSection({ currentLang }) {
               )}
 
               {/* X-axis labels */}
-              <div className="absolute bottom-0 left-0 right-0 flex justify-between pl-10 pr-4 text-xs font-semibold text-slate-500 pt-2 border-t border-slate-100">
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between pl-10 pr-4 text-xs font-semibold text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
                 {linePoints.map((pt) => (
                   <span key={pt.month}>{pt.month}</span>
                 ))}
@@ -308,8 +308,8 @@ export default function CivicPulseSection({ currentLang }) {
           </div>
 
           {/* Panel 2: Issues by Category */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
               {text.issuesByCategory}
             </h3>
 
@@ -335,7 +335,7 @@ export default function CivicPulseSection({ currentLang }) {
 
                 {/* Center Badge */}
                 <div className="absolute text-center pointer-events-none">
-                  <div className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
+                  <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
                     2,450
                   </div>
                   <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
@@ -353,9 +353,9 @@ export default function CivicPulseSection({ currentLang }) {
                         className="w-2.5 h-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="font-semibold text-slate-700">{item.name}</span>
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">{item.name}</span>
                     </div>
-                    <span className="font-bold text-slate-900 ml-4">{item.percent}%</span>
+                    <span className="font-bold text-slate-900 dark:text-white ml-4">{item.percent}%</span>
                   </div>
                 ))}
               </div>
@@ -363,8 +363,8 @@ export default function CivicPulseSection({ currentLang }) {
           </div>
 
           {/* Panel 3: Ward Wise Distribution */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
               {text.wardWiseDistribution}
             </h3>
 
@@ -373,15 +373,15 @@ export default function CivicPulseSection({ currentLang }) {
               <div className="absolute inset-0 flex flex-col justify-between text-[11px] font-medium text-slate-400 pointer-events-none pb-7">
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">100</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">50</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 text-right">0</span>
-                  <div className="flex-1 border-b border-slate-100" />
+                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
               </div>
 
@@ -415,7 +415,7 @@ export default function CivicPulseSection({ currentLang }) {
               </div>
 
               {/* X-axis labels */}
-              <div className="border-t border-slate-100 pl-8 pr-2 pt-2 flex justify-between text-[11px] font-semibold text-slate-500">
+              <div className="border-t border-slate-100 dark:border-slate-800 pl-8 pr-2 pt-2 flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                 {wardData.map((w, idx) => (
                   <span key={idx} className="flex-1 text-center truncate">
                     {idx === 0 ? 'Ward 1' : w.ward.replace('Ward ', '')}
@@ -426,8 +426,8 @@ export default function CivicPulseSection({ currentLang }) {
           </div>
 
           {/* Panel 4: Status Overview */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-2xs flex flex-col justify-between">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4">
+          <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
               {text.statusOverview}
             </h3>
 
@@ -453,7 +453,7 @@ export default function CivicPulseSection({ currentLang }) {
 
                 {/* Center Badge */}
                 <div className="absolute text-center pointer-events-none">
-                  <div className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
+                  <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
                     384
                   </div>
                   <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
@@ -471,9 +471,9 @@ export default function CivicPulseSection({ currentLang }) {
                         className="w-2.5 h-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="font-semibold text-slate-700">{item.name}</span>
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">{item.name}</span>
                     </div>
-                    <span className="font-bold text-slate-900 ml-4">{item.count}</span>
+                    <span className="font-bold text-slate-900 dark:text-white ml-4">{item.count}</span>
                   </div>
                 ))}
               </div>

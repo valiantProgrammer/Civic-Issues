@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import ThemeToggle from '@/app/components/ThemeToggle';
 
 export default function AdministrationSidebar({
   activeTab,
@@ -155,12 +156,14 @@ export default function AdministrationSidebar({
           })}
         </nav>
 
-        {/* Bottom Section: Logout */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40">
+        {/* Bottom Section: Theme Toggle & Logout */}
+        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 space-y-2">
+          <ThemeToggle variant="sidebar-item" />
+
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-all cursor-pointer"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
