@@ -28,6 +28,12 @@
 
 <br /><br />
 
+<!-- Live Status Indicator -->
+<p>
+  <img src="./docs/assets/pulse-dot.svg" width="11" height="11" alt="Live Status" /> <strong>System Status:</strong> Operational &nbsp;&bull;&nbsp;
+  <img src="./docs/assets/pulse-dot.svg" width="11" height="11" alt="Live DB" /> <strong>Civic Pulse:</strong> Live Database Analytics Active
+</p>
+
 <!-- Quick Links Navigation Bar -->
 <p>
   <a href="#-current-ui-layouts--walkthrough">Demo</a> &nbsp;|&nbsp;
@@ -118,7 +124,7 @@
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <h4>📊 Live Civic Pulse</h4>
+      <h4><img src="./docs/assets/pulse-dot.svg" width="12" height="12" alt="Live" /> Live Civic Pulse</h4>
       Transparent public dashboard computing resolution velocity and ward distribution directly from MongoDB.
     </td>
     <td width="50%" valign="top">
@@ -156,7 +162,7 @@ Interactive city-wide landing page with dynamic issue counters, followed by the 
   <thead>
     <tr>
       <th width="50%">Landing Page & Community Feed</th>
-      <th width="50%">Civic Pulse Live Analytics</th>
+      <th width="50%"><img src="./docs/assets/pulse-dot.svg" width="11" height="11" alt="Live" /> Civic Pulse Live Analytics</th>
     </tr>
   </thead>
   <tbody>
