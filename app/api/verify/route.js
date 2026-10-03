@@ -52,12 +52,15 @@ export async function POST(request) {
         const hashedPassword = await hashPassword(password);
         const userId = generateNumericId();
 
+        const parsedPhone = phone && String(phone).trim() ? Number(String(phone).replace(/\D/g, '')) || undefined : undefined;
+        const parsedAge = age && String(age).trim() ? Number(age) || undefined : undefined;
+
         const newUser = new User({
             userName: fullName,
-            Address: address,
+            Address: address || '',
             email,
-            phone,
-            age,
+            phone: parsedPhone,
+            age: parsedAge,
             password: hashedPassword,
             userId,
             timeOfLogin: new Date()
