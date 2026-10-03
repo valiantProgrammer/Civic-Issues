@@ -71,6 +71,16 @@ export default function UserSidebar({ activeTab, onTabChange, isMobileOpen, onCl
         </svg>
       ),
     },
+    {
+      id: 'help',
+      label: 'Help & Support',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <circle cx="12" cy="12" r="9" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m.08 4h.01" />
+        </svg>
+      ),
+    },
   ];
 
   return (

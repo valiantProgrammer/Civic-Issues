@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import HelpCard from './HelpCard';
 
 export default function ReportDetailCard({ report, onClose }) {
+  const [rightSideTab, setRightSideTab] = useState('both'); // 'both', 'history', 'help'
   if (!report) return null;
 
   // Formatting ticket ID and attributes
@@ -223,51 +225,106 @@ export default function ReportDetailCard({ report, onClose }) {
           </div>
         </div>
 
-        {/* Right Column (4 cols): Activity History Card matching screenshot */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
-            Activity History
-          </h2>
-
-          {/* Vertical Stepper Timeline */}
-          <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
-            {timelineNodes.map((node) => (
-              <div key={node.id} className="relative flex items-start gap-3">
-                {/* Node Indicator Icon */}
-                <div className="absolute -left-6 top-0.5">
-                  {node.completed ? (
-                    <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-xs ${
-                        node.color === 'blue'
-                          ? 'bg-blue-600 ring-4 ring-blue-100'
-                          : 'bg-emerald-500 ring-4 ring-emerald-100'
-                      }`}
-                    >
-                      ✓
-                    </div>
-                  ) : node.inProgress ? (
-                    <div className="w-5 h-5 rounded-full border-2 border-emerald-500 bg-white flex items-center justify-center ring-4 ring-emerald-50">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    </div>
-                  ) : (
-                    <div className="w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="min-w-0 flex-1">
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
-                    {node.title}
-                  </div>
-                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">
-                    {node.time}
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Right Column (4 cols): Full Right Side with Activity History and Help/Support */}
+        <div className="lg:col-span-4 space-y-4">
+          {/* Segmented Switcher Tab */}
+          <div className="bg-white rounded-2xl p-1.5 border border-slate-100 shadow-2xs flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setRightSideTab('history')}
+              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
+                rightSideTab === 'history'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              Activity History
+            </button>
+            <button
+              type="button"
+              onClick={() => setRightSideTab('help')}
+              className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center flex items-center justify-center gap-1 ${
+                rightSideTab === 'help'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <span>Help & Support</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setRightSideTab('both')}
+              className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
+                rightSideTab === 'both'
+                  ? 'bg-slate-800 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'
+              }`}
+              title="Show Both Stacked on Right Side"
+            >
+              Both
+            </button>
           </div>
+
+          {/* 1. Activity History (Current Thing) */}
+          {(rightSideTab === 'history' || rightSideTab === 'both') && (
+            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                  Activity History
+                </h2>
+                <span className="text-[11px] font-semibold text-slate-400">
+                  Live Updates
+                </span>
+              </div>
+
+              {/* Vertical Stepper Timeline */}
+              <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                {timelineNodes.map((node) => (
+                  <div key={node.id} className="relative flex items-start gap-3">
+                    {/* Node Indicator Icon */}
+                    <div className="absolute -left-6 top-0.5">
+                      {node.completed ? (
+                        <div
+                          className={`w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-xs ${
+                            node.color === 'blue'
+                              ? 'bg-blue-600 ring-4 ring-blue-100'
+                              : 'bg-emerald-500 ring-4 ring-emerald-100'
+                          }`}
+                        >
+                          ✓
+                        </div>
+                      ) : node.inProgress ? (
+                        <div className="w-5 h-5 rounded-full border-2 border-emerald-500 bg-white flex items-center justify-center ring-4 ring-emerald-50">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                        </div>
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
+                        {node.title}
+                      </div>
+                      <div className="text-[11px] text-slate-400 font-medium mt-0.5">
+                        {node.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 2. Help & Support (Full Right Side) */}
+          {(rightSideTab === 'help' || rightSideTab === 'both') && (
+            <div className="w-full">
+              <HelpCard />
+            </div>
+          )}
         </div>
 
       </div>

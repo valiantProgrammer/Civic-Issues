@@ -10,11 +10,12 @@ import ProfileCard from './components/components/ProfileCard';
 import ReportIssueFlow from './components/components/ReportIssueFlow';
 import UserReportHistory from './components/components/UserReportHistory';
 import UserNotificationsView from './components/components/UserNotificationsView';
+import HelpCard from './components/components/HelpCard';
 import authApi from '@/lib/api';
 
 export default function UserPortalPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'reports', 'add-report', 'notifications', 'profile'
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'reports', 'add-report', 'notifications', 'profile', 'help'
   const [reportFilter, setReportFilter] = useState('pending');
   const [selectedReport, setSelectedReport] = useState(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function UserPortalPage() {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
-      if (tabParam && ['dashboard', 'reports', 'add-report', 'notifications', 'profile'].includes(tabParam)) {
+      if (tabParam && ['dashboard', 'reports', 'add-report', 'notifications', 'profile', 'help'].includes(tabParam)) {
         setActiveTab(tabParam);
       }
     }
@@ -144,6 +145,16 @@ export default function UserPortalPage() {
           {activeTab === 'profile' && (
             <div className="w-full">
               <ProfileCard />
+            </div>
+          )}
+
+          {/* Help & Support View matching the reference card */}
+          {activeTab === 'help' && (
+            <div className="w-full">
+              <HelpCard
+                onNavigateToReport={() => setActiveTab('add-report')}
+                onNavigateToReports={() => setActiveTab('reports')}
+              />
             </div>
           )}
 
