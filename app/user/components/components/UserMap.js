@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import { setWorkerUrl } from 'maplibre-gl';
 import Map, { Marker, Popup, NavigationControl, Layer } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useTheme } from '@/app/context/ThemeContext';
 import ofmDarkStyle from './ofm_dark.json';
+import ofmLightStyle from './ofm_light.json';
 
 const WORKER_URL = 'https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl-worker.mjs';
 
@@ -13,46 +15,50 @@ if (typeof window !== 'undefined') {
   setWorkerUrl(WORKER_URL);
 }
 
-// 3D Building Extrusions layer from OpenMapTiles vector data
-const building3DLayer = {
-  id: '3d-buildings',
-  source: 'openmaptiles',
-  'source-layer': 'building',
-  type: 'fill-extrusion',
-  minzoom: 13,
-  paint: {
-    'fill-extrusion-color': [
-      'interpolate',
-      ['linear'],
-      ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
-      0, '#1e293b',
-      30, '#334155',
-      80, '#475569',
-      150, '#64748b'
-    ],
-    'fill-extrusion-height': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
-    ],
-    'fill-extrusion-base': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
-    ],
-    'fill-extrusion-opacity': 0.88,
-  },
-};
-
 export default function UserMap({ onMarkerClick }) {
   const mapRef = useRef(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const currentMapStyle = isDark ? ofmDarkStyle : ofmLightStyle;
+
   const [selectedPin, setSelectedPin] = useState(null);
   const [hoveredPin, setHoveredPin] = useState(null);
   const [is3D, setIs3D] = useState(true);
+
+  // 3D Building Extrusions layer from OpenMapTiles vector data with theme-adaptive colors
+  const building3DLayer = useMemo(() => ({
+    id: '3d-buildings',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    type: 'fill-extrusion',
+    minzoom: 13,
+    paint: {
+      'fill-extrusion-color': [
+        'interpolate',
+        ['linear'],
+        ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
+        0, isDark ? '#1e293b' : '#e2e8f0',
+        30, isDark ? '#334155' : '#cbd5e1',
+        80, isDark ? '#475569' : '#94a3b8',
+        150, isDark ? '#64748b' : '#64748b'
+      ],
+      'fill-extrusion-height': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
+      ],
+      'fill-extrusion-base': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
+      ],
+      'fill-extrusion-opacity': isDark ? 0.88 : 0.72,
+    },
+  }), [isDark]);
 
   const toggle3D = () => {
     if (!mapRef.current) return;
@@ -137,15 +143,15 @@ export default function UserMap({ onMarkerClick }) {
   const activePopupPin = hoveredPin || selectedPin;
 
   return (
-    <div className="relative w-full h-full min-h-[250px] rounded-2xl overflow-hidden bg-slate-900 border border-slate-800">
+    <div className="relative w-full h-full min-h-[250px] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors">
       {/* 2D / 3D Toggle button */}
       <div className="absolute top-3 left-3 z-10">
         <button
           onClick={toggle3D}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-[11px] font-semibold text-white shadow-lg hover:bg-slate-800 transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200 dark:border-slate-700/80 text-[11px] font-semibold text-slate-800 dark:text-white shadow-md hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
           title="Toggle 3D Perspective / 2D Top-down"
         >
-          <span className={`w-2 h-2 rounded-full ${is3D ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'}`} />
+          <span className={`w-2 h-2 rounded-full ${is3D ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
           {is3D ? '3D View' : '2D View'}
         </button>
       </div>
@@ -163,7 +169,7 @@ export default function UserMap({ onMarkerClick }) {
         }}
         maxPitch={85}
         style={{ width: '100%', height: '100%', minHeight: '250px' }}
-        mapStyle={ofmDarkStyle}
+        mapStyle={currentMapStyle}
         attributionControl={false}
       >
         <NavigationControl position="top-right" showCompass={true} visualizePitch={true} />

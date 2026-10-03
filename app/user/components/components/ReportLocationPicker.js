@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import { setWorkerUrl } from 'maplibre-gl';
 import Map, { Marker, NavigationControl, Layer } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useTheme } from '@/app/context/ThemeContext';
 import ofmDarkStyle from './ofm_dark.json';
+import ofmLightStyle from './ofm_light.json';
 import toast from 'react-hot-toast';
 
 const WORKER_URL = 'https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl-worker.mjs';
@@ -14,53 +16,57 @@ if (typeof window !== 'undefined') {
   setWorkerUrl(WORKER_URL);
 }
 
-// 3D Building Extrusions from OpenMapTiles / OpenFreeMap vector layer
-const building3DLayer = {
-  id: '3d-buildings',
-  source: 'openmaptiles',
-  'source-layer': 'building',
-  type: 'fill-extrusion',
-  minzoom: 13,
-  paint: {
-    'fill-extrusion-color': [
-      'interpolate',
-      ['linear'],
-      ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
-      0, '#1e293b',
-      30, '#334155',
-      80, '#475569',
-      150, '#64748b'
-    ],
-    'fill-extrusion-height': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
-    ],
-    'fill-extrusion-base': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
-    ],
-    'fill-extrusion-opacity': 0.88,
-  },
-};
-
 export default function ReportLocationPicker({
   initialLng = 88.351286,
   initialLat = 22.563282,
   onLocationChange,
 }) {
   const mapRef = useRef(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const currentMapStyle = isDark ? ofmDarkStyle : ofmLightStyle;
+
   const [markerCoords, setMarkerCoords] = useState({
     lng: initialLng,
     lat: initialLat,
   });
   const [isLocating, setIsLocating] = useState(false);
   const [is3D, setIs3D] = useState(true);
+
+  // 3D Building Extrusions from OpenMapTiles / OpenFreeMap vector layer
+  const building3DLayer = useMemo(() => ({
+    id: '3d-buildings',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    type: 'fill-extrusion',
+    minzoom: 13,
+    paint: {
+      'fill-extrusion-color': [
+        'interpolate',
+        ['linear'],
+        ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
+        0, isDark ? '#1e293b' : '#e2e8f0',
+        30, isDark ? '#334155' : '#cbd5e1',
+        80, isDark ? '#475569' : '#94a3b8',
+        150, isDark ? '#64748b' : '#64748b'
+      ],
+      'fill-extrusion-height': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
+      ],
+      'fill-extrusion-base': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
+      ],
+      'fill-extrusion-opacity': isDark ? 0.88 : 0.72,
+    },
+  }), [isDark]);
 
   // Preset civic landmarks in Kolkata
   const presets = [
@@ -199,16 +205,16 @@ export default function ReportLocationPicker({
       </div>
 
       {/* Interactive 3D Map Container */}
-      <div className="relative w-full h-[300px] sm:h-[350px] rounded-2xl overflow-hidden bg-slate-900 border border-slate-700/60 shadow-inner">
+      <div className="relative w-full h-[300px] sm:h-[350px] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/60 shadow-inner transition-colors">
         {/* 2D / 3D Toggle button */}
         <div className="absolute top-3 left-3 z-10">
           <button
             type="button"
             onClick={toggle3D}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-[11px] font-semibold text-white shadow-lg hover:bg-slate-800 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200 dark:border-slate-700/80 text-[11px] font-semibold text-slate-800 dark:text-white shadow-md hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
             title="Toggle 3D Perspective / 2D Top-down"
           >
-            <span className={`w-2 h-2 rounded-full ${is3D ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'}`} />
+            <span className={`w-2 h-2 rounded-full ${is3D ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
             {is3D ? '3D View' : '2D View'}
           </button>
         </div>
@@ -227,7 +233,7 @@ export default function ReportLocationPicker({
           maxPitch={85}
           onClick={handleMapClick}
           style={{ width: '100%', height: '100%' }}
-          mapStyle={ofmDarkStyle}
+          mapStyle={currentMapStyle}
           attributionControl={false}
           cursor="crosshair"
         >

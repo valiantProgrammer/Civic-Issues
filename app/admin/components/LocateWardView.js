@@ -1,52 +1,19 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import { setWorkerUrl } from 'maplibre-gl';
 import Map, { Marker, NavigationControl, Layer } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useTheme } from '@/app/context/ThemeContext';
 import ofmDarkStyle from '@/app/user/components/components/ofm_dark.json';
+import ofmLightStyle from '@/app/user/components/components/ofm_light.json';
 
 const WORKER_URL = 'https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl-worker.mjs';
 
 if (typeof window !== 'undefined') {
   setWorkerUrl(WORKER_URL);
 }
-
-// 3D Building Extrusions Layer
-const building3DLayer = {
-  id: '3d-buildings',
-  source: 'openmaptiles',
-  'source-layer': 'building',
-  type: 'fill-extrusion',
-  minzoom: 13,
-  paint: {
-    'fill-extrusion-color': [
-      'interpolate',
-      ['linear'],
-      ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
-      0, '#1e293b',
-      30, '#334155',
-      80, '#475569',
-      150, '#64748b'
-    ],
-    'fill-extrusion-height': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
-    ],
-    'fill-extrusion-base': [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13, 0,
-      13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
-    ],
-    'fill-extrusion-opacity': 0.85,
-  },
-};
 
 const wardCoordinates = {
   'Ward 8': {
@@ -90,6 +57,44 @@ const wardCoordinates = {
 export default function LocateWardView() {
   const [selectedWard, setSelectedWard] = useState('Ward 8');
   const mapRef = useRef(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const currentMapStyle = isDark ? ofmDarkStyle : ofmLightStyle;
+
+  // 3D Building Extrusions Layer with theme-adaptive colors
+  const building3DLayer = useMemo(() => ({
+    id: '3d-buildings',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    type: 'fill-extrusion',
+    minzoom: 13,
+    paint: {
+      'fill-extrusion-color': [
+        'interpolate',
+        ['linear'],
+        ['coalesce', ['get', 'render_height'], ['get', 'height'], 15],
+        0, isDark ? '#1e293b' : '#e2e8f0',
+        30, isDark ? '#334155' : '#cbd5e1',
+        80, isDark ? '#475569' : '#94a3b8',
+        150, isDark ? '#64748b' : '#64748b'
+      ],
+      'fill-extrusion-height': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_height'], ['get', 'height'], 15]
+      ],
+      'fill-extrusion-base': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        13, 0,
+        13.8, ['coalesce', ['get', 'render_min_height'], ['get', 'min_height'], 0]
+      ],
+      'fill-extrusion-opacity': isDark ? 0.85 : 0.72,
+    },
+  }), [isDark]);
 
   const wardInfo = wardCoordinates[selectedWard] || wardCoordinates['Ward 8'];
 
@@ -144,7 +149,7 @@ export default function LocateWardView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* 3D Map Viewport (8 cols) */}
-        <div className="lg:col-span-8 bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm relative aspect-[16/10] sm:aspect-[16/9]">
+        <div className="lg:col-span-8 bg-slate-100 dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm relative aspect-[16/10] sm:aspect-[16/9] transition-colors">
           <Map
             ref={mapRef}
             mapLib={maplibregl}
@@ -155,7 +160,7 @@ export default function LocateWardView() {
               pitch: 50,
               bearing: -15,
             }}
-            mapStyle={ofmDarkStyle}
+            mapStyle={currentMapStyle}
             style={{ width: '100%', height: '100%' }}
             maxPitch={85}
           >
@@ -170,8 +175,8 @@ export default function LocateWardView() {
             </Marker>
           </Map>
 
-          <div className="absolute top-4 left-4 z-10 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10 text-white text-xs font-semibold flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="absolute top-4 left-4 z-10 bg-white/90 dark:bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition-colors">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>3D Ward Buildings View</span>
           </div>
         </div>
