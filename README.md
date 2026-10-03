@@ -644,7 +644,9 @@ civicSaathi/
         <img src="https://github.com/valiantProgrammer.png?size=96" width="80" alt="RUPAYAN DEY" /><br />
         <sub><b>RUPAYAN DEY</b></sub>
       </a><br />
-      <sub>Full Stack Lead & Architect</sub>
+      <sub>Full Stack Lead & Architect
+      UI-UX Lead | UI-UX Designer of Current 
+      Website & Frontend</sub>
     </td>
     <td align="center" width="25%">
       <a href="https://github.com/bitsByRishika">
