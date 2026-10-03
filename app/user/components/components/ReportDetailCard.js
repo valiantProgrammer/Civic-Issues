@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import HelpCard from './HelpCard';
+import { useTheme } from '@/app/context/ThemeContext';
 
 export default function ReportDetailCard({ report, onClose }) {
+  const { theme } = useTheme();
   const [rightSideTab, setRightSideTab] = useState('both'); // 'both', 'history', 'help'
   if (!report) return null;
 
@@ -193,7 +195,7 @@ export default function ReportDetailCard({ report, onClose }) {
               <div className="relative w-full h-32 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 shadow-inner group">
                 {/* Visual Map Backdrop */}
                 <Image
-                  src="/images/city_map_bg.jpg"
+                  src={theme === 'dark' ? '/images/city_map_dark.jpg' : '/images/city_map_light.jpg'}
                   alt="City Map Preview"
                   fill
                   className="object-cover opacity-90 contrast-105"

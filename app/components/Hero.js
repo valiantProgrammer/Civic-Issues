@@ -3,8 +3,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTheme } from '@/app/context/ThemeContext';
 
 export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const mapImageSrc = isDark ? '/images/city_map_dark.jpg' : '/images/city_map_light.jpg';
   const [activePin, setActivePin] = useState(null);
 
   const t = {
@@ -134,7 +138,7 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
-          
+
           {/* Left Column: Headline, Subtitle, CTA & Stats */}
           <div className="lg:col-span-5 flex flex-col justify-center text-left pt-2 lg:pt-0">
             {/* Main Headline */}
@@ -199,21 +203,24 @@ export default function Hero({ onOpenLogin, onOpenReport, currentLang }) {
 
           {/* Right Column: Stylized City Map Illustration with Legend & Issue Card */}
           <div className="lg:col-span-7 relative w-full flex items-center justify-center">
-            
+
             {/* Map Canvas Container */}
             <div className="relative w-full aspect-[4/3] max-h-[580px] rounded-3xl overflow-hidden shadow-[0_12px_40px_-10px_rgba(20,40,90,0.12)] border border-blue-100/60 dark:border-slate-800 bg-[#EAF2FA] dark:bg-[#0B132B]">
-              
-              {/* Map background image */}
+
+              {/* Map background image (dynamic dark/light) */}
               <Image
-                src="/images/city_map_bg.jpg"
+                src={mapImageSrc}
                 alt="Civic issues interactive city map"
                 fill
                 priority
-                className="object-cover object-center filter saturate-[1.04] brightness-[1.01]"
+                className={`object-cover object-center transition-all duration-300 ${isDark
+                  ? 'filter saturate-[1.08] contrast-[1.05] brightness-[0.98]'
+                  : 'filter saturate-[1.04] brightness-[1.01]'
+                  }`}
               />
 
               {/* Soft vignette on map edges */}
-              <div className="absolute inset-0 bg-gradient-to-t from-white/10 via-transparent to-white/10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-slate-900/10 dark:from-slate-950/40 dark:via-transparent dark:to-slate-950/20 pointer-events-none" />
 
               {/* Interactive Teardrop Location Pins */}
               {mapPins.map((pin) => (

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import PanoramaModal from '@/app/user/components/components/PanoramaModal';
 import HelpCard from '@/app/user/components/components/HelpCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/app/context/ThemeContext';
 
 const rejectButtonStyles = `
   .reject-btn {
@@ -64,6 +65,7 @@ export default function ReportDetailView({
   onReject,
   onSend,
 }) {
+  const { theme } = useTheme();
   const [similarReports, setSimilarReports] = useState({
     areaCount: 0,
     categoryCount: 0,
@@ -692,7 +694,7 @@ export default function ReportDetailView({
                 <div className="relative w-full h-32 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-inner group">
                   {/* Visual Map Backdrop */}
                   <img
-                    src="/images/city_map_bg.jpg"
+                    src={theme === 'dark' ? '/images/city_map_dark.jpg' : '/images/city_map_light.jpg'}
                     alt="City Map Preview"
                     className="w-full h-full object-cover opacity-90 contrast-105"
                   />
