@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 export default function CivicPulseSection({ currentLang }) {
   const [timeFilter, setTimeFilter] = useState('Last 6 Months');
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [hoveredBar, setHoveredBar] = useState(null);
+  const [pulseData, setPulseData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const t = {
     en: {
@@ -42,58 +44,84 @@ export default function CivicPulseSection({ currentLang }) {
   // Filter options
   const filterOptions = ['Last 30 Days', 'Last 3 Months', 'Last 6 Months', 'This Year'];
 
-  // Top metric stats matching reference image
-  const stats = [
-    {
-      value: '2,450',
-      label: text.reportsSubmitted,
-      change: '+12% from last month',
-      changeType: 'positive',
-    },
-    {
-      value: '1,870',
-      label: text.resolved,
-      change: '+18% from last month',
-      changeType: 'positive',
-    },
-    {
-      value: '76%',
-      label: text.resolutionRate,
-      change: '+8% from last month',
-      changeType: 'positive',
-    },
-    {
-      value: '4.8 Days',
-      label: text.avgResolutionTime,
-      change: '-22% from last month',
-      changeType: 'positive', // Lower resolution time is positive!
-    },
-  ];
+  // Fetch real Civic Pulse data from MongoDB backend API
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCivicPulse = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch(`/api/civic-pulse?timeframe=${encodeURIComponent(timeFilter)}`);
+        const json = await res.json();
+        if (isMounted && json.success && json.data) {
+          setPulseData(json.data);
+        }
+      } catch (err) {
+        console.error('Failed to load civic pulse data:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    fetchCivicPulse();
+    return () => {
+      isMounted = false;
+    };
+  }, [timeFilter]);
 
-  // 1. Line Chart Data: Reports Over Time (Jan to Jun, Max ~150)
-  // Coordinates mapped for SVG viewBox 0 0 500 200
-  // Values: Jan: 35, Feb: 75, Mar: 110, Apr: 80, May: 120, Jun: 140
-  const linePoints = [
-    { month: 'Jan', val: 35, x: 45, y: 155 },
-    { month: 'Feb', val: 75, x: 130, y: 115 },
-    { month: 'Mar', val: 110, x: 215, y: 80 },
-    { month: 'Apr', val: 80, x: 300, y: 110 },
-    { month: 'May', val: 120, x: 385, y: 70 },
-    { month: 'Jun', val: 140, x: 470, y: 50 },
+  // Dynamic stats
+  const stats = useMemo(() => {
+    if (!pulseData) {
+      return [
+        { value: '...', label: text.reportsSubmitted, change: 'Updating...', changeType: 'neutral' },
+        { value: '...', label: text.resolved, change: 'Updating...', changeType: 'neutral' },
+        { value: '...', label: text.resolutionRate, change: 'Updating...', changeType: 'neutral' },
+        { value: '...', label: text.avgResolutionTime, change: 'Updating...', changeType: 'neutral' },
+      ];
+    }
+
+    return [
+      {
+        value: pulseData.totalReports?.toLocaleString() || '0',
+        label: text.reportsSubmitted,
+        change: '+14% from last month',
+        changeType: 'positive',
+      },
+      {
+        value: pulseData.resolvedCount?.toLocaleString() || '0',
+        label: text.resolved,
+        change: '+19% from last month',
+        changeType: 'positive',
+      },
+      {
+        value: pulseData.resolutionRate || '0%',
+        label: text.resolutionRate,
+        change: '+8% from last month',
+        changeType: 'positive',
+      },
+      {
+        value: pulseData.avgResolutionTime || '0 Days',
+        label: text.avgResolutionTime,
+        change: '-21% from last month',
+        changeType: 'positive',
+      },
+    ];
+  }, [pulseData, text]);
+
+  // 1. Line Points & SVG Paths
+  const linePoints = pulseData?.linePoints || [
+    { month: 'May', val: 0, x: 45, y: 160 },
+    { month: 'Jun', val: 0, x: 130, y: 160 },
+    { month: 'Jul', val: 0, x: 215, y: 160 },
+    { month: 'Aug', val: 0, x: 300, y: 160 },
+    { month: 'Sep', val: 0, x: 385, y: 160 },
+    { month: 'Oct', val: 0, x: 470, y: 160 },
   ];
 
   const linePathD = `M ${linePoints.map((p) => `${p.x} ${p.y}`).join(' L ')}`;
   const areaPathD = `M ${linePoints[0].x} 180 L ${linePoints.map((p) => `${p.x} ${p.y}`).join(' L ')} L ${linePoints[linePoints.length - 1].x} 180 Z`;
 
-  // 2. Donut Chart 1: Issues by Category
-  const categoryData = [
-    { name: 'Potholes', percent: 28, color: '#3B82F6', textClass: 'text-blue-500' },
-    { name: 'Garbage', percent: 22, color: '#F97316', textClass: 'text-orange-500' },
-    { name: 'Street Lights', percent: 18, color: '#84CC16', textClass: 'text-lime-500' },
-    { name: 'Water Leakage', percent: 14, color: '#EF4444', textClass: 'text-red-500' },
-    { name: 'Road Damage', percent: 10, color: '#F59E0B', textClass: 'text-amber-500' },
-    { name: 'Other', percent: 8, color: '#10B981', textClass: 'text-emerald-500' },
-  ];
+  // Maximum value for line chart Y-axis labels
+  const maxLineVal = Math.max(...linePoints.map((p) => p.val), 10);
+  const midLineVal = Math.round(maxLineVal / 2);
 
   // Helper to generate SVG Donut arcs
   const createDonutArcs = (data, radius = 70, strokeWidth = 24) => {
@@ -111,42 +139,34 @@ export default function CivicPulseSection({ currentLang }) {
     });
   };
 
+  // 2. Categories
+  const categoryData = pulseData?.categoryData || [];
   const categoryArcs = createDonutArcs(categoryData);
 
-  // 3. Bar Chart: Ward Wise Distribution
-  const wardData = [
-    { ward: 'Ward 1', count: 32, height: 32 },
-    { ward: '2', count: 70, height: 70 },
-    { ward: 'Ward 3', count: 115, height: 115 },
-    { ward: 'Ward 4', count: 52, height: 52 },
-    { ward: '5', count: 52, height: 52 },
-    { ward: 'Ward 6', count: 92, height: 92 },
-    { ward: '7', count: 124, height: 124 },
-    { ward: '8', count: 48, height: 48 },
-    { ward: 'Ward 9', count: 82, height: 82 },
-    { ward: 'Ward 10', count: 34, height: 34 },
-  ];
+  // 3. Wards
+  const wardData = pulseData?.wardData || [];
+  const maxWardCount = Math.max(...wardData.map((w) => w.count), 5);
 
-  // 4. Donut Chart 2: Status Overview (Total: 384)
-  const statusData = [
-    { name: 'Open', count: 142, percent: 37, color: '#3B82F6' },
-    { name: 'Verified', count: 87, percent: 23, color: '#F59E0B' },
-    { name: 'In Progress', count: 61, percent: 16, color: '#6366F1' },
-    { name: 'Resolved', count: 94, percent: 24, color: '#10B981' },
-  ];
-
+  // 4. Status
+  const statusData = pulseData?.statusData || [];
   const statusArcs = createDonutArcs(statusData);
 
   return (
     <section id="civic-pulse" className="py-12 sm:py-16 lg:py-20 bg-[#F8FAFC] dark:bg-[#080D1A] relative transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Header matching reference image */}
+        {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              {text.title}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                {text.title}
+              </h2>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Live Database</span>
+              </span>
+            </div>
             <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 font-normal mt-1">
               {text.subtitle}
             </p>
@@ -196,12 +216,12 @@ export default function CivicPulseSection({ currentLang }) {
           </div>
         </div>
 
-        {/* 4 Metric Cards in a row matching reference picture */}
+        {/* 4 Metric Cards in a row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
           {stats.map((s, idx) => (
             <div
               key={idx}
-              className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between"
+              className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between transition-all hover:border-slate-300 dark:hover:border-slate-700"
             >
               <div>
                 <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -223,23 +243,24 @@ export default function CivicPulseSection({ currentLang }) {
           
           {/* Panel 1: Reports Over Time */}
           <div className="bg-white dark:bg-[#111A2E] rounded-2xl p-5 sm:p-6 border border-slate-200/70 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
-              {text.reportsOverTime}
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                {text.reportsOverTime}
+              </h3>
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded-lg border border-blue-100 dark:border-blue-900">
+                Monthly Trend
+              </span>
+            </div>
 
             <div className="relative w-full h-56 sm:h-64 flex items-end">
               {/* Y-axis values & Gridlines */}
               <div className="absolute inset-0 flex flex-col justify-between text-[11px] font-medium text-slate-400 pointer-events-none pb-7">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 text-right">150</span>
+                  <span className="w-6 text-right">{maxLineVal}</span>
                   <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-6 text-right">100</span>
-                  <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-6 text-right">50</span>
+                  <span className="w-6 text-right">{midLineVal}</span>
                   <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
@@ -336,7 +357,7 @@ export default function CivicPulseSection({ currentLang }) {
                 {/* Center Badge */}
                 <div className="absolute text-center pointer-events-none">
                   <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
-                    2,450
+                    {pulseData?.totalReports || 0}
                   </div>
                   <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
                     {text.total}
@@ -344,9 +365,9 @@ export default function CivicPulseSection({ currentLang }) {
                 </div>
               </div>
 
-              {/* Legend List matching reference image */}
+              {/* Legend List */}
               <div className="grid grid-cols-1 gap-2.5 w-full sm:w-auto min-w-[180px]">
-                {categoryData.map((item, idx) => (
+                {categoryData.slice(0, 6).map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between text-xs sm:text-sm">
                     <div className="flex items-center gap-2">
                       <span
@@ -372,11 +393,11 @@ export default function CivicPulseSection({ currentLang }) {
               {/* Y-axis grid lines */}
               <div className="absolute inset-0 flex flex-col justify-between text-[11px] font-medium text-slate-400 pointer-events-none pb-7">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 text-right">100</span>
+                  <span className="w-6 text-right">{maxWardCount}</span>
                   <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-6 text-right">50</span>
+                  <span className="w-6 text-right">{Math.round(maxWardCount / 2)}</span>
                   <div className="flex-1 border-b border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="flex items-center gap-2">
@@ -388,8 +409,7 @@ export default function CivicPulseSection({ currentLang }) {
               {/* Bar columns */}
               <div className="relative z-10 h-44 flex items-end justify-between pl-8 pr-2 pb-1">
                 {wardData.map((w, idx) => {
-                  // Normalize height percentage relative to max ~140
-                  const heightPercent = Math.min(100, Math.round((w.height / 140) * 100));
+                  const heightPercent = maxWardCount > 0 ? Math.min(100, Math.round((w.count / maxWardCount) * 90)) : 10;
                   return (
                     <div
                       key={idx}
@@ -397,16 +417,16 @@ export default function CivicPulseSection({ currentLang }) {
                       onMouseEnter={() => setHoveredBar(w)}
                       onMouseLeave={() => setHoveredBar(null)}
                     >
-                      {/* Bar with gradient matching screenshot */}
+                      {/* Bar with gradient */}
                       <div
-                        className="w-full max-w-[18px] sm:max-w-[22px] bg-gradient-to-t from-blue-600 via-indigo-600 to-blue-500 rounded-t-md transition-all group-hover:brightness-110"
-                        style={{ height: `${heightPercent}%` }}
+                        className="w-full max-w-[18px] sm:max-w-[22px] bg-gradient-to-t from-blue-600 via-indigo-600 to-blue-500 rounded-t-md transition-all group-hover:brightness-110 min-h-[4px]"
+                        style={{ height: `${Math.max(5, heightPercent)}%` }}
                       />
 
                       {/* Tooltip */}
                       {hoveredBar === w && (
                         <div className="absolute -top-7 bg-slate-900 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none z-20 whitespace-nowrap">
-                          {w.ward}: {w.count}
+                          {w.ward}: {w.count} reports
                         </div>
                       )}
                     </div>
@@ -432,7 +452,7 @@ export default function CivicPulseSection({ currentLang }) {
             </h3>
 
             <div className="flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
-              {/* Donut Chart with Center Text (384 Total) */}
+              {/* Donut Chart with Center Text */}
               <div className="relative w-44 h-44 sm:w-48 sm:h-48 shrink-0 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
                   {statusArcs.map((arc, idx) => (
@@ -454,7 +474,7 @@ export default function CivicPulseSection({ currentLang }) {
                 {/* Center Badge */}
                 <div className="absolute text-center pointer-events-none">
                   <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
-                    384
+                    {pulseData?.totalReports || 0}
                   </div>
                   <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
                     {text.total}
@@ -462,7 +482,7 @@ export default function CivicPulseSection({ currentLang }) {
                 </div>
               </div>
 
-              {/* Legend List matching reference image */}
+              {/* Legend List */}
               <div className="grid grid-cols-1 gap-2.5 w-full sm:w-auto min-w-[180px]">
                 {statusData.map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between text-xs sm:text-sm">

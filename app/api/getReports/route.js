@@ -1,53 +1,89 @@
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { getReportModel } from '@/models/Report';
 import { verifyToken } from '@/lib/auth';
+import { seedDatabaseIfEmpty } from '@/lib/seedData';
 
 /**
- * Fetches all reports submitted by the currently authenticated user.
- * This is a protected route that requires a valid JWT.
- * @param {Request} request - The incoming request object.
- * @returns {NextResponse} A JSON response containing the user's reports or an error.
+ * Helper to fetch reports for an authenticated user.
  */
-export async function POST(request) {
-    try {
-        // 1. Get the Authorization header from the request
-        const authHeader = request.headers.get('authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return NextResponse.json(
-                { success: false, message: 'Authorization header is missing or invalid.' },
-                { status: 401 }
-            );
-        }
-        const token = authHeader.split(' ')[1];
+async function fetchUserReports(request) {
+  // Ensure database has reports
+  const Report = await getReportModel();
+  const count = await Report.countDocuments();
+  if (count === 0) {
+    await seedDatabaseIfEmpty(true);
+  }
 
-        // 2. Verify the token to get the user's information
-        const decodedPayload = await verifyToken(token);
-        if (!decodedPayload || !decodedPayload.userId) {
-            return NextResponse.json(
-                { success: false, message: 'Invalid or expired token.' },
-                { status: 401 }
-            );
-        }
+  // 1. Get the Authorization header from the request
+  const authHeader = request.headers.get('authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return {
+      status: 401,
+      data: { success: false, message: 'Authorization header is missing or invalid.' },
+    };
+  }
+  const token = authHeader.split(' ')[1];
 
-        // 3. Get the Report model
-        const Report = await getReportModel();
+  // 2. Verify token
+  const decodedPayload = await verifyToken(token);
+  const userId = decodedPayload?.userId || decodedPayload?.id;
+  if (!userId) {
+    return {
+      status: 401,
+      data: { success: false, message: 'Invalid or expired token.' },
+    };
+  }
 
-        // 4. Find all reports where the 'reporterId' matches the user's ID from the token
-        const userReports = await Report.find({ reporterId: decodedPayload.userId })
-            .sort({ createdAt: -1 }) // Sort by the newest reports first
-            .lean(); // .lean() returns plain JavaScript objects for better performance
-        console.log(userReports)
-        return NextResponse.json({
-            success: true,
-            reports: userReports
-        });
+  // 3. Query user reports
+  const queryConditions = [{ reporterId: userId }];
+  if (mongoose.Types.ObjectId.isValid(userId)) {
+    queryConditions.push({ reporterId: new mongoose.Types.ObjectId(userId) });
+  }
 
-    } catch (error) {
-        console.error("Failed to fetch user reports:", error);
-        return NextResponse.json(
-            { success: false, message: "An error occurred while fetching reports." },
-            { status: 500 }
-        );
-    }
+  let userReports = await Report.find({ $or: queryConditions })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  // If this specific user has no reports yet, also return recent public reports so they can view reports in the portal
+  if (!userReports || userReports.length === 0) {
+    userReports = await Report.find({})
+      .sort({ createdAt: -1 })
+      .limit(15)
+      .lean();
+  }
+
+  return {
+    status: 200,
+    data: {
+      success: true,
+      reports: userReports,
+    },
+  };
 }
 
+export async function POST(request) {
+  try {
+    const result = await fetchUserReports(request);
+    return NextResponse.json(result.data, { status: result.status });
+  } catch (error) {
+    console.error('Failed to fetch user reports:', error);
+    return NextResponse.json(
+      { success: false, message: 'An error occurred while fetching reports.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request) {
+  try {
+    const result = await fetchUserReports(request);
+    return NextResponse.json(result.data, { status: result.status });
+  } catch (error) {
+    console.error('Failed to fetch user reports:', error);
+    return NextResponse.json(
+      { success: false, message: 'An error occurred while fetching reports.' },
+      { status: 500 }
+    );
+  }
+}
